@@ -1,0 +1,34 @@
+
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+        <div class="layout-portlets-box">
+            <div class="Container100">
+                <div class="ContainerIndent TexAlCenter">
+
+                    <!--                    <p:messages id="messages"/>-->
+                    <p:growl id="messages"/>
+                    <h:form id="inscritForm">
+                        <p:focus/>
+                        <h:panelGrid id="grid" columns="2"  styleClass="ui-panelgrid-blank" >
+                            <p:outputLabel value="Nom:"  />
+                            <p:inputText label="Nom" value="#{inscritController.inscrit.nom}"/>
+                            <p:outputLabel value="Prénom:" />
+                            <p:inputText label="Prénom"  value="#{inscritController.inscrit.prenom}"/>
+                            <p:commandButton value="Save" action="#{inscritController.save()}" />
+                        </h:panelGrid>
+
+                    </h:form>  
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>
