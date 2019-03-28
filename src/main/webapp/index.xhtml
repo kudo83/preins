@@ -9,24 +9,60 @@
 
     <ui:define name="content">
         <div class="layout-portlets-box">
-            <div class="Container100">
-                <div class="ContainerIndent TexAlCenter">
+            <!--                    <p:messages id="messages"/>-->
+            <p:growl id="messages"/>
+            <h:form id="inscritForm">
+                <div class="Container50 Responsive50">
 
-                    <!--                    <p:messages id="messages"/>-->
-                    <p:growl id="messages"/>
-                    <h:form id="inscritForm">
-                        <p:focus/>
-                        <h:panelGrid id="grid" columns="2"  styleClass="ui-panelgrid-blank" >
-                            <p:outputLabel value="Nom:"  />
-                            <p:inputText label="Nom" value="#{inscritController.inscrit.nom}"/>
-                            <p:outputLabel value="Prénom:" />
-                            <p:inputText label="Prénom"  value="#{inscritController.inscrit.prenom}"/>
-                            <p:commandButton value="Save" action="#{inscritController.save()}" />
-                        </h:panelGrid>
+                    <div class="ContainerIndent ui-fluid">
+                        <h2 class="BigTopic">
+                            INFORMATIONS ETUDIANT
+                        </h2>
 
-                    </h:form>  
+                        <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="ui-panelgrid ui-widget ui-panelgrid-blank"   >
+                            <p:inputText placeholder="Nom" value="#{inscritController.inscrit.nom}"/>
+                            <p:inputText placeholder="النسب"  value="#{inscritController.inscrit.nomAr}"  dir="rtl"/>
+                            <p:inputText placeholder="Prénom" value="#{inscritController.inscrit.nom}"/>
+                            <p:inputText placeholder="الاسم"  value="#{inscritController.inscrit.prenomAr}"  dir="rtl"/>
+                            <p:inputText placeholder="CNE" value="#{inscritController.inscrit.cne}"/>
+                            <p:inputText placeholder="CIN" value="#{inscritController.inscrit.cin}"/>
+                            <p:calendar placeholder="Date de Naissance" value="#{inscritController.inscrit.dateNaiss}"/>
+                            <p:inputText placeholder="Pays de Naissance" value="#{inscritController.inscrit.nom}"/>
+                            <p:inputText placeholder="Ville de Naissance" value="#{inscritController.inscrit.nom}"/>
+                            <p:inputText placeholder="Province de Naissance" value="#{inscritController.inscrit.nom}"/>
+                            <p:inputTextarea placeholder="Adresse Personelle Actuelle" value="#{inscritController.inscrit.nom}"/>   
+                            <p:inputText placeholder="Téléphone" value="#{inscritController.inscrit.nom}"/>
+
+
+                        </p:panelGrid>
+
+
+
+                    </div>
                 </div>
-            </div>
+                <div class="Container50 Responsive50">
+
+                    <div class="ContainerIndent ui-fluid">
+                        <h2 class="BigTopic">
+                            INFORMATIONS PARENTS
+                        </h2>
+                        <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="ui-panelgrid ui-widget ui-panelgrid-blank"   >
+                            
+                            <p:inputText placeholder="Prénom du Père ou Tuteur" value="#{inscritController.inscrit.nom}"/>
+                            <p:inputText placeholder="اسم الأب أو الوالي"  value="#{inscritController.inscrit.prenomAr}"  dir="rtl"/>
+                            <p:inputText placeholder="Prénom de la Mère" value="#{inscritController.inscrit.nom}"/>
+                            <p:inputText placeholder="اسم الأم"  value="#{inscritController.inscrit.prenomAr}"  dir="rtl"/>
+                         
+                            <p:inputText placeholder="CIN Père ou Tuteur" value="#{inscritController.inscrit.cin}"/>
+                              <p:inputText placeholder="Téléphone" value="#{inscritController.inscrit.nom}"/>
+                            <p:inputTextarea placeholder="Adresse Personelle Actuelle" value="#{inscritController.inscrit.nom}"/>   
+                          
+
+
+                        </p:panelGrid>
+                    </div>
+                </div>
+            </h:form> 
         </div>
 
     </ui:define>

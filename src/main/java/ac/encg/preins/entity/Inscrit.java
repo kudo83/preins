@@ -6,11 +6,13 @@
 package ac.encg.preins.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,4 +32,10 @@ public class Inscrit implements Serializable {
 
     private String nom;
     private String prenom;
+    private String nomAr;
+    private String prenomAr;
+    private String cne;
+    private String cin;
+  //  @Temporal(javax.persistence.TemporalType.DATE)
+    private Date dateNaiss;
 }
