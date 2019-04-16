@@ -8,12 +8,11 @@
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="content">
-        <div class="layout-portlets-box">
-            <!--                    <p:messages id="messages"/>-->
-            <p:growl id="messages"/>
-            <h:form id="inscritForm">
+        <!--                    <p:messages id="messages"/>-->
+        <p:growl id="messages"/>
+        <h:form id="inscritForm">
+            <div class="layout-portlets-box ui-fluid">
                 <div class="Container50 Responsive50">
-
                     <div class="ContainerIndent ui-fluid">
                         <h2 class="BigTopic">
                             INFORMATIONS ETUDIANT
@@ -24,46 +23,76 @@
                             <p:inputText placeholder="النسب"  value="#{inscritController.inscrit.nomAr}"  dir="rtl"/>
                             <p:inputText placeholder="Prénom" value="#{inscritController.inscrit.nom}"/>
                             <p:inputText placeholder="الاسم"  value="#{inscritController.inscrit.prenomAr}"  dir="rtl"/>
-                            <p:inputText placeholder="CNE" value="#{inscritController.inscrit.cne}"/>
+                            <p:inputText placeholder="CNE" value="#{inscritController.inscrit.cne}" disabled="true"/>
                             <p:inputText placeholder="CIN" value="#{inscritController.inscrit.cin}"/>
                             <p:calendar placeholder="Date de Naissance" value="#{inscritController.inscrit.dateNaiss}"/>
-                            <p:inputText placeholder="Pays de Naissance" value="#{inscritController.inscrit.nom}"/>
                             <p:inputText placeholder="Ville de Naissance" value="#{inscritController.inscrit.nom}"/>
                             <p:inputText placeholder="Province de Naissance" value="#{inscritController.inscrit.nom}"/>
-                            <p:inputTextarea placeholder="Adresse Personelle Actuelle" value="#{inscritController.inscrit.nom}"/>   
+                            <p:inputText placeholder="Pays de Naissance" value="#{inscritController.inscrit.nom}"/>
                             <p:inputText placeholder="Téléphone" value="#{inscritController.inscrit.nom}"/>
-
-
+                            <p:inputText placeholder="Email" value="#{inscritController.inscrit.nom}"/>
+                            <p:inputTextarea placeholder="Adresse Personelle Actuelle" value="#{inscritController.inscrit.nom}"/>   
                         </p:panelGrid>
-
-
-
                     </div>
                 </div>
                 <div class="Container50 Responsive50">
-
                     <div class="ContainerIndent ui-fluid">
                         <h2 class="BigTopic">
                             INFORMATIONS PARENTS
                         </h2>
                         <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="ui-panelgrid ui-widget ui-panelgrid-blank"   >
-                            
                             <p:inputText placeholder="Prénom du Père ou Tuteur" value="#{inscritController.inscrit.nom}"/>
                             <p:inputText placeholder="اسم الأب أو الوالي"  value="#{inscritController.inscrit.prenomAr}"  dir="rtl"/>
                             <p:inputText placeholder="Prénom de la Mère" value="#{inscritController.inscrit.nom}"/>
                             <p:inputText placeholder="اسم الأم"  value="#{inscritController.inscrit.prenomAr}"  dir="rtl"/>
-                         
                             <p:inputText placeholder="CIN Père ou Tuteur" value="#{inscritController.inscrit.cin}"/>
-                              <p:inputText placeholder="Téléphone" value="#{inscritController.inscrit.nom}"/>
+                            <p:inputText placeholder="Téléphone" value="#{inscritController.inscrit.nom}"/>
                             <p:inputTextarea placeholder="Adresse Personelle Actuelle" value="#{inscritController.inscrit.nom}"/>   
-                          
-
-
                         </p:panelGrid>
                     </div>
                 </div>
-            </h:form> 
-        </div>
+
+
+                <div class="ContainerIndent ui-fluid">
+                    <h2 class="BigTopic">
+                        BACCALAUREAT
+                    </h2>
+                    <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="ui-panelgrid ui-widget ui-panelgrid-blank"   >
+                        <p:inputText placeholder="Prénom du Père ou Tuteur" value="#{inscritController.inscrit.nom}"/>
+                        <p:inputText placeholder="اسم الأب أو الوالي"  value="#{inscritController.inscrit.prenomAr}"  dir="rtl"/>
+                        <p:inputText placeholder="Prénom de la Mère" value="#{inscritController.inscrit.nom}"/>
+                        <p:inputText placeholder="اسم الأم"  value="#{inscritController.inscrit.prenomAr}"  dir="rtl"/>
+                        <p:inputText placeholder="CIN Père ou Tuteur" value="#{inscritController.inscrit.cin}"/>
+                        <p:inputText placeholder="Téléphone" value="#{inscritController.inscrit.nom}"/>
+                        <p:inputTextarea placeholder="Adresse Personelle Actuelle" value="#{inscritController.inscrit.nom}"/>   
+                    </p:panelGrid>
+                </div>
+            </div>
+            <div class="layout-portlets-box ui-fluid">
+                <div class="Container50 Responsive50">
+                    <div class="ContainerIndent ui-fluid">
+                        <h2 class="BigTopic">
+                            PHOTO PERSONELLE
+                        </h2>
+                        <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="ui-panelgrid ui-widget ui-panelgrid-blank"   >
+                            <p:graphicImage name="images/default-male.gif" library="spark-layout" style="height:200px; width:200px;"/>
+                             <p:fileUpload value="#{inscritController.inscrit.nom}" mode="simple" skinSimple="true"/>
+                        </p:panelGrid>
+                    </div>
+                </div>
+                <div class="Container50 Responsive50">
+                    <div class="ContainerIndent ui-fluid">
+                        <h2 class="BigTopic">
+                            PHOTO CIN
+                        </h2>
+                       <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="ui-panelgrid ui-widget ui-panelgrid-blank"   >
+                            <p:graphicImage name="images/default-male.gif" library="spark-layout" style="height:200px; width:200px;"/>
+                             <p:fileUpload value="#{inscritController.inscrit.nom}" mode="simple" skinSimple="true"/>
+                        </p:panelGrid>
+                    </div>
+                </div>
+            </div>
+        </h:form> 
 
     </ui:define>
 
