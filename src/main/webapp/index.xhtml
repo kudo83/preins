@@ -23,15 +23,20 @@
                             <p:inputText placeholder="النسب"  value="#{inscritController.inscrit.nomAr}"  dir="rtl"/>
                             <p:inputText placeholder="Prénom" value="#{inscritController.inscrit.nom}"/>
                             <p:inputText placeholder="الاسم"  value="#{inscritController.inscrit.prenomAr}"  dir="rtl"/>
+                            <p:inputText placeholder="SEX" value="#{inscritController.inscrit.sex}"/>
                             <p:inputText placeholder="CNE" value="#{inscritController.inscrit.cne}" disabled="true"/>
                             <p:inputText placeholder="CIN" value="#{inscritController.inscrit.cin}"/>
                             <p:calendar placeholder="Date de Naissance" value="#{inscritController.inscrit.dateNaiss}"/>
-                            <p:inputText placeholder="Ville de Naissance" value="#{inscritController.inscrit.nom}"/>
-                            <p:inputText placeholder="Province de Naissance" value="#{inscritController.inscrit.nom}"/>
-                            <p:inputText placeholder="Pays de Naissance" value="#{inscritController.inscrit.nom}"/>
-                            <p:inputText placeholder="Téléphone" value="#{inscritController.inscrit.nom}"/>
-                            <p:inputText placeholder="Email" value="#{inscritController.inscrit.nom}"/>
-                            <p:inputTextarea placeholder="Adresse Personelle Actuelle" value="#{inscritController.inscrit.nom}"/>   
+                            <p:inputText placeholder="Lieu de Naissance" value="#{inscritController.inscrit.lieuNaiss}"/>
+                            <p:selectOneMenu placeholder="Province de Naissance" value="#{inscritController.inscrit.provinceNaiss.id}">
+                                <f:selectItem itemLabel="Province de Naissance" itemValue="" noSelectionOption="true" />
+                                <f:selectItems value="#{inscritController.provinces}" var="province" itemLabel="#{province.lib}" itemValue="#{province.id}"/>
+                            </p:selectOneMenu>
+
+                            <p:inputText placeholder="Pays de Naissance" value="#{inscritController.inscrit.paysNaiss}"/>
+                            <p:inputText placeholder="Téléphone" value="#{inscritController.inscrit.tel}"/>
+                            <p:inputText placeholder="Email" value="#{inscritController.inscrit.email}"/>
+                            <p:inputTextarea placeholder="Adresse Personelle Actuelle" value="#{inscritController.inscrit.adress}"/>   
                         </p:panelGrid>
                     </div>
                 </div>
@@ -49,24 +54,22 @@
                             <p:inputText placeholder="Téléphone" value="#{inscritController.inscrit.nom}"/>
                             <p:inputTextarea placeholder="Adresse Personelle Actuelle" value="#{inscritController.inscrit.nom}"/>   
                         </p:panelGrid>
+                        <h2 class="BigTopic">
+                            BACCALAUREAT
+                        </h2>
+                        <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="ui-panelgrid ui-widget ui-panelgrid-blank"   >
+                            <p:inputText placeholder="Date d'obtention du Bac" value="#{inscritController.inscrit.nom}"/>
+                            <p:inputText placeholder="ٍSerie du Bac"  value="#{inscritController.inscrit.prenomAr}"  dir="rtl"/>
+                            <p:inputText placeholder="Province d'obtention du Bac " value="#{inscritController.inscrit.nom}"/>
+                            <p:inputText placeholder="Mention du Bac"  value="#{inscritController.inscrit.prenomAr}"  dir="rtl"/>
+                            <p:inputText placeholder="Académie " value="#{inscritController.inscrit.cin}"/>
+
+                        </p:panelGrid>
                     </div>
                 </div>
 
 
-                <div class="ContainerIndent ui-fluid">
-                    <h2 class="BigTopic">
-                        BACCALAUREAT
-                    </h2>
-                    <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="ui-panelgrid ui-widget ui-panelgrid-blank"   >
-                        <p:inputText placeholder="Prénom du Père ou Tuteur" value="#{inscritController.inscrit.nom}"/>
-                        <p:inputText placeholder="اسم الأب أو الوالي"  value="#{inscritController.inscrit.prenomAr}"  dir="rtl"/>
-                        <p:inputText placeholder="Prénom de la Mère" value="#{inscritController.inscrit.nom}"/>
-                        <p:inputText placeholder="اسم الأم"  value="#{inscritController.inscrit.prenomAr}"  dir="rtl"/>
-                        <p:inputText placeholder="CIN Père ou Tuteur" value="#{inscritController.inscrit.cin}"/>
-                        <p:inputText placeholder="Téléphone" value="#{inscritController.inscrit.nom}"/>
-                        <p:inputTextarea placeholder="Adresse Personelle Actuelle" value="#{inscritController.inscrit.nom}"/>   
-                    </p:panelGrid>
-                </div>
+
             </div>
             <div class="layout-portlets-box ui-fluid">
                 <div class="Container50 Responsive50">
@@ -76,7 +79,7 @@
                         </h2>
                         <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="ui-panelgrid ui-widget ui-panelgrid-blank"   >
                             <p:graphicImage name="images/default-male.gif" library="spark-layout" style="height:200px; width:200px;"/>
-                             <p:fileUpload value="#{inscritController.inscrit.nom}" mode="simple" skinSimple="true"/>
+                            <p:fileUpload value="#{inscritController.inscrit.nom}" mode="simple" skinSimple="true"/>
                         </p:panelGrid>
                     </div>
                 </div>
@@ -85,9 +88,9 @@
                         <h2 class="BigTopic">
                             PHOTO CIN
                         </h2>
-                       <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="ui-panelgrid ui-widget ui-panelgrid-blank"   >
+                        <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="ui-panelgrid ui-widget ui-panelgrid-blank"   >
                             <p:graphicImage name="images/id.png" library="spark-layout" style="height:161px; width:214px;"/>
-                             <p:fileUpload value="#{inscritController.inscrit.nom}" mode="simple" skinSimple="true"/>
+                            <p:fileUpload value="#{inscritController.inscrit.nom}" mode="simple" skinSimple="true"/>
                         </p:panelGrid>
                     </div>
                 </div>

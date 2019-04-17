@@ -6,9 +6,12 @@
 package ac.encg.preins.service;
 
 import ac.encg.preins.entity.Inscrit;
+import ac.encg.preins.entity.Province;
 import java.io.Serializable;
 import org.springframework.beans.factory.annotation.Autowired;
 import ac.encg.preins.repository.InscritRepository;
+import ac.encg.preins.repository.ProvinceRepository;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -22,10 +25,17 @@ import org.springframework.stereotype.Service;
 public class InscritService implements Serializable {
 
     @Autowired
-    private InscritRepository repository;
+    private InscritRepository inscritRepo;
+    
+    @Autowired
+    private ProvinceRepository provinceRepo;
   
 
     public void save(Inscrit inscrit) {
-        repository.save(inscrit);
+        inscritRepo.save(inscrit);
+    }
+    
+    public List<Province> loadProvinces(){
+        return provinceRepo.findAll();
     }
 }
