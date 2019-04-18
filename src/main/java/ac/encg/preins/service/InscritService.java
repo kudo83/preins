@@ -5,11 +5,17 @@
  */
 package ac.encg.preins.service;
 
+import ac.encg.preins.entity.Academie;
+import ac.encg.preins.entity.Bac;
 import ac.encg.preins.entity.Inscrit;
+import ac.encg.preins.entity.Pays;
 import ac.encg.preins.entity.Province;
+import ac.encg.preins.repository.AcademieRepository;
+import ac.encg.preins.repository.BacRepository;
 import java.io.Serializable;
 import org.springframework.beans.factory.annotation.Autowired;
 import ac.encg.preins.repository.InscritRepository;
+import ac.encg.preins.repository.PaysRepository;
 import ac.encg.preins.repository.ProvinceRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -29,6 +35,15 @@ public class InscritService implements Serializable {
     
     @Autowired
     private ProvinceRepository provinceRepo;
+    
+    @Autowired
+    private PaysRepository paysRepo;
+    
+    @Autowired
+    private BacRepository bacRepo;
+    
+    @Autowired
+    private AcademieRepository academieRepo;
   
 
     public void save(Inscrit inscrit) {
@@ -36,6 +51,18 @@ public class InscritService implements Serializable {
     }
     
     public List<Province> loadProvinces(){
-        return provinceRepo.findAll();
+        return provinceRepo.findAllByOrderByLibAsc();
+    }
+    
+    public List<Pays> loadPays(){
+        return paysRepo.findAllByOrderByLibAsc();
+    }
+    
+    public List<Bac> loadBacs(){
+        return bacRepo.findAllByOrderByLibAsc();
+    }
+    
+    public List<Academie> loadAcademies(){
+        return academieRepo.findAllByOrderByLibAsc();
     }
 }

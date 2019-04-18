@@ -20,13 +20,13 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "PROVINCE")
-public class Province implements Serializable {
+@Table(name = "ACADEMIE")
+public class Academie implements Serializable {
 
     @Id
-    @Column(name = "ID_PROVINCE")
+    @Column(name = "COD_ACADEMIE")
     private Long id;
-    @Column(name = "LIB_PROVINCE")
+    @Column(name = "LIB_ACADEMIE")
     private String lib;
 
 }
