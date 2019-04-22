@@ -24,7 +24,7 @@ import lombok.Setter;
 public class Academie implements Serializable {
 
     @Id
-    @Column(name = "COD_ACADEMIE")
+    @Column(name = "ID_ACADEMIE")
     private Long id;
     @Column(name = "LIB_ACADEMIE")
     private String lib;

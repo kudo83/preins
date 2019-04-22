@@ -5,7 +5,7 @@
  */
 package ac.encg.preins.repository;
 
-import ac.encg.preins.entity.Bac;
+import ac.encg.preins.entity.SerieBac;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -13,6 +13,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  *
  * @author Aissam
  */
-public interface BacRepository extends JpaRepository<Bac, Long> {
-      public List<Bac> findAllByOrderByLibAsc();
+public interface SerieBacRepository extends JpaRepository<SerieBac, Long> {
+      public List<SerieBac> findAllByOrderByLibAsc();
 }

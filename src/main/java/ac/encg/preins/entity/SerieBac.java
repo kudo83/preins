@@ -8,8 +8,6 @@ package ac.encg.preins.entity;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.Getter;
@@ -22,24 +20,13 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "INS_BAC")
-public class InscritBac implements Serializable {
+@Table(name = "SERIE_BAC")
+public class SerieBac implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID_INS_BAC")
+    @Column(name = "ID_SERIE_BAC")
     private Long id;
-
-    private Bac bac;
-
-    private Province provinceBac;
-
-    @Column(name = "COD_MNB")
-    private String montion;
-
-    @Column(name = "ANN")
-    private String Annee;
-    
-    private Academie academie;
+    @Column(name = "LIB_SERIE_BAC")
+    private String lib;
 
 }

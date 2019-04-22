@@ -6,12 +6,11 @@
 package ac.encg.preins.service;
 
 import ac.encg.preins.entity.Academie;
-import ac.encg.preins.entity.Bac;
+import ac.encg.preins.entity.SerieBac;
 import ac.encg.preins.entity.Inscrit;
 import ac.encg.preins.entity.Pays;
 import ac.encg.preins.entity.Province;
 import ac.encg.preins.repository.AcademieRepository;
-import ac.encg.preins.repository.BacRepository;
 import java.io.Serializable;
 import org.springframework.beans.factory.annotation.Autowired;
 import ac.encg.preins.repository.InscritRepository;
@@ -20,6 +19,7 @@ import ac.encg.preins.repository.ProvinceRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import ac.encg.preins.repository.SerieBacRepository;
 
 /**
  *
@@ -40,7 +40,7 @@ public class InscritService implements Serializable {
     private PaysRepository paysRepo;
     
     @Autowired
-    private BacRepository bacRepo;
+    private SerieBacRepository SerieBacRepo;
     
     @Autowired
     private AcademieRepository academieRepo;
@@ -58,8 +58,8 @@ public class InscritService implements Serializable {
         return paysRepo.findAllByOrderByLibAsc();
     }
     
-    public List<Bac> loadBacs(){
-        return bacRepo.findAllByOrderByLibAsc();
+    public List<SerieBac> loadBacs(){
+        return SerieBacRepo.findAllByOrderByLibAsc();
     }
     
     public List<Academie> loadAcademies(){

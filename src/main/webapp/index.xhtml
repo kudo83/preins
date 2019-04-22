@@ -9,7 +9,7 @@
 
     <ui:define name="content">
         <!--                    <p:messages id="messages"/>-->
-        <p:growl id="messages"/>
+        <p:growl id="messages" showDetail="true"/>
         <h:form id="inscritForm">
             <div class="layout-portlets-box ui-fluid">
                 <div class="Container50 Responsive50">
@@ -42,7 +42,7 @@
                             <p:inputTextarea placeholder="Adresse Personelle Actuelle" value="#{inscritController.inscrit.adresse}"/>   
                         </p:panelGrid>
                     </div>
-                </div>
+                </div> 
                 <div class="Container50 Responsive50">
                     <div class="ContainerIndent ui-fluid">
                         <h2 class="BigTopic">
@@ -61,18 +61,17 @@
                             BACCALAUREAT
                         </h2>
                         <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="ui-panelgrid ui-widget ui-panelgrid-blank"   >
-                            <p:inputText placeholder="Date d'obtention du Bac" value="#{inscritController.inscrit.nom}"/>
-                            <p:selectOneMenu  value="#{inscritController.inscrit.inscritBac.bac.id}">
+                            <p:inputText placeholder="Année d'obtention du Bac" value="#{inscritController.inscrit.bac.annee}"/>
+                            <p:selectOneMenu  value="#{inscritController.inscrit.bac.serieBac.id}">
                                 <f:selectItem itemLabel="Série du Bac" itemValue="" noSelectionOption="true" />
-                                <f:selectItems value="#{inscritController.bacs}" var="bac" itemLabel="#{bac.lib}" itemValue="#{bac.id}"/>
+                                <f:selectItems value="#{inscritController.seriesBac}" var="serieBac" itemLabel="#{serieBac.lib}" itemValue="#{serieBac.id}"/>
                             </p:selectOneMenu>
-                            <p:selectOneMenu  value="#{inscritController.inscrit.inscritBac.provinceBac.id}">
+                            <p:selectOneMenu  value="#{inscritController.inscrit.bac.provinceBac.id}">
                                 <f:selectItem itemLabel="Province d'obtention du Bac" itemValue="" noSelectionOption="true" />
                                 <f:selectItems value="#{inscritController.provinces}" var="province" itemLabel="#{province.lib}" itemValue="#{province.id}"/>
                             </p:selectOneMenu>
                             <p:inputText placeholder="Mention du Bac"  value="#{inscritController.inscrit.prenomAr}" />
-                            <p:inputText placeholder="Académie " value="#{inscritController.inscrit.cin}"/>
-                            <p:selectOneMenu  value="#{inscritController.inscrit.inscritBac.academie.id}">
+                            <p:selectOneMenu  value="#{inscritController.inscrit.bac.academie.id}">
                                 <f:selectItem itemLabel="Académie" itemValue="" noSelectionOption="true" />
                                 <f:selectItems value="#{inscritController.academies}" var="academie" itemLabel="#{academie.lib}" itemValue="#{academie.id}"/>
                             </p:selectOneMenu>
@@ -81,10 +80,6 @@
                     </div>
                 </div>
 
-
-
-            </div>
-            <div class="layout-portlets-box ui-fluid">
                 <div class="Container50 Responsive50">
                     <div class="ContainerIndent ui-fluid">
                         <h2 class="BigTopic">
@@ -92,7 +87,10 @@
                         </h2>
                         <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="ui-panelgrid ui-widget ui-panelgrid-blank"   >
                             <p:graphicImage name="images/default-male.gif" library="spark-layout" style="height:161px; width:161px;"/>
-                            <p:fileUpload value="#{inscritController.inscrit.nom}" mode="simple" skinSimple="true"/>
+                            <!--<p:fileUpload value="#{inscritController.upload}" mode="simple" skinSimple="true"/>-->
+                            <p:fileUpload fileUploadListener="#{inscritController.upload}" mode="advanced" dragDropSupport="false" 
+                                          update="messages" sizeLimit="2000000" fileLimit="1" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+                             <h3>Maximum size: 2 MB</h3>
                         </p:panelGrid>
                     </div>
                 </div>
@@ -103,10 +101,22 @@
                         </h2>
                         <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="ui-panelgrid ui-widget ui-panelgrid-blank"   >
                             <p:graphicImage name="images/id.png" library="spark-layout" style="height:161px; width:214px;"/>
-                            <p:fileUpload value="#{inscritController.inscrit.nom}" mode="simple" skinSimple="true"/>
+                            <p:fileUpload value="#{inscritController.inscrit.nom}" mode="simple" skinSimple="true" />
                         </p:panelGrid>
                     </div>
+
                 </div>
+            </div>
+            <div class="layout-portlets-box ui-fluid" >
+                <!--<div class="Container50 Responsive50 ">-->
+                <div class="ContainerIndent ui-fluid" dir="rtl" >
+                        <p:panelGrid id="buttonGrid" columns="8" layout="grid" style="border:0px !important; background:none;" class="ui-panelgrid-blank">       
+                             <p:commandButton value="VALIDER" class ="GreenButton" action="#{inscritController.save()}" update="messages"  icon="fa fa-save Fs16 white"  />
+                            <p:commandButton value="ENREGISTER" class ="OrangeButton" action="#{inscritController.save()}" update="messages"  icon="fa fa-save Fs16 white"  />
+                        </p:panelGrid>
+
+                    </div>
+                <!--</div>-->
             </div>
         </h:form> 
 
