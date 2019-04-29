@@ -481,3 +481,8 @@ li{list-style:none;}
 
 .animated.fa{display:inline-block !important;}
 .fa-spin.fa{display:inline-block !important;}
+
+/*Caher le bouton Upload et Cancel*/
+/*.ui-fileupload-buttonbar button:not(.ui-fileupload-choose) {  
+    display: none;  
+  }  */

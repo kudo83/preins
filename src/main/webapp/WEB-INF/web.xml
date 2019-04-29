@@ -22,18 +22,7 @@
         <!--<param-value>spark#{themeView.color}</param-value>-->
         <param-value>spark-blue</param-value>
     </context-param>
-    <!--    <context-param>
-        <param-name>primefaces.DIR</param-name>
-        <param-value>RTL</param-value>
-    </context-param>-->
     
-    
-    <!--    <context-param>
-        <param-name>contextConfigLocation</param-name>
-        <param-value>/WEB-INF/applicationContext.xml</param-value>
-    </context-param>-->
-    
-    <!--Ignorer le contenu des commentaire dans les page JSF.. Surtout pour ne pas essayer d'interpréter les EL dans les commentaire-->
     <context-param>
         <param-name>javax.faces.FACELETS_SKIP_COMMENTS</param-name>
         <param-value>true</param-value>
@@ -43,14 +32,12 @@
         <param-name>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</param-name>
         <param-value>true</param-value>
     </context-param>
-    <filter>
-        <filter-name>PrimeFaces FileUpload Filter</filter-name>
-        <filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>PrimeFaces FileUpload Filter</filter-name>
-        <servlet-name>Faces Servlet</servlet-name>
-    </filter-mapping>
+    
+    <context-param>
+        <param-name>primefaces.UPLOADER</param-name>
+        <param-value>auto|native|commons</param-value>
+    </context-param>
+   
     
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
@@ -61,6 +48,18 @@
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
+    
+    
+    
+<!--    <filter>
+        <filter-name>PrimeFaces FileUpload Filter</filter-name>
+        <filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>PrimeFaces FileUpload Filter</filter-name>
+        <servlet-name>Faces Servlet</servlet-name>
+    </filter-mapping>-->
+    
     <session-config>
         <session-timeout>
             30
