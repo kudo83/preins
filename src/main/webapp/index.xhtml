@@ -9,8 +9,10 @@
 
     <ui:define name="content">
         <!--                    <p:messages id="messages"/>-->
-        <p:growl id="messages" showDetail="true"/>
+     
         <h:form id="inscritForm" enctype="multipart/form-data">
+             <p:growl id="messages"/>
+            <p:focus context="inscritForm" />
             <div class="layout-portlets-box ui-fluid">
                 <div class="Container50 Responsive50">
                     <div class="ContainerIndent ui-fluid">
@@ -19,27 +21,28 @@
                         </h2>
 
                         <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="ui-panelgrid ui-widget ui-panelgrid-blank"   >
-                            <p:inputText placeholder="Nom" value="#{inscritController.inscrit.nom}"/>
-                            <p:inputText placeholder="النسب"  value="#{inscritController.inscrit.nomAr}"  dir="rtl"/>
-                            <p:inputText placeholder="Prénom" value="#{inscritController.inscrit.nom}"/>
-                            <p:inputText placeholder="الاسم"  value="#{inscritController.inscrit.prenomAr}"  dir="rtl"/>
-                            <p:inputText placeholder="SEX" value="#{inscritController.inscrit.sex}"/>
-                            <p:inputText placeholder="CNE" value="#{inscritController.inscrit.cne}" disabled="false"/>
+                            <p:inputText placeholder="Nom" value="#{inscritController.inscrit.nom}" required="true" requiredMessage="Le champ Nom est obligatoire"/>
+                            <p:inputText placeholder="النسب"  value="#{inscritController.inscrit.nomAr}"  dir="rtl" required="true" requiredMessage="Le champ النسب est obligatoire">
+                            </p:inputText>    
+                            <p:inputText placeholder="Prénom" value="#{inscritController.inscrit.nom}" required="true" requiredMessage="Le champ Nom est obligatoire"/>
+                            <p:inputText placeholder="الاسم"  value="#{inscritController.inscrit.prenomAr}"  dir="rtl" required="true" requiredMessage="Le champ Nom est obligatoire"/>
+                            <p:inputText placeholder="SEX" value="#{inscritController.inscrit.sex}" required="true" requiredMessage="Le champ Nom est obligatoire"/>
+                            <p:inputText placeholder="CNE" value="#{inscritController.inscrit.cne}" disabled="false" required="true" requiredMessage="Le champ Nom est obligatoire"/>
                             <p:inputText placeholder="CIN" value="#{inscritController.inscrit.cin}"/>
-                            <p:calendar placeholder="Date de Naissance" value="#{inscritController.inscrit.dateNaiss}"/>
-                            <p:inputText placeholder="Lieu de Naissance" value="#{inscritController.inscrit.lieuNaiss}"/>
-                            <p:selectOneMenu placeholder="Province de Naissance" value="#{inscritController.inscrit.provinceNaiss.id}">
+                            <p:calendar placeholder="Date de Naissance" value="#{inscritController.inscrit.dateNaiss}" required="true" requiredMessage="Le champ Nom est obligatoire"/>
+                            <p:inputText placeholder="Lieu de Naissance" value="#{inscritController.inscrit.lieuNaiss}" required="true" requiredMessage="Le champ Nom est obligatoire"/>
+                            <p:selectOneMenu placeholder="Province de Naissance" value="#{inscritController.inscrit.provinceNaiss.id}" required="true" requiredMessage="Le champ Nom est obligatoire">
                                 <f:selectItem itemLabel="Province de Naissance" itemValue="" noSelectionOption="true" />
                                 <f:selectItems value="#{inscritController.provinces}" var="province" itemLabel="#{province.lib}" itemValue="#{province.id}"/>
                             </p:selectOneMenu>
 
-                            <p:selectOneMenu placeholder="Pays de Naissance" value="#{inscritController.inscrit.paysNaiss.id}">
+                            <p:selectOneMenu placeholder="Pays de Naissance" value="#{inscritController.inscrit.paysNaiss.id}" required="true" requiredMessage="Le champ Nom est obligatoire">
                                 <f:selectItem itemLabel="Pays de Naissance" itemValue="" noSelectionOption="true" />
                                 <f:selectItems value="#{inscritController.pays}" var="pays" itemLabel="#{pays.lib}" itemValue="#{pays.id}"/>
                             </p:selectOneMenu>
-                            <p:inputText placeholder="Téléphone" value="#{inscritController.inscrit.tel}"/>
-                            <p:inputText placeholder="Email" value="#{inscritController.inscrit.email}"/>
-                            <p:inputTextarea placeholder="Adresse Personelle Actuelle" value="#{inscritController.inscrit.adresse}"/>   
+                            <p:inputText placeholder="Téléphone" value="#{inscritController.inscrit.tel}" required="true" requiredMessage="Le champ Nom est obligatoire"/>
+                            <p:inputText placeholder="Email" value="#{inscritController.inscrit.email}" required="true" requiredMessage="Le champ Nom est obligatoire"/>
+                            <p:inputTextarea placeholder="Adresse Personelle Actuelle" value="#{inscritController.inscrit.adresse}" required="true" requiredMessage="Le champ Nom est obligatoire"/>   
                         </p:panelGrid>
                     </div>
                 </div> 
@@ -49,29 +52,29 @@
                             INFORMATIONS PARENTS
                         </h2>
                         <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="ui-panelgrid ui-widget ui-panelgrid-blank"   >
-                            <p:inputText placeholder="Prénom du Père ou Tuteur" value="#{inscritController.inscrit.prenomPere}"/>
-                            <p:inputText placeholder="اسم الأب أو الوالي"  value="#{inscritController.inscrit.prenomPereAr}"  dir="rtl"/>
-                            <p:inputText placeholder="Prénom de la Mère" value="#{inscritController.inscrit.prenomMere}"/>
-                            <p:inputText placeholder="اسم الأم"  value="#{inscritController.inscrit.prenomMereAr}"  dir="rtl"/>
-                            <p:inputText placeholder="CIN Père ou Tuteur" value="#{inscritController.inscrit.cinTuteur}"/>
+                            <p:inputText placeholder="Prénom du Père ou Tuteur" value="#{inscritController.inscrit.prenomPere}" required="true" requiredMessage="Le champ Nom est obligatoire"/>
+                            <p:inputText placeholder="اسم الأب أو الوالي"  value="#{inscritController.inscrit.prenomPereAr}"  dir="rtl" required="true" requiredMessage="Le champ Nom est obligatoire"/>
+                            <p:inputText placeholder="Prénom de la Mère" value="#{inscritController.inscrit.prenomMere}" required="true" requiredMessage="Le champ Nom est obligatoire"/>
+                            <p:inputText placeholder="اسم الأم"  value="#{inscritController.inscrit.prenomMereAr}"  dir="rtl" required="true" requiredMessage="Le champ Nom est obligatoire"/>
+                            <p:inputText placeholder="CIN Père ou Tuteur" value="#{inscritController.inscrit.cinTuteur}" required="true" requiredMessage="Le champ Nom est obligatoire"/>
                             <p:inputText placeholder="Téléphone" value="#{inscritController.inscrit.tel}"/>
-                            <p:inputTextarea placeholder="Adresse Actuelle du Tuteur" value="#{inscritController.inscrit.adresseTuteur}"/>   
+                            <p:inputTextarea placeholder="Adresse Actuelle du Tuteur" value="#{inscritController.inscrit.adresseTuteur}" required="true" requiredMessage="Le champ Nom est obligatoire"/>   
                         </p:panelGrid>
                         <h2 class="BigTopic">
                             BACCALAUREAT
                         </h2>
                         <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="ui-panelgrid ui-widget ui-panelgrid-blank"   >
-                            <p:inputText placeholder="Année d'obtention du Bac" value="#{inscritController.inscrit.bac.annee}"/>
-                            <p:selectOneMenu  value="#{inscritController.inscrit.bac.serieBac.id}">
+                            <p:inputText placeholder="Année d'obtention du Bac" value="#{inscritController.inscrit.bac.annee}" required="true" requiredMessage="Le champ Nom est obligatoire"/>
+                            <p:selectOneMenu  value="#{inscritController.inscrit.bac.serieBac.id}" required="true" requiredMessage="Le champ Nom est obligatoire">
                                 <f:selectItem itemLabel="Série du Bac" itemValue="" noSelectionOption="true" />
                                 <f:selectItems value="#{inscritController.seriesBac}" var="serieBac" itemLabel="#{serieBac.lib}" itemValue="#{serieBac.id}"/>
                             </p:selectOneMenu>
-                            <p:selectOneMenu  value="#{inscritController.inscrit.bac.provinceBac.id}">
+                            <p:selectOneMenu  value="#{inscritController.inscrit.bac.provinceBac.id}" required="true" requiredMessage="Le champ Nom est obligatoire">
                                 <f:selectItem itemLabel="Province d'obtention du Bac" itemValue="" noSelectionOption="true" />
                                 <f:selectItems value="#{inscritController.provinces}" var="province" itemLabel="#{province.lib}" itemValue="#{province.id}"/>
                             </p:selectOneMenu>
-                            <p:inputText placeholder="Mention du Bac"  value="#{inscritController.inscrit.prenomAr}" />
-                            <p:selectOneMenu  value="#{inscritController.inscrit.bac.academie.id}">
+                            <p:inputText placeholder="Mention du Bac"  value="#{inscritController.inscrit.prenomAr}" required="true" requiredMessage="Le champ Nom est obligatoire"/>
+                            <p:selectOneMenu  value="#{inscritController.inscrit.bac.academie.id}" required="true" requiredMessage="Le champ Nom est obligatoire">
                                 <f:selectItem itemLabel="Académie" itemValue="" noSelectionOption="true" />
                                 <f:selectItems value="#{inscritController.academies}" var="academie" itemLabel="#{academie.lib}" itemValue="#{academie.id}"/>
                             </p:selectOneMenu>
@@ -85,33 +88,15 @@
                         <h2 class="BigTopic">
                             PHOTO PERSONELLE
                         </h2>
-                        <!--                        <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="ui-panelgrid ui-widget ui-panelgrid-blank"   >-->
-                        <p:graphicImage id="photoPerso" value="/imagesUpload/#{inscritController.filename}" library="spark-layout" style="height:161px; width:161px;"/>
-                        <!--<p:fileUpload value="#{inscritController.getImage}" mode="simple" skinSimple="true"/>-->
-<!--                      <p:graphicImage id="photoPerso" value="#{inscritController.image}">
-                            <f:param name="default-male" value="default-male.gif" />
-                        </p:graphicImage>-->
-<!--                        <p:fileUpload fileUploadListener="#{inscritController.fileUpload}" value="#{inscritController.photoFile}" mode="advanced" dragDropSupport="false" 
-                                      update="messages" sizeLimit="2000000" fileLimit="10" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+                        <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="ui-panelgrid ui-widget ui-panelgrid-blank"   >
+                            <p:graphicImage id="photo" value="/imagesUpload/#{inscritController.photoFileName}" library="spark-layout" style="height:161px; width:161px;"/>
 
-                        <h3>Maximum size: 2 MB</h3>
-
-                                                <h:form id="form" enctype="multipart/form-data">
-                                                    <h:inputFile id="file" value="#{inscritController.photoFile}"/>
-                                                    <h:commandButton value="Upload"
-                                                                     action="#{inscritController.upload}"/>
-                                                </h:form>
+                            <h:inputFile  value="#{inscritController.uploadedPhotoFile}" >
+                                <f:ajax listener="#{inscritController.uploadPhoto()}" render="photo"/>
+                            </h:inputFile>
                         </p:panelGrid>
 
--->  
 
- 
-<h:inputFile value="#{inscritController.uploadedFile}"  >
-                            <f:ajax listener="#{inscritController.upload}" render="photoPerso"/>
-                        </h:inputFile>
-<!--                        <p:graphicImage id="photoPerso" value="#{inscritController.image}">
-                            <f:param name="filename" value="test.jpeg" />
-                        </p:graphicImage>-->
                     </div>
                 </div>
                 <div class="Container50 Responsive50">
@@ -119,9 +104,12 @@
                         <h2 class="BigTopic">
                             PHOTO CIN
                         </h2>
-                        <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="ui-panelgrid ui-widget ui-panelgrid-blank"   >
-                            <p:graphicImage id ="persoImage" name="images/id.png" value="#{inscritController.cinFile}" library="spark-layout" style="height:161px; width:214px;"/>
-                            <p:fileUpload value="#{inscritController.inscrit.nom}" mode="simple" skinSimple="true" />
+                       <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="ui-panelgrid ui-widget ui-panelgrid-blank"   >
+                            <p:graphicImage id="cin" value="/imagesUpload/#{inscritController.cinFileName}" library="spark-layout" style="height:161px; width:214px;"/>
+
+                            <h:inputFile  value="#{inscritController.uploadedCinFile}" >
+                                <f:ajax listener="#{inscritController.uploadCin()}" render="cin"/>
+                            </h:inputFile>
                         </p:panelGrid>
                     </div>
 
@@ -131,8 +119,9 @@
                 <!--<div class="Container50 Responsive50 ">-->
                 <div class="ContainerIndent ui-fluid" dir="rtl" >
                     <p:panelGrid id="buttonGrid" columns="8" layout="grid" style="border:0px !important; background:none;" class="ui-panelgrid-blank">       
-                        <p:commandButton value="VALIDER" class ="GreenButton" action="#{inscritController.fileUpload(photoFile)}" update="messages"  icon="fa fa-save Fs16 white"  />
-                        <p:commandButton value="ENREGISTER" class ="OrangeButton" action="#{inscritController.save()}" update="messages"  icon="fa fa-save Fs16 white"  />
+                        <!--<p:commandButton value="VALIDER" class ="GreenButton" action="#{inscritController.save()}" update="messages"  icon="fa fa-save Fs16 white"  />-->
+                        <h:commandButton value="VALIDER" class ="ui-button ui-button-text"  action="#{inscritController.save()}"> <f:ajax execute="inscritForm" render="inscritForm" /> </h:commandButton> 
+                        <!--<p:commandButton value="ENREGISTER" class ="OrangeButton" action="#{inscritController.save()}" update="messages"  icon="fa fa-save Fs16 white"  />-->
                     </p:panelGrid>
 
                 </div>
