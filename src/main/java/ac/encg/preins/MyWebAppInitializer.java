@@ -4,6 +4,7 @@ import javax.servlet.ServletContext;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.web.filter.DelegatingFilterProxy;
 
 /**
  *
@@ -17,8 +18,11 @@ public class MyWebAppInitializer implements WebApplicationInitializer {
         AnnotationConfigWebApplicationContext rootContext
                 = new AnnotationConfigWebApplicationContext();
         rootContext.register(SpringConfiguration.class);
+        rootContext.register(WebSecurityConfig.class);
 
         // Manage the lifecycle of the root application context
         container.addListener(new ContextLoaderListener(rootContext));
+//        container.addFilter("securityFilter", 
+//                       new DelegatingFilterProxy("springSecurityFilterChain"));
     }
 }

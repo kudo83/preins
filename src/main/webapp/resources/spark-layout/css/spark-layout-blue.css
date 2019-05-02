@@ -488,3 +488,11 @@ li{list-style:none;}
   }  */
 
 
+.arabic{
+    font-family: 'ralewayregular' !important;
+}
+
+.boldLabel{
+    font-weight: bold;
+}
+

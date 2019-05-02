@@ -1,0 +1,134 @@
+
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+        <!--                    <p:messages id="messages"/>-->
+     
+        <h:form id="inscritForm" enctype="multipart/form-data">
+             <p:growl id="messages"/>
+            <p:focus context="inscritForm" />
+            <div class="layout-portlets-box ui-fluid">
+                <div class="Container50 Responsive50">
+                    <div class="ContainerIndent ui-fluid">
+                        <h2 class="BigTopic">
+                            INFORMATIONS ETUDIANT
+                        </h2>
+
+                        <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;">
+                            <p:inputText placeholder="Nom" value="#{inscritController.inscrit.nom}" required="true" requiredMessage="Le champ Nom est obligatoire"/>
+                            <p:inputText placeholder="النسب"  value="#{inscritController.inscrit.nomAr}" dir="rtl" required="true" requiredMessage="Le champ النسب est obligatoire">
+                            </p:inputText>    
+                            <p:inputText placeholder="Prénom" value="#{inscritController.inscrit.nom}" required="true" requiredMessage="Le champ Nom est obligatoire"/>
+                            <p:inputText placeholder="الاسم"  value="#{inscritController.inscrit.prenomAr}"  dir="rtl" required="true" requiredMessage="Le champ Nom est obligatoire"/>
+                            <p:inputText placeholder="SEX" value="#{inscritController.inscrit.sex}" required="true" requiredMessage="Le champ Nom est obligatoire"/>
+                            <p:inputText placeholder="CNE" value="#{inscritController.inscrit.cne}" disabled="false" required="true" requiredMessage="Le champ Nom est obligatoire"/>
+                            <p:inputText placeholder="CIN" value="#{inscritController.inscrit.cin}"/>
+                            <p:calendar placeholder="Date de Naissance" value="#{inscritController.inscrit.dateNaiss}" required="true" requiredMessage="Le champ Nom est obligatoire"/>
+                            <p:inputText placeholder="Lieu de Naissance" value="#{inscritController.inscrit.lieuNaiss}" required="true" requiredMessage="Le champ Nom est obligatoire"/>
+                            <p:selectOneMenu placeholder="Province de Naissance" value="#{inscritController.inscrit.provinceNaiss.id}" required="true" requiredMessage="Le champ Nom est obligatoire">
+                                <f:selectItem itemLabel="Province de Naissance" itemValue="" noSelectionOption="true" />
+                                <f:selectItems value="#{inscritController.provinces}" var="province" itemLabel="#{province.lib}" itemValue="#{province.id}"/>
+                            </p:selectOneMenu>
+
+                            <p:selectOneMenu placeholder="Pays de Naissance" value="#{inscritController.inscrit.paysNaiss.id}" required="true" requiredMessage="Le champ Nom est obligatoire">
+                                <f:selectItem itemLabel="Pays de Naissance" itemValue="" noSelectionOption="true" />
+                                <f:selectItems value="#{inscritController.pays}" var="pays" itemLabel="#{pays.lib}" itemValue="#{pays.id}"/>
+                            </p:selectOneMenu>
+                            <p:inputText placeholder="Téléphone" value="#{inscritController.inscrit.tel}" required="true" requiredMessage="Le champ Nom est obligatoire"/>
+                            <p:inputText placeholder="Email" value="#{inscritController.inscrit.email}" required="true" requiredMessage="Le champ Nom est obligatoire"/>
+                            <p:inputTextarea placeholder="Adresse Personelle Actuelle" value="#{inscritController.inscrit.adresse}" required="true" requiredMessage="Le champ Nom est obligatoire"/>   
+                        </p:panelGrid>
+                    </div>
+                </div> 
+                <div class="Container50 Responsive50">
+                    <div class="ContainerIndent ui-fluid">
+                        <h2 class="BigTopic">
+                            INFORMATIONS PARENTS
+                        </h2>
+                        <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="ui-panelgrid ui-widget ui-panelgrid-blank"   >
+                            <p:inputText placeholder="Prénom du Père ou Tuteur" value="#{inscritController.inscrit.prenomPere}" required="true" requiredMessage="Le champ Nom est obligatoire"/>
+                            <p:inputText placeholder="اسم الأب أو الوالي"  value="#{inscritController.inscrit.prenomPereAr}"  dir="rtl" required="true" requiredMessage="Le champ Nom est obligatoire"/>
+                            <p:inputText placeholder="Prénom de la Mère" value="#{inscritController.inscrit.prenomMere}" required="true" requiredMessage="Le champ Nom est obligatoire"/>
+                            <p:inputText placeholder="اسم الأم"  value="#{inscritController.inscrit.prenomMereAr}"  dir="rtl" required="true" requiredMessage="Le champ Nom est obligatoire"/>
+                            <p:inputText placeholder="CIN Père ou Tuteur" value="#{inscritController.inscrit.cinTuteur}" required="true" requiredMessage="Le champ Nom est obligatoire"/>
+                            <p:inputText placeholder="Téléphone" value="#{inscritController.inscrit.tel}"/>
+                            <p:inputTextarea placeholder="Adresse Actuelle du Tuteur" value="#{inscritController.inscrit.adresseTuteur}" required="true" requiredMessage="Le champ Nom est obligatoire"/>   
+                        </p:panelGrid>
+                        <h2 class="BigTopic">
+                            BACCALAUREAT
+                        </h2>
+                        <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="ui-panelgrid ui-widget ui-panelgrid-blank"   >
+                            <p:inputText placeholder="Année d'obtention du Bac" value="#{inscritController.inscrit.bac.annee}" required="true" requiredMessage="Le champ Nom est obligatoire"/>
+                            <p:selectOneMenu  value="#{inscritController.inscrit.bac.serieBac.id}" required="true" requiredMessage="Le champ Nom est obligatoire">
+                                <f:selectItem itemLabel="Série du Bac" itemValue="" noSelectionOption="true" />
+                                <f:selectItems value="#{inscritController.seriesBac}" var="serieBac" itemLabel="#{serieBac.lib}" itemValue="#{serieBac.id}"/>
+                            </p:selectOneMenu>
+                            <p:selectOneMenu  value="#{inscritController.inscrit.bac.provinceBac.id}" required="true" requiredMessage="Le champ Nom est obligatoire">
+                                <f:selectItem itemLabel="Province d'obtention du Bac" itemValue="" noSelectionOption="true" />
+                                <f:selectItems value="#{inscritController.provinces}" var="province" itemLabel="#{province.lib}" itemValue="#{province.id}"/>
+                            </p:selectOneMenu>
+                            <p:inputText placeholder="Mention du Bac"  value="#{inscritController.inscrit.prenomAr}" required="true" requiredMessage="Le champ Nom est obligatoire"/>
+                            <p:selectOneMenu  value="#{inscritController.inscrit.bac.academie.id}" required="true" requiredMessage="Le champ Nom est obligatoire">
+                                <f:selectItem itemLabel="Académie" itemValue="" noSelectionOption="true" />
+                                <f:selectItems value="#{inscritController.academies}" var="academie" itemLabel="#{academie.lib}" itemValue="#{academie.id}"/>
+                            </p:selectOneMenu>
+
+                        </p:panelGrid>
+                    </div>
+                </div>
+
+                <div class="Container50 Responsive50">
+                    <div class="ContainerIndent ui-fluid">
+                        <h2 class="BigTopic">
+                            PHOTO PERSONELLE
+                        </h2>
+                        <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="ui-panelgrid ui-widget ui-panelgrid-blank"   >
+                            <p:graphicImage id="photo" value="/imagesUpload/#{inscritController.photoFileName}" library="spark-layout" style="height:161px; width:161px;"/>
+
+                            <h:inputFile  value="#{inscritController.uploadedPhotoFile}" >
+                                <f:ajax listener="#{inscritController.uploadPhoto()}" render="photo"/>
+                            </h:inputFile>
+                        </p:panelGrid>
+
+
+                    </div>
+                </div>
+                <div class="Container50 Responsive50">
+                    <div class="ContainerIndent ui-fluid">
+                        <h2 class="BigTopic">
+                            PHOTO CIN
+                        </h2>
+                       <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="ui-panelgrid ui-widget ui-panelgrid-blank"   >
+                            <p:graphicImage id="cin" value="/imagesUpload/#{inscritController.cinFileName}" library="spark-layout" style="height:161px; width:214px;"/>
+
+                            <h:inputFile  value="#{inscritController.uploadedCinFile}" >
+                                <f:ajax listener="#{inscritController.uploadCin()}" render="cin"/>
+                            </h:inputFile>
+                        </p:panelGrid>
+                    </div>
+
+                </div>
+            </div>
+            <div class="layout-portlets-box ui-fluid" >
+                <!--<div class="Container50 Responsive50 ">-->
+                <div class="ContainerIndent ui-fluid" dir="rtl" >
+                    <p:panelGrid id="buttonGrid" columns="8" layout="grid" style="border:0px !important; background:none;" class="ui-panelgrid-blank">       
+                        <!--<p:commandButton value="VALIDER" class ="GreenButton" action="#{inscritController.save()}" update="messages"  icon="fa fa-save Fs16 white"  />-->
+                        <h:commandButton value="VALIDER" class ="ui-button ui-button-text"  action="#{inscritController.save()}"> <f:ajax execute="inscritForm" render="inscritForm" /> </h:commandButton> 
+                        <!--<p:commandButton value="ENREGISTER" class ="OrangeButton" action="#{inscritController.save()}" update="messages"  icon="fa fa-save Fs16 white"  />-->
+                    </p:panelGrid>
+
+                </div>
+                <!--</div>-->
+            </div>
+        </h:form> 
+
+    </ui:define>
+
+</ui:composition>

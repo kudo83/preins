@@ -7,14 +7,9 @@ import ac.encg.preins.entity.Pays;
 import ac.encg.preins.entity.Province;
 import ac.encg.preins.service.InscritService;
 import java.io.File;
-import java.io.FileInputStream;
-
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.Serializable;
-import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -25,12 +20,9 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
-import javax.faces.event.PhaseId;
 import javax.servlet.http.Part;
 import lombok.Getter;
 import lombok.Setter;
-import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
 import org.springframework.beans.factory.annotation.Autowired;
