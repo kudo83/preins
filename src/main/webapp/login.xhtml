@@ -28,12 +28,16 @@
 
         <div id="layout-portlets-cover">
             <div class="other-pages-box Container40 Responsive50 MarAuto Fnone TexAlCenter ShadowGray MarTop10"
-                 style="margin-top:5%; background-image:url(#{resource['spark-layout:images/loginpageillust.svg']}); background-repeat:no-repeat; background-position:center; background-size:cover;">
+                 styline="margin-top:5%; background-image:url(#{resource['spark-layout:images/loginpageillust.svg']}); background-repeat:no-repeat; background-position:center; background-size:cover;">
                 <div class="Container90 Fnone MarAuto TexAlCenter">
                     <h:form prependId="false">
+                      
                         <div class="EmptyBox50"></div>
-                        <h:graphicImage name="images/LOGO.svg" library="spark-layout" styleClass="MarAuto MarTop20 MarBot10"/>
+                        <h:graphicImage name="images/logo.png" library="spark-layout" styleClass="MarAuto MarTop20 MarBot10" style="height:80px; width:3#0px;"/>
                         <div class="EmptyBox20"></div>
+                         <p:outputLabel value="Login failed!" styleClass="red"
+                                       rendered="${!empty param['error']}" />
+
                         <p:inputText id="username" value="" placeholder="Username" styleClass="Container80 Fnone MarAuto Fs18"/>
                         <div class="EmptyBox10"></div>
                         <p:password id="password" value="" placeholder="Password" styleClass="Container80 Fnone MarAuto Fs18" feedback="false"/>

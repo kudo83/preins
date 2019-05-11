@@ -10,6 +10,7 @@ import ac.encg.preins.entity.SerieBac;
 import ac.encg.preins.entity.Inscrit;
 import ac.encg.preins.entity.Pays;
 import ac.encg.preins.entity.Province;
+import ac.encg.preins.predicate.InscritPredicate;
 import ac.encg.preins.repository.AcademieRepository;
 import java.io.Serializable;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ac.encg.preins.repository.SerieBacRepository;
+import java.util.Optional;
 
 /**
  *
@@ -64,5 +66,9 @@ public class InscritService implements Serializable {
     
     public List<Academie> loadAcademies(){
         return academieRepo.findAllByOrderByLibAsc();
+    }
+    
+    public Optional<Inscrit> getInscrit(String cne){
+        return inscritRepo.findOne(InscritPredicate.hasCne(cne));
     }
 }

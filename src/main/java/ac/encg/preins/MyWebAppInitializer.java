@@ -18,7 +18,7 @@ public class MyWebAppInitializer implements WebApplicationInitializer {
         AnnotationConfigWebApplicationContext rootContext
                 = new AnnotationConfigWebApplicationContext();
         rootContext.register(SpringConfiguration.class);
-        rootContext.register(WebSecurityConfig.class);
+     //   rootContext.register(WebSecurityConfig.class);
 
         // Manage the lifecycle of the root application context
         container.addListener(new ContextLoaderListener(rootContext));

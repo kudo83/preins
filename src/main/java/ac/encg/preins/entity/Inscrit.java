@@ -102,4 +102,10 @@ public class Inscrit implements Serializable {
     @OneToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "FK_ID_BAC")
     private Bac Bac = new Bac();
+    
+    @Column (name = "PHOTO_FILENAME")
+    private String photoFileName;
+    
+    @Column (name = "CIN_FILENAME")
+    private String cinFileName;
 }

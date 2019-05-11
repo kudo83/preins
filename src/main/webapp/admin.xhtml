@@ -1,0 +1,25 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+        <h1>ADMIN PAGE</h1>
+        
+         <h:outputLink value="logout" class="Animated05" ><i class="fa fa-sign-out"></i>Logout</h:outputLink>
+   
+    
+    <h:form enctype="multipart/form-data">
+    <p:growl id="messages" showDetail="true" />
+     
+    <p:fileUpload value="#{inscritController.uploadedFile}" mode="simple" skinSimple="true"/>
+     
+    <br /> <br />
+     
+    <p:commandButton value="Submit" ajax="false" action="#{inscritController.preview()}"/>
+</h:form>
+    
+    </ui:define>      
+</ui:composition>

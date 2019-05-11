@@ -9,9 +9,13 @@
 
     <ui:define name="content">
         <!--                    <p:messages id="messages"/>-->
-     
+        <f:metadata>
+        <!--<f:viewParam name="cne" value="#{inscritController.inscrit.cne}"/>-->
+            <f:event type="preRenderView" listener="#{inscritController.loadLoggedInscrit()}"/>
+            <f:event type="preRenderView" listener="#{inscritController.loadLists()}"/>
+        </f:metadata>
         <h:form id="inscritForm" enctype="multipart/form-data">
-             <p:growl id="messages"/>
+            <p:growl id="messages"/>
             <p:focus context="inscritForm" />
             <div class="layout-portlets-box ui-fluid">
                 <div class="Container50 Responsive50">
@@ -89,11 +93,36 @@
                             PHOTO PERSONELLE
                         </h2>
                         <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="ui-panelgrid ui-widget ui-panelgrid-blank"   >
-                            <p:graphicImage id="photo" value="/imagesUpload/#{inscritController.photoFileName}" library="spark-layout" style="height:161px; width:161px;"/>
+                            <h:panelGroup id="photo">
+                                <ui:fragment  rendered="#{not empty inscritController.uploadedFile}"  >
+                                    <img src="data:image/png;base64,#{inscritController.imageContentsAsBase64}" style="height:161px; width:161px;" />
+                                </ui:fragment>
+                            </h:panelGroup>
+                            <p:fileUpload value="#{inscritController.uploadedFile}" fileUploadListener="#{inscritController.preview}" mode="advanced" dragDropSupport="false"
+                                          update="photo" auto="true" sizeLimit="1000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"  />
+                            <!--                            <p:fileUpload update="content" auto="true" 
+                                                                      fileUploadListener="#{inscritController.preview}"/>
+                            
+                                                        <p:panel id="content" style="border:none;">
+                                                            <p:outputPanel rendered="#{inscritController.fileName ne null}">
+                                                                <h4>File name:</h4>
+                            #{inscritController.fileName}
+                            <h4>File content:</h4>
+                            #{inscritController.fileContent}
+                        </p:outputPanel>
+                    </p:panel>
+
+                            <p:commandButton action="#{inscritController.preview}" update="photo" value="Preview" />
+                            <p:commandButton value="Submit" ajax="false" action="#{inscritController.preview()}"/> -->
+
+
+<!--                            <p:graphicImage id="photo" value="/imagesUpload/#{inscritController.photoTemp}" library="spark-layout" style="height:161px; width:161px;"/>
 
                             <h:inputFile  value="#{inscritController.uploadedPhotoFile}" >
                                 <f:ajax listener="#{inscritController.uploadPhoto()}" render="photo"/>
-                            </h:inputFile>
+                            </h:inputFile>-->
+                       
+                        
                         </p:panelGrid>
 
 
@@ -104,8 +133,8 @@
                         <h2 class="BigTopic">
                             PHOTO CIN
                         </h2>
-                       <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="ui-panelgrid ui-widget ui-panelgrid-blank"   >
-                            <p:graphicImage id="cin" value="/imagesUpload/#{inscritController.cinFileName}" library="spark-layout" style="height:161px; width:214px;"/>
+                        <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="ui-panelgrid ui-widget ui-panelgrid-blank"   >
+                            <p:graphicImage id="cin" value="/imagesUpload/#{inscritController.cinTemp}" library="spark-layout" style="height:161px; width:214px;"/>
 
                             <h:inputFile  value="#{inscritController.uploadedCinFile}" >
                                 <f:ajax listener="#{inscritController.uploadCin()}" render="cin"/>
@@ -120,8 +149,8 @@
                 <div class="ContainerIndent ui-fluid" dir="rtl" >
                     <p:panelGrid id="buttonGrid" columns="8" layout="grid" style="border:0px !important; background:none;" class="ui-panelgrid-blank">       
                         <!--<p:commandButton value="VALIDER" class ="GreenButton" action="#{inscritController.save()}" update="messages"  icon="fa fa-save Fs16 white"  />-->
-                        <h:commandButton value="VALIDER" class ="ui-button ui-button-text"  action="#{inscritController.save()}"> <f:ajax execute="inscritForm" render="inscritForm" /> </h:commandButton> 
-                        <!--<p:commandButton value="ENREGISTER" class ="OrangeButton" action="#{inscritController.save()}" update="messages"  icon="fa fa-save Fs16 white"  />-->
+                        <!--<h:commandButton value="VALIDER" class ="ui-button ui-button-text"  action="#{inscritController.save()}"> <f:ajax execute="inscritForm" render="inscritForm" /> </h:commandButton>--> 
+                        <p:commandButton value="ENREGISTER" class ="OrangeButton" action="#{inscritController.save()}" update="messages"  icon="fa fa-save Fs16 white"  />
                     </p:panelGrid>
 
                 </div>
