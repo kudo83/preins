@@ -105,7 +105,5 @@ public class Inscrit implements Serializable {
     
     @Column (name = "PHOTO_FILENAME")
     private String photoFileName;
-    
-    @Column (name = "CIN_FILENAME")
-    private String cinFileName;
+  
 }

@@ -8,8 +8,10 @@ import ac.encg.preins.entity.Province;
 import ac.encg.preins.helper.UserHelper;
 import ac.encg.preins.service.InscritService;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -20,9 +22,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+
 import javax.servlet.http.Part;
 import lombok.Getter;
 import lombok.Setter;
@@ -40,16 +45,17 @@ import org.springframework.stereotype.Controller;
 @Getter
 @Setter
 @ManagedBean(name = "inscritController")
+@ViewScoped
 public class InscritController implements Serializable {
 
     @Autowired
     private InscritService inscritService;
-
-    private Part uploadedPhotoFile;
-    private Part uploadedCinFile;
     private String tempFolder = "D:\\PreinsTemp\\";
     private String uploadFolder = "D:\\PreinsUploads\\";
-    private UploadedFile uploadedFile;
+    private UploadedFile uploadedPhoto;
+    private UploadedFile uploadedCin;
+    private InputStream inputStreamPhoto;
+    private String photoContentsAsBase64;
 
     private Inscrit inscrit = new Inscrit();
     private List<Province> provinces = new ArrayList<>();
@@ -58,37 +64,15 @@ public class InscritController implements Serializable {
     private List<Academie> academies = new ArrayList<>();
 
     private String loggedUsername;
+    
     private String photoTemp = "default.gif";
-    private String cinTemp = "id.png";
-    private String fileContent;
-    private String fileName;
-
-    private byte[] fileContents;
-    private String imageContentsAsBase64;
-    private byte[] contents;
-
-       
-    public void preview(FileUploadEvent event) {
-        uploadedFile = event.getFile();
-       contents = uploadedFile.getContents();
-        fileContent = new String(contents);
-        fileName = uploadedFile.getFileName();
-        imageContentsAsBase64 = Base64.getEncoder().encodeToString(contents);
-
-    }
 
     public void save() {
-        if (photosNotValid()) {
+        if (photosObligatoires()) {
             return;
         }
 
-        try {
-            copyFileAndRename(inscrit.getPhotoFileName(), "P");
-            copyFileAndRename(inscrit.getCinFileName(), "C");
-
-        } catch (IOException ex) {
-            Logger.getLogger(InscritController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        copyFileAndRename();
 
         inscritService.save(inscrit);
 
@@ -97,22 +81,17 @@ public class InscritController implements Serializable {
 
     }
 
-    private void copyFileAndRename(String fileName, String type) throws IOException {
-        String photoFileName = inscrit.getCne() + type + getFileExtension(fileName);
-        Files.copy(Paths.get(tempFolder + fileName), Paths.get(uploadFolder + photoFileName), StandardCopyOption.REPLACE_EXISTING);
-        Files.delete(Paths.get(tempFolder + fileName));
+    private void copyFileAndRename() {
+        String photoFileName = inscrit.getCne()  + getFileExtension(uploadedPhoto.getFileName());
+        copyFile(photoFileName, inputStreamPhoto, uploadFolder);//        Files.copy(Paths.get(tempFolder + fileName), Paths.get(uploadFolder + photoFileName), StandardCopyOption.REPLACE_EXISTING);
+//        Files.delete(Paths.get(tempFolder + fileName));
     }
 
-    public boolean photosNotValid() {
+    public boolean photosObligatoires() {
         boolean retour = false;
-        if (inscrit.getPhotoFileName().equals("default.gif")) {
+        if (inscrit.getPhotoFileName() == null) {
             FacesContext.getCurrentInstance().
                     addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Le champ Photo Personnelle est obligatoire", null));
-            retour = true;
-        }
-        if (inscrit.getCinFileName().equals("id.png")) {
-            FacesContext.getCurrentInstance().
-                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Le champ Photo CIN est obligatoire", null));
             retour = true;
         }
 
@@ -129,17 +108,18 @@ public class InscritController implements Serializable {
 //        System.out.println(loggedUsername);
     }
 
-    public void uploadPhoto() {
+    public void uploadPhoto(FileUploadEvent event) {
 
-//        transferFile(uploadedPhotoFile, tempFolder);
-//        photoTemp = uploadedPhotoFile.getSubmittedFileName();
+        try {
+            uploadedPhoto = event.getFile();
+            inputStreamPhoto = uploadedPhoto.getInputstream();
+            photoContentsAsBase64 = Base64.getEncoder().encodeToString( uploadedPhoto.getContents());
+        } catch (IOException ex) {
+            Logger.getLogger(InscritController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
-    public void uploadCin() {
-        transferFile(uploadedCinFile, tempFolder);
-        cinTemp = uploadedCinFile.getSubmittedFileName();
-
-    }
+   
 
     public void transferFile(Part uploadedFile, String folder) {
 
@@ -181,17 +161,48 @@ public class InscritController implements Serializable {
         if (username != null) {
             Optional<Inscrit> optional = inscritService.getInscrit(username);
             if (optional.isPresent()) {
-                inscrit = optional.get();
                 try {
-                    Files.copy(Paths.get(uploadFolder + inscrit.getPhotoFileName()), Paths.get(tempFolder + inscrit.getPhotoFileName()), StandardCopyOption.REPLACE_EXISTING);
-                    photoTemp = inscrit.getPhotoFileName();
-                    Files.copy(Paths.get(uploadFolder + inscrit.getCinFileName()), Paths.get(tempFolder + inscrit.getCinFileName()), StandardCopyOption.REPLACE_EXISTING);
-                    cinTemp = inscrit.getCinFileName();
+                    inscrit = optional.get();
+                    byte[] contents = Files.readAllBytes(Paths.get(uploadFolder + inscrit.getPhotoFileName()));
+                    photoContentsAsBase64 = Base64.getEncoder().encodeToString(contents);
                 } catch (IOException ex) {
                     Logger.getLogger(InscritController.class.getName()).log(Level.SEVERE, null, ex);
                 }
+
+            }else{
+                inscrit = new Inscrit();
+                photoContentsAsBase64 = null;
             }
         }
+    }
+
+    public void copyFile(String fileName, InputStream in, String destination) {
+        try {
+
+            // write the inputStream to a FileOutputStream
+            OutputStream out = new FileOutputStream(new File(destination + fileName));
+
+            int read = 0;
+            byte[] bytes = new byte[1024];
+
+            while ((read = in.read(bytes)) != -1) {
+                out.write(bytes, 0, read);
+            }
+
+            in.close();
+            out.flush();
+            out.close();
+
+            System.out.println("New file created!");
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void initialize() {
+        loadLoggedInscrit();
+        loadLists();
+
     }
 
 }
