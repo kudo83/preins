@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -36,8 +37,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // require all requests to be authenticated except for the resources   
-        http.authorizeRequests().antMatchers("/javax.faces.resource/**")
+        http.authorizeRequests().antMatchers("/javax.faces.resource/**","/contact*")
                 .permitAll().anyRequest().authenticated();
+        
         // login
         http.formLogin().loginPage("/login.xhtml").permitAll()
                 .failureUrl("/login.xhtml?error=true").
@@ -49,10 +51,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessHandler(customLogoutHandler)
                 .invalidateHttpSession(true)
                 .clearAuthentication(true);
-        
+
 // not needed as JSF 2.2 is implicitly protected against CSRF
         http.csrf().disable();
     }
+
+//    @Override
+//    public void configure(WebSecurity web) throws Exception {
+//        web.ignoring().antMatchers("/contact.xhtml");
+//    }
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {

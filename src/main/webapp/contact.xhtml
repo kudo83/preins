@@ -31,29 +31,29 @@
                  styline="margin-top:5%; background-image:url(#{resource['spark-layout:images/loginpageillust.svg']}); background-repeat:no-repeat; background-position:center; background-size:cover;">
                 <div class="Container90 Fnone MarAuto TexAlCenter">
                     <h:form prependId="false">
-
+                      
                         <div class="EmptyBox50"></div>
                         <h:graphicImage name="images/logo.png" library="spark-layout" styleClass="MarAuto MarTop20 MarBot10" style="height:80px; width:3#0px;"/>
                         <div class="EmptyBox20"></div>
-                        <p:outputLabel value="Le CNE ou le CIN que vous avez introduit est érroné!" styleClass="red"
+                         <p:outputLabel value="Le CNE ou le CIN que vous avez introduit est érroné!" styleClass="red"
                                        rendered="${!empty param['error']}" />
-                        <div class="EmptyBox20"></div>
+
                         <p:inputText id="username" value="" placeholder="Username" styleClass="Container80 Fnone MarAuto Fs18"/>
                         <div class="EmptyBox10"></div>
                         <p:password id="password" value="" placeholder="Password" styleClass="Container80 Fnone MarAuto Fs18" feedback="false"/>
-                        <!--                        <div class="EmptyBox20"></div>
-                                                <div class="Container85 Fnone MarAuto softgray">
-                                                    <div class="EmptyBox5"></div>
-                                                    <p:selectBooleanCheckbox value="accept" itemLabel="I Accept Terms And Policies"/>
-                                                </div>-->
+<!--                        <div class="EmptyBox20"></div>
+                        <div class="Container85 Fnone MarAuto softgray">
+                            <div class="EmptyBox5"></div>
+                            <p:selectBooleanCheckbox value="accept" itemLabel="I Accept Terms And Policies"/>
+                        </div>-->
                         <div class="EmptyBox30"></div>
                         <!--<h:commandButton  value="Login" styleClass="Fs16"/>-->
-                        <p:commandButton value="Login" ajax="false" style="width: 50%"/>
+                        <p:commandButton value="Send" ajax="false" style="width: 50%"/>
                         <div class="EmptyBox10"></div>
                         <div class="Seperator"></div>
                         <div class="EmptyBox10"></div>
                         <!--<p:commandButton  value="Login"  ajax="false" styleClass="Fs16" style="width: 50%"/>-->
-                        <h:link  value="Contact Admin ?" styleClass="Fs12" outcome="contact.xhtml"  style="width: 50%"/>
+<!--                        <h:link  value="Contact Admin ?" styleClass="Fs16 OrangeButton" href="contact.xhtml"  style="width: 50%"/>-->
                         <div class="EmptyBox50"></div>
                     </h:form>
                 </div>

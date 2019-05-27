@@ -27,7 +27,7 @@
                             <p:inputText placeholder="Nom" value="#{inscritController.inscrit.nom}" required="true" requiredMessage="Le champ Nom est obligatoire"/>
                             <p:inputText placeholder="النسب"  value="#{inscritController.inscrit.nomAr}" dir="rtl" required="true" requiredMessage="Le champ النسب est obligatoire">
                             </p:inputText>    
-                            <p:inputText placeholder="Prénom" value="#{inscritController.inscrit.nom}" required="true" requiredMessage="Le champ Prénom est obligatoire"/>
+                            <p:inputText placeholder="Prénom" value="#{inscritController.inscrit.prenom}" required="true" requiredMessage="Le champ Prénom est obligatoire"/>
                             <p:inputText placeholder="الاسم"  value="#{inscritController.inscrit.prenomAr}"  dir="rtl" required="true" requiredMessage="Le champ الاسم est obligatoire"/>
                             <p:inputText placeholder="SEX" value="#{inscritController.inscrit.sex}" required="true" requiredMessage="Le champ SEX est obligatoire"/>
                             <p:inputText placeholder="CNE" value="#{inscritController.inscrit.cne}" disabled="false" required="true" requiredMessage="Le champ CNE est obligatoire"/>
@@ -94,14 +94,14 @@
                         <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="ui-panelgrid ui-widget ui-panelgrid-blank"   >
                             <h:panelGroup id="photo">
                                 <ui:fragment  rendered="#{not empty inscritController.photoContentsAsBase64}"  >
-                                    <img src="data:image/png;base64,#{inscritController.photoContentsAsBase64}" style="height:161px; width:161px;" />
+                                    <img src="data:image/png;base64,#{inscritController.photoContentsAsBase64}" style="height:161px; width:161px;" onclick="document.querySelector('.photoUpload input').click()" />
                                 </ui:fragment>
                                 <ui:fragment  rendered="#{empty inscritController.photoContentsAsBase64}"  >
-                                    <img src="resources/spark-layout/images/default-male.gif" style="height:161px; width:161px;" />
+                                    <img src="resources/spark-layout/images/default-male.gif" style="height:161px; width:161px;" onclick="document.querySelector('.photoUpload input').click()"/>
                                 </ui:fragment>
                             </h:panelGroup>
 
-                            <p:fileUpload value="#{inscritController.uploadedPhoto}" fileUploadListener="#{inscritController.uploadPhoto}" mode="advanced" dragDropSupport="false"
+                            <p:fileUpload styleClass="photoUpload" value="#{inscritController.uploadedPhoto}" fileUploadListener="#{inscritController.uploadPhoto}" mode="advanced" dragDropSupport="false"
                                           update="photo" auto="true" sizeLimit="1000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"  />
                         </p:panelGrid>
 
