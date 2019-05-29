@@ -1,6 +1,7 @@
 package ac.encg.preins.controller;
 
 import ac.encg.preins.entity.Academie;
+import ac.encg.preins.entity.Etape;
 import ac.encg.preins.entity.SerieBac;
 import ac.encg.preins.entity.Inscrit;
 import ac.encg.preins.entity.Pays;
@@ -29,6 +30,9 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.Part;
 import lombok.Getter;
 import lombok.Setter;
+import ac.encg.preins.nonPersistable.Civilite;
+import ac.encg.preins.nonPersistable.LoggedUser;
+import ac.encg.preins.nonPersistable.Sex;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 
@@ -56,22 +60,26 @@ public class InscritController implements Serializable {
     private String photoContentsAsBase64;
 
     private Inscrit inscrit = new Inscrit();
+    private List<Etape> etapes = new ArrayList<>();
     private List<Province> provinces = new ArrayList<>();
     private List<Pays> pays = new ArrayList<>();
     private List<SerieBac> seriesBac = new ArrayList<>();
     private List<Academie> academies = new ArrayList<>();
-
+    private List<Civilite> civilites = new ArrayList<>();
+     private List<Sex> sex = new ArrayList<>();
+    
     private String loggedUsername;
 
     private String photoTemp = "default.gif";
 
     public void save() {
-        if (photosObligatoires()) {
-            return;
-        }
-
+        
         if (uploadedPhoto != null) {
             InscritHelper.copyFileAndRename(inscrit, uploadedPhoto, inputStreamPhoto, uploadFolder);
+        }else{
+              FacesContext.getCurrentInstance().
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Le champ Photo Personnelle est obligatoire", null));
+            return;
         }
 
         inscritService.save(inscrit);
@@ -81,22 +89,17 @@ public class InscritController implements Serializable {
 
     }
 
-    public boolean photosObligatoires() {
-        boolean retour = false;
-        if (inscrit.getPhotoFileName() == null) {
-            FacesContext.getCurrentInstance().
-                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Le champ Photo Personnelle est obligatoire", null));
-            retour = true;
-        }
-
-        return retour;
-    }
+   
 
     public void loadLists() {
         provinces = inscritService.loadProvinces();
         pays = inscritService.loadPays();
         seriesBac = inscritService.loadBacs();
         academies = inscritService.loadAcademies();
+        etapes = inscritService.loadEtapes();
+        InscritHelper.loadListCivSex(civilites, sex);
+        
+       
 
 //       loggedUsername = UserHelper.getLoggedUsername();
 //        System.out.println(loggedUsername);
@@ -135,9 +138,9 @@ public class InscritController implements Serializable {
     }
 
     public void loadLoggedInscrit() {
-        String username = UserHelper.getLoggedUsername();
-        if (username != null) {
-            Optional<Inscrit> optional = inscritService.getInscrit(username);
+        LoggedUser user = UserHelper.getLoggedUser();
+        if (user != null) {
+            Optional<Inscrit> optional = inscritService.getInscrit(user.getUsername());
             if (optional.isPresent()) {
                 try {
                     inscrit = optional.get();
@@ -149,7 +152,8 @@ public class InscritController implements Serializable {
 
             } else {
                 inscrit = new Inscrit();
-                inscrit.setCne(username);
+                inscrit.setCne(user.getUsername());
+                inscrit.setCin(user.getPassword());
                 photoContentsAsBase64 = null;
             }
         }

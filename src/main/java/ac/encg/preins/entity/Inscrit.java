@@ -57,6 +57,9 @@ public class Inscrit implements Serializable {
     @Column(name = "SEX")
     private char sex;
 
+    @Column(name = "CIV")
+    private Byte civ;
+
     @Column(name = "TEL")
     private String tel;
 
@@ -91,6 +94,9 @@ public class Inscrit implements Serializable {
     @Column(name = "LIEU_NAISS")
     private String lieuNaiss;
 
+    @Column(name = "PHOTO_FILENAME")
+    private String photoFileName;
+
     @ManyToOne
     @JoinColumn(name = "FK_ID_PROVINCE")
     private Province provinceNaiss = new Province();
@@ -99,11 +105,12 @@ public class Inscrit implements Serializable {
     @JoinColumn(name = "FK_ID_PAYS")
     private Pays paysNaiss = new Pays();
 
-    @OneToOne(cascade=CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "FK_ID_BAC")
     private Bac Bac = new Bac();
-    
-    @Column (name = "PHOTO_FILENAME")
-    private String photoFileName;
-  
+
+    @ManyToOne
+    @JoinColumn(name = "FK_COD_ETAPE")
+    private Etape etape = new Etape();
+
 }

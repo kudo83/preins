@@ -6,12 +6,14 @@
 package ac.encg.preins.service;
 
 import ac.encg.preins.entity.Academie;
+import ac.encg.preins.entity.Etape;
 import ac.encg.preins.entity.SerieBac;
 import ac.encg.preins.entity.Inscrit;
 import ac.encg.preins.entity.Pays;
 import ac.encg.preins.entity.Province;
 import ac.encg.preins.predicate.InscritPredicate;
 import ac.encg.preins.repository.AcademieRepository;
+import ac.encg.preins.repository.EtapeRepository;
 import java.io.Serializable;
 import org.springframework.beans.factory.annotation.Autowired;
 import ac.encg.preins.repository.InscritRepository;
@@ -46,6 +48,9 @@ public class InscritService implements Serializable {
     
     @Autowired
     private AcademieRepository academieRepo;
+    
+    @Autowired
+    private EtapeRepository etapeRepo;
   
 
     public void save(Inscrit inscrit) {
@@ -70,5 +75,9 @@ public class InscritService implements Serializable {
     
     public Optional<Inscrit> getInscrit(String cne){
         return inscritRepo.findOne(InscritPredicate.hasCne(cne));
+    }
+    
+    public List<Etape> loadEtapes(){
+        return etapeRepo.findAllByOrderByLibAsc();
     }
 }

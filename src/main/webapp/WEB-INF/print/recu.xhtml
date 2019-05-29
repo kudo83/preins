@@ -1,0 +1,68 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui" dir="rtl">
+   
+     <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>PrimeFaces Spark</title>
+        <h:outputScript name="js/layout.js" library="spark-layout" />
+
+        <ui:insert name="head" />
+    </h:head>
+      <h:body>  
+        <div class="layout-portlets-box">
+            <div class="Container100">
+                <div class="ContainerIndent TexAlCenter">
+                    <h1 class="BigTopic TexAlCenter">الملزمون</h1>
+                    <span class="gray">
+                        <p:growl id="messages"/>
+                        <h:form id="molzamForm">
+
+                            <p:dataTable id="molzamTable" var="molzam" value="#{molzamController.listMolzam}" selectionMode="single"  
+                                         selection="#{molzamController.selectedMolzam}" rowKey="#{molzam.id}" >
+
+                                <f:facet name="header">
+                                    لائحة الملزمين
+                                </f:facet>
+
+                                <p:column headerText="النسب">
+                                    <h:outputText value="#{molzam.nom}" />
+                                </p:column>
+                                <p:column headerText="الاسم">
+                                    <h:outputText value="#{molzam.prenom}" />
+                                </p:column>
+                                <p:column headerText="العنوان">
+                                    <h:outputText value="#{molzam.adresse}" />
+                                </p:column>
+                                <p:column headerText="رقم البطاقة">
+                                    <h:outputText value="#{molzam.cin}" />
+                                </p:column>
+                                <p:column headerText="الهاتف">
+                                    <h:outputText value="#{molzam.numTel}" />
+                                </p:column>
+                                <p:column headerText="الفاكس">
+                                    <h:outputText value="#{molzam.numFax}" />
+                                </p:column>
+                                
+                            </p:dataTable> 
+                        </h:form>
+
+
+
+
+
+                    </span>
+                </div>
+            </div>
+        </div>
+        </h:body>
+    <h:outputScript library="js" name="jsTools.js" target="head" />   
+</html>
+    

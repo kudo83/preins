@@ -19,7 +19,7 @@ public class CustomUserDetails extends User implements UserDetails {
 
         return getRoles()
                 .stream()
-                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getRole()))
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getLib()))
                 .collect(Collectors.toList());
     }
 
@@ -30,7 +30,7 @@ public class CustomUserDetails extends User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return super.getName();
+        return super.getUsername();
     }
 
     @Override

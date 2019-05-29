@@ -7,16 +7,16 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "role")
+@Table(name = "ROLE")
 public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "role_id")
-    private int roleId;
+    @Column(name = "ID_ROLE")
+    private int id;
 
-    @Column(name = "role")
-    private String role;
+    @Column(name = "LIB_ROLE")
+    private String lib;
 
     public Role() {
     }

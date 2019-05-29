@@ -17,6 +17,7 @@
             <p:growl id="messages"/>
             <p:focus context="inscritForm" />
             <div class="layout-portlets-box ui-fluid">
+
                 <div class="Container50 Responsive50">
                     <div class="ContainerIndent ui-fluid">
                         <h2 class="BigTopic">
@@ -29,9 +30,18 @@
                             </p:inputText>    
                             <p:inputText placeholder="Prénom" value="#{inscritController.inscrit.prenom}" required="true" requiredMessage="Le champ Prénom est obligatoire"/>
                             <p:inputText placeholder="الاسم"  value="#{inscritController.inscrit.prenomAr}"  dir="rtl" required="true" requiredMessage="Le champ الاسم est obligatoire"/>
-                            <p:inputText placeholder="SEX" value="#{inscritController.inscrit.sex}" required="true" requiredMessage="Le champ SEX est obligatoire"/>
-                            <p:inputText placeholder="CNE" value="#{inscritController.inscrit.cne}" disabled="false" required="true" requiredMessage="Le champ CNE est obligatoire"/>
-                            <p:inputText placeholder="CIN" value="#{inscritController.inscrit.cin}" required="true" requiredMessage="Le champ CIN est obligatoire"/>
+                            <!--<p:inputText placeholder="CNE" value="#{inscritController.inscrit.cne}" disabled="false" required="true" requiredMessage="Le champ CNE est obligatoire"/>-->
+                            <!--<p:inputText placeholder="CIN ou N° Passport pour les étrangers" value="#{inscritController.inscrit.cin}" required="true" requiredMessage="Le champ CIN est obligatoire"/>-->
+                            <p:selectOneMenu placeholder="SEX" value="#{inscritController.inscrit.sex}" required="true" requiredMessage="Le champ SEX est obligatoire">
+                                <f:selectItem itemLabel="SEX" itemValue="" noSelectionOption="true" />
+                                <f:selectItems value="#{inscritController.sex}" var="sex" itemLabel="#{sex.libSex}" itemValue="#{sex.codSex}"/>
+                            </p:selectOneMenu>
+                            <p:selectOneMenu placeholder="Situation Familiale" value="#{inscritController.inscrit.civ}" required="true" requiredMessage="Le champ Situation Familiale est obligatoire">
+                                <f:selectItem itemLabel="Situation Familiale" itemValue="" noSelectionOption="true" />
+                                <f:selectItems value="#{inscritController.civilites}" var="civilite" itemLabel="#{civilite.libCiv}" itemValue="#{civilite.codCiv}"/>
+                            </p:selectOneMenu>
+
+
                             <p:calendar placeholder="Date de Naissance" value="#{inscritController.inscrit.dateNaiss}" required="true" requiredMessage="Le champ Date de Naissance est obligatoire"/>
                             <p:inputText placeholder="Lieu de Naissance" value="#{inscritController.inscrit.lieuNaiss}" required="true" requiredMessage="Le champ Lieu de Naissance est obligatoire"/>
                             <p:selectOneMenu placeholder="Province de Naissance" value="#{inscritController.inscrit.provinceNaiss.id}" required="true" requiredMessage="Le champ Province de Naissance est obligatoire">
@@ -56,9 +66,9 @@
                         </h2>
                         <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="ui-panelgrid ui-widget ui-panelgrid-blank"   >
                             <p:inputText placeholder="Prénom du Père ou Tuteur" value="#{inscritController.inscrit.prenomPere}" required="true" requiredMessage="Le champ Prénom du Père ou Tuteur est obligatoire"/>
-                            <p:inputText placeholder="اسم الأب أو الوالي"  value="#{inscritController.inscrit.prenomPereAr}"  dir="rtl" required="true" requiredMessage="Le champ اسم الأب أو الوالي est obligatoire"/>
+                            <!--<p:inputText placeholder="اسم الأب أو الوالي"  value="#{inscritController.inscrit.prenomPereAr}"  dir="rtl" required="true" requiredMessage="Le champ اسم الأب أو الوالي est obligatoire"/>-->
                             <p:inputText placeholder="Prénom de la Mère" value="#{inscritController.inscrit.prenomMere}" required="true" requiredMessage="Le champ Prénom de la Mère est obligatoire"/>
-                            <p:inputText placeholder="اسم الأم"  value="#{inscritController.inscrit.prenomMereAr}"  dir="rtl" required="true" requiredMessage="Le champ اسم الأم est obligatoire"/>
+                            <!--<p:inputText placeholder="اسم الأم"  value="#{inscritController.inscrit.prenomMereAr}"  dir="rtl" required="true" requiredMessage="Le champ اسم الأم est obligatoire"/>-->
                             <p:inputText placeholder="CIN Père ou Tuteur" value="#{inscritController.inscrit.cinTuteur}" required="true" requiredMessage="Le champ CIN Père ou Tuteur est obligatoire"/>
                             <p:inputText placeholder="Téléphone du Tuteur" value="#{inscritController.inscrit.tel}" required="true" requiredMessage="Le champ Téléphone du Tuteur est obligatoire"/>
                             <p:inputTextarea placeholder="Adresse Actuelle du Tuteur" value="#{inscritController.inscrit.adresseTuteur}" required="true" requiredMessage="Le champ Adresse Actuelle du Tuteur est obligatoire"/>   
@@ -85,7 +95,7 @@
                         </p:panelGrid>
                     </div>
                 </div>
-
+                <div class="EmptyBox50"/>
                 <div class="Container50 Responsive50">
                     <div class="ContainerIndent ui-fluid">
                         <h2 class="BigTopic">
@@ -108,6 +118,19 @@
 
                     </div>
                 </div>
+                 <div class="Container50 Responsive50">
+                    <div class="ContainerIndent ui-fluid">
+                        <h2 class="BigTopic">
+                            NIVEAU D'INSCRIPTION
+                        </h2>
+                        <p:selectOneMenu placeholder="NIVEAU" value="#{inscritController.inscrit.etape.cod}" required="true" requiredMessage="Le champ Niveau d'inscription est obligatoire">
+                            <f:selectItem itemLabel="Selectionner Niveau ..." itemValue="" noSelectionOption="true" />
+                            <f:selectItems value="#{inscritController.etapes}" var="etape" itemLabel="#{etape.lib}" itemValue="#{etape.cod}"/>
+                        </p:selectOneMenu>
+                       
+
+                    </div>
+                </div>
             </div>
             <div class="layout-portlets-box ui-fluid" >
                 <!--<div class="Container50 Responsive50 ">-->
@@ -115,7 +138,7 @@
                     <p:panelGrid id="buttonGrid" columns="8" layout="grid" style="border:0px !important; background:none;" class="ui-panelgrid-blank">       
                         <!--<p:commandButton value="VALIDER" class ="GreenButton" action="#{inscritController.save()}" update="messages"  icon="fa fa-save Fs16 white"  />-->
                         <!--<h:commandButton value="VALIDER" class ="ui-button ui-button-text"  action="#{inscritController.save()}"> </h:commandButton>--> 
-                        <p:commandButton value="ENREGISTER" class ="OrangeButton" action="#{inscritController.save()}" update="messages"  icon="fa fa-save Fs16 white"  />
+                        <p:commandButton value="ENREGISTER"  action="#{inscritController.save()}" update="messages"  icon="fa fa-save Fs16 white"  />
                     </p:panelGrid>
 
                 </div>

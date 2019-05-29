@@ -36,9 +36,9 @@ public class SpringConfiguration {
 //              jpaProperties.put("hibernate.hbm2ddl.auto", "create");
         jpaProperties.put("hibernate.hbm2ddl.auto", "update");
         jpaProperties.put("hibernate.show_sql", "true");
-         jpaProperties.put("hibernate.format_sql", "true");
-       //  jpaProperties.put("generate-ddl", "true");
-        jpaProperties.put("hibernate.use-new-id-generator-mappings","false");
+        jpaProperties.put("hibernate.format_sql", "true");
+        //  jpaProperties.put("generate-ddl", "true");
+        jpaProperties.put("hibernate.use-new-id-generator-mappings", "false");
         entityManagerFactory.setJpaProperties(jpaProperties);
         entityManagerFactory.setPackagesToScan("ac.encg.preins.entity");
         entityManagerFactory.setPersistenceUnitName("entity");
@@ -62,22 +62,19 @@ public class SpringConfiguration {
     public DataSource dataSource() {
         HikariDataSource dataSource = new HikariDataSource();
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-       
+
         //local
         dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/preinsdb?serverTimezone=UTC");
         dataSource.setUsername("root");
         dataSource.setPassword("tabit");
         dataSource.setConnectionTestQuery("show tables");
-        
+
         //Server test
 //        dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/preinstest?serverTimezone=UTC");
 //        dataSource.setUsername("root");
 //        dataSource.setPassword("ENCGdbuser@2019");
-
         return dataSource;
 
     }
-    
-    
 
 }

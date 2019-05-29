@@ -31,8 +31,13 @@ public class Bac implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID_BAC")
     private Long id;
-
     
+    @Column(name = "COD_MNB")
+    private String montion;
+
+    @Column(name = "ANN")
+    private String Annee;
+
     @ManyToOne
     @JoinColumn(name = "FK_ID_SERIE_BAC")
     private SerieBac SerieBac = new SerieBac();
@@ -40,12 +45,6 @@ public class Bac implements Serializable {
     @ManyToOne
     @JoinColumn(name = "FK_ID_PROVINCE")
     private Province provinceBac = new Province();
-
-    @Column(name = "COD_MNB")
-    private String montion;
-
-    @Column(name = "ANN")
-    private String Annee;
 
     @ManyToOne
     @JoinColumn(name = "FK_ID_ACADEMIE")

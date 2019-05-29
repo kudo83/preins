@@ -496,3 +496,14 @@ li{list-style:none;}
     font-weight: bold;
 }
 
+/* Footer H3 */
+.FooterTopic{font-size:14px; 
+         color:white;
+         font-family: 'ralewaymedium';
+         display:block; 
+         width:35%; 
+         border-bottom:solid 1px white; 
+         padding:10px 0px; 
+         margin-bottom:10px !important; 
+         overflow: hidden; 
+         font-weight:bold;}

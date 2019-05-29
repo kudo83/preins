@@ -9,7 +9,8 @@
     <div id="layout-topbar" class="ShadowGray">
         <div id="layout-topbar-indent">
             <!--<a href="dashboard.xhtml"><h:graphicImage name="images/LOGO.svg" styleClass="Fleft" library="spark-layout" id="logo" class="Fleft"/></a>-->
-            <a href="index.xhtml"><img src="resources/spark-layout/images/logo.png" height="68" width="250"  alt="ENCG" id="logo" class="Fleft"/></a>
+            <a href="index.xhtml"><img src="resources/spark-layout/images/logo.png" height="68" width="250"  alt="ENCG" id="logo" class="Fleft ShowOnDesktop"/></a>
+              <a href="index.xhtml"><img src="resources/spark-layout/images/logo-square.png" height="250"   alt="ENCG" id="logo" class="ShowOnMobile"/></a>
             <a href="#" id="mobile-menu-button" class="BordRad3 white ShowOnMobile"><i class="fa fa-bars"></i> Menu</a>
             <a href="#" id="mobile-menu-button-gray" class="BordRad3 white ShowOnMobile"><i class="fa fa-caret-down"></i> Top Menu</a>
 
@@ -48,11 +49,11 @@
                 <li id="profile">
                     <ui:fragment  rendered="#{not empty inscritController.inscrit.prenom}"  >
                         <a class="Animated05"><i class="fa fa-user"></i> #{inscritController.inscrit.prenom} <i class="fa fa-chevron-down Fs14 Fright ShowOnMobile"></i></a>
-<!--                        <ul style="width:175px; margin-left:-10px;" class="Animated03 submenu">
+                        <ul style="width:175px; margin-left:-10px;" class="Animated03 submenu">
                             <li><a class="Animated05"><i class="fa fa-user"></i> #{inscritController.inscrit.nom} #{inscritController.inscrit.prenom}</a></li>
-                            <li><a class="Animated05"><i class="fa fa-at"></i>  #{inscritController.inscrit.email}</a></li>
+                            <li><a class="Animated05" style="font-family: 'Open Sans', sans-serif;"><i class="fa fa-code" ></i>  #{inscritController.inscrit.cne}</a></li>
                            
-                        </ul>-->
+                        </ul>
                     </ui:fragment>
                     <ui:fragment  rendered="#{empty inscritController.inscrit.prenom}"  >
                         <a class="Animated05 CursPointer"><i class="fa fa-user"></i> #{inscritController.inscrit.cne} <i class="fa fa-chevron-down Fs14 Fright ShowOnMobile"></i></a>

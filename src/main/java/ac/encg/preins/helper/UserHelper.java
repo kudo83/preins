@@ -5,6 +5,7 @@
  */
 package ac.encg.preins.helper;
 
+import ac.encg.preins.nonPersistable.LoggedUser;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,22 +16,24 @@ import org.springframework.security.core.userdetails.UserDetails;
  */
 public class UserHelper {
 
-    public static String getLoggedUsername() {
-        String username = null;
+    public static LoggedUser getLoggedUser() {
+        LoggedUser user = null;
         if (SecurityContextHolder.getContext().getAuthentication() != null
                 && SecurityContextHolder.getContext().getAuthentication().isAuthenticated()
                 && //when Anonymous Authentication is enabled
                 !(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)) {
-            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-            
+            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            user = new LoggedUser();
+
             if (principal instanceof UserDetails) {
-                username = ((UserDetails) principal).getUsername();
+                user.setUsername(((UserDetails) principal).getUsername());
+                user.setPassword(((UserDetails) principal).getPassword());
             } else {
-                username = principal.toString();
+                user.setUsername(principal.toString());
             }
         }
-        return username;
+        return user;
 
     }
 }

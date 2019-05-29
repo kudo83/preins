@@ -32,18 +32,21 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "user_id")
+    @Column(name = "ID_USER")
     private int id;
-    @Column(name = "email")
-    private String email;
-    @Column(name = "password")
+    
+     @Column(name = "USERNAME")
+    private String username;
+
+    @Column(name = "PASSWORD")
     private String password;
-    @Column(name = "name")
-    private String name;
-    @Column(name = "last_name")
-    private String lastName;
+    
+    @Column(name = "EMAIL")
+    private String email;
+    
     @Column(name = "active")
     private int active;
+    
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
@@ -55,8 +58,7 @@ public class User {
         this.active = user.getActive();
         this.email = user.getEmail();
         this.roles = user.getRoles();
-        this.name = user.getName();
-        this.lastName =user.getLastName();
+        this.username = user.getUsername();
         this.id = user.getId();
         this.password = user.getPassword();
     }
