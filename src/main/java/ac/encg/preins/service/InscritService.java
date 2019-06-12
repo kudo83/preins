@@ -80,4 +80,31 @@ public class InscritService implements Serializable {
     public List<Etape> loadEtapes(){
         return etapeRepo.findAllByOrderByLibAsc();
     }
+    
+    public List<Inscrit> loadAll(){
+        return inscritRepo.findAll();
+    }
+    
+    public List<Inscrit> saveAll(List<Inscrit> inscrits){
+        return inscritRepo.saveAll(inscrits);
+    }
+    
+     public SerieBac loadSerie(){
+        return SerieBacRepo.getOne(new Long("1"));
+    }
+     
+      public Academie loadAcademie(){
+        return academieRepo.getOne(new Long("1"));
+    }
+      public Province loadProvince(){
+        return provinceRepo.getOne(new Long("1"));
+    }
+      
+      public Etape loadEtape(){
+        return etapeRepo.getOne("GITCT1");
+    }
+       public Pays loadPay(){
+        return paysRepo.getOne(new Long("350"));
+    }
+       
 }

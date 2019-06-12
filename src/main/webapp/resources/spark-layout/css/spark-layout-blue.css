@@ -507,3 +507,19 @@ li{list-style:none;}
          margin-bottom:10px !important; 
          overflow: hidden; 
          font-weight:bold;}
+
+
+.fontNum{
+    font-family: 'Open Sans', sans-serif ; 
+}
+
+.table-actions a{font-size:14px; line-height:16px; color:#778D9B; display:inline-block;}
+.table-actions a:hover{color:#33AFDE;}
+
+.buttonHeader .ui-button:nth-child(1) {
+    background: url("#{resource['spark-layout:images/logo.png']}") no-repeat;
+}
+.buttonHeader .ui-button:nth-child(2) {
+    background: url("#{resource['img/myImg2.png']}") no-repeat;
+}
+

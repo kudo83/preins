@@ -3,6 +3,7 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:sec="http://www.springframework.org/security/tags"
       xmlns:p="http://primefaces.org/ui">
 
     <h:head>
@@ -22,6 +23,13 @@
         <h:outputText value="&lt;![endif]--&gt;" escape="false" />
 
         <ui:insert name="head" />
+        <!--        <f:metadata>
+                    <f:event type="preRenderView" listener="#{loginController.onPageLoad}"/>
+                </f:metadata>-->
+        
+        <sec:authorize access="isAuthenticated()">
+            <meta http-equiv="refresh" content="0;url=inscrit.xhtml" /> 
+        </sec:authorize>
     </h:head>
 
     <h:body>

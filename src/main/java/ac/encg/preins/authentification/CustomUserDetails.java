@@ -1,4 +1,4 @@
-package ac.encg.preins.utils;
+package ac.encg.preins.authentification;
 
 import ac.encg.preins.entity.User;
 import org.springframework.security.core.GrantedAuthority;

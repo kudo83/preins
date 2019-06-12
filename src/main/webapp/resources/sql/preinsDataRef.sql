@@ -513,7 +513,23 @@ INSERT INTO `ETAPE` (`COD_ETP`, `LIB_ETP`) VALUES
 
 INSERT INTO `ROLE` (`ID_ROLE`, `LIB_ROLE`) VALUES
 (1, 'ADMIN'),
-(2, 'USER');
+(2, 'OPERATOR'),
+(3, 'USER');
+
+
+INSERT INTO `USER` (`ID_USER`, `ACTIVE`, `PASSWORD`, `USERNAME` ) VALUES
+
+(1, TRUE, 'tabit' , 'aissam'),
+(2, TRUE, '123456' , 'op1'),
+(3, TRUE, '123456' , 'D123456');
+
+
+INSERT INTO `USER_ROLE` (`ID_USER`, `ID_ROLE`) VALUES
+
+(1, 1),
+(2, 2),
+(3, 3);
+
 
 
 

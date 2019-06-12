@@ -2,7 +2,7 @@ package ac.encg.preins.service;
 
 import ac.encg.preins.entity.User;
 import ac.encg.preins.repository.UserRepository;
-import ac.encg.preins.utils.CustomUserDetails;
+import ac.encg.preins.authentification.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -35,6 +35,8 @@ public class Inscrit implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID_INS")
     private Long id;
+    @Column(name = "VALIDE")
+    private boolean isVALID;
 
     @Column(name = "NOM")
     private String nom;
@@ -108,7 +110,10 @@ public class Inscrit implements Serializable {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "FK_ID_BAC")
     private Bac Bac = new Bac();
-
+    
+    @Column(name = "MENTION_BAC")
+    private String mentionBac;
+    
     @ManyToOne
     @JoinColumn(name = "FK_COD_ETAPE")
     private Etape etape = new Etape();

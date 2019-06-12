@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ac.encg.preins.utils;
+package ac.encg.preins.authentification;
 
 import java.io.IOException;
 import javax.servlet.ServletException;

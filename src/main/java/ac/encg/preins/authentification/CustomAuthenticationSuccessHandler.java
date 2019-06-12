@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ac.encg.preins.utils;
+package ac.encg.preins.authentification;
 
 /**
  *
@@ -57,14 +57,14 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             roles.add(a.getAuthority());
         }
  
-        if (isDba(roles)) {
-            url = "/db";
+        if (isOperator(roles)) {
+            url = "/inscritList.xhtml";
         } else if (isAdmin(roles)) {
             url = "/admin.xhtml";
         } else if (isUser(roles)) {
             url = "/inscrit.xhtml";
         } else {
-            url = "/accessDenied";
+            url = "/access-denied.xhtml";
         }
  
         return url;
@@ -84,8 +84,8 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         return false;
     }
  
-    private boolean isDba(List<String> roles) {
-        if (roles.contains("ROLE_DBA")) {
+    private boolean isOperator(List<String> roles) {
+        if (roles.contains("ROLE_OPERATOR")) {
             return true;
         }
         return false;

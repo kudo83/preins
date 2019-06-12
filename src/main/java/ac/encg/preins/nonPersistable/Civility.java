@@ -16,9 +16,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Civilite {
+public class Civility {
 
-    public Civilite(Byte codCiv, String libCiv) {
+    public Civility(Byte codCiv, String libCiv) {
         this.codCiv = codCiv;
         this.libCiv = libCiv;
     }
