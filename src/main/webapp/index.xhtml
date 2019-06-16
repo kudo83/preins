@@ -5,10 +5,20 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.springframework.org/security/tags">
     <head>
         <title>TODO supply a title</title>
-        <meta http-equiv="refresh" content="0; URL='login.xhtml'" />
+        <sec:authorize ifAnyGranted="ROLE_ADMIN, ROLE_OPERATOR">
+            <meta http-equiv="refresh" content="0;url=inscritList.xhtml" /> 
+        </sec:authorize>
+        <sec:authorize ifAnyGranted="ROLE_USER">
+            <meta http-equiv="refresh" content="0;url=inscrit.xhtml" /> 
+        </sec:authorize>
+        <sec:authorize access="!isAuthenticated()">
+             <meta http-equiv="refresh" content="0;url=login.xhtml" /> 
+        </sec:authorize>
+        
     </head>
     <body>
 <!--        <div>TODO write content</div>-->

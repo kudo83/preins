@@ -22,11 +22,7 @@
         </style>
         <h:outputText value="&lt;![endif]--&gt;" escape="false" />
 
-        <ui:insert name="head" />
-        <!--        <f:metadata>
-                    <f:event type="preRenderView" listener="#{loginController.onPageLoad}"/>
-                </f:metadata>-->
-        
+        <ui:insert name="head"/>
         <sec:authorize access="isAuthenticated()">
             <meta http-equiv="refresh" content="0;url=inscrit.xhtml" /> 
         </sec:authorize>
