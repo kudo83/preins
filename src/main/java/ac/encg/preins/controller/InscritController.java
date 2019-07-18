@@ -5,6 +5,7 @@ import ac.encg.preins.entity.Bac;
 import ac.encg.preins.entity.Etape;
 import ac.encg.preins.entity.SerieBac;
 import ac.encg.preins.entity.Inscrit;
+import ac.encg.preins.entity.Pcs;
 import ac.encg.preins.entity.Pays;
 import ac.encg.preins.entity.Province;
 import ac.encg.preins.helper.FilesHelper;
@@ -25,7 +26,7 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
+import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import javax.faces.context.FacesContext;
 
@@ -37,6 +38,7 @@ import ac.encg.preins.nonPersistable.LoggedUser;
 import ac.encg.preins.nonPersistable.Mention;
 import ac.encg.preins.nonPersistable.Sex;
 import ac.encg.preins.service.UserService;
+import ac.encg.preins.utility.SendMail;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 
@@ -50,8 +52,8 @@ import org.springframework.stereotype.Controller;
 @Controller
 @Getter
 @Setter
-@ManagedBean(name = "inscritController")
 @ViewScoped
+@Named("inscritController")
 public class InscritController implements Serializable {
 
     @Autowired
@@ -60,8 +62,12 @@ public class InscritController implements Serializable {
     @Autowired
     private UserService userService;
 
-    private String tempFolder = "D:\\PreinsTemp\\";
-    private String uploadFolder = "D:\\PreinsUploads\\";
+    //Local
+   private String uploadFolder = "D:\\PreinsUploads\\";
+    
+    //Server
+  //  private String uploadFolder = "/opt/apache-tomcat-9.0.20/webapps/PreinsUploads/";
+    
     private UploadedFile uploadedPhoto;
     private UploadedFile uploadedCin;
     private InputStream inputStreamPhoto;
@@ -70,13 +76,14 @@ public class InscritController implements Serializable {
     private Inscrit inscrit = new Inscrit();
     private List<Inscrit> inscrits = new ArrayList<>();
     private List<Inscrit> filteredInscrits;
-    
+
     private List<Etape> etapes = new ArrayList<>();
     private List<Province> provinces = new ArrayList<>();
     private List<Pays> pays = new ArrayList<>();
     private List<SerieBac> seriesBac = new ArrayList<>();
     private List<Academie> academies = new ArrayList<>();
     private List<Civility> civilities = new ArrayList<>();
+    private List<Pcs> pcsList = new ArrayList<>();
     private List<Sex> sexes = new ArrayList<>();
     private List<Mention> mentions = new ArrayList<>();
 
@@ -89,9 +96,12 @@ public class InscritController implements Serializable {
     public void save() throws IOException {
 
         if (photoContentsAsBase64 != null) {
-     //       InscritHelper.copyFileAndRename(inscrit, uploadedPhoto, inputStreamPhoto, uploadFolder);
-            FilesHelper.savePhoto(photoContentsAsBase64, uploadFolder+inscrit.getCin() + FilesHelper.getFileExtension(uploadedPhoto.getFileName()));
-        } else{
+            //       InscritHelper.copyFileAndRename(inscrit, uploadedPhoto, inputStreamPhoto, uploadFolder);
+            if (uploadedPhoto != null) {
+                FilesHelper.savePhoto(photoContentsAsBase64, uploadFolder + inscrit.getCin() + FilesHelper.getFileExtension(uploadedPhoto.getFileName()));
+                inscrit.setPhotoFileName(inscrit.getCin() + FilesHelper.getFileExtension(uploadedPhoto.getFileName()));
+            }
+        } else {
             FacesContext.getCurrentInstance().
                     addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Le champ Photo Personnelle est obligatoire", null));
             return;
@@ -99,6 +109,7 @@ public class InscritController implements Serializable {
         }
 
         inscritService.save(inscrit);
+        SendMail.sendConfirmationMail(inscrit.getEmail(), inscrit.getId());
 
         FacesContext.getCurrentInstance().
                 addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Votre Inscription à été faite avec succès!", null));
@@ -111,6 +122,7 @@ public class InscritController implements Serializable {
         seriesBac = inscritService.loadBacs();
         academies = inscritService.loadAcademies();
         etapes = inscritService.loadEtapes();
+        pcsList = inscritService.loadPcsList();
         civilities = InscritHelper.loadListCivilities();
         sexes = InscritHelper.loadListSexes();
         mentions = InscritHelper.loadListMentions();
@@ -190,19 +202,22 @@ public class InscritController implements Serializable {
         }
     }
 
-    public void validateInscrition() {
+    public void validateInscrition() throws IOException {
         inscrit.setVALID(true);
-         inscritService.save(inscrit);
-         FacesContext.getCurrentInstance().
+        inscritService.save(inscrit);
+        FacesContext.getCurrentInstance().
                 addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "L'inscription à été Validée avec succès!", null));
-        
+     //   FacesContext.getCurrentInstance().getExternalContext().redirect("inscritList.xhtml");
+
     }
-    public void inValidateInscrition() {
+
+    public void inValidateInscrition() throws IOException {
         inscrit.setVALID(false);
-         inscritService.save(inscrit);
-         FacesContext.getCurrentInstance().
+        inscritService.save(inscrit);
+        FacesContext.getCurrentInstance().
                 addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "L'inscription à été invalidée avec succès!", null));
-        
+      //  FacesContext.getCurrentInstance().getExternalContext().redirect("inscritList.xhtml");
+
     }
 
     public void initialize() {
@@ -213,33 +228,32 @@ public class InscritController implements Serializable {
 
     public void loadListInscrit() {
         inscrits = inscritService.loadAll();
-       
+
     }
 
-    public void injectData(){
+    public void injectData() {
         List<Inscrit> inscriptions = new ArrayList<>();
-        SerieBac serieBac =new SerieBac();
+        SerieBac serieBac = new SerieBac();
         Academie academie = inscritService.loadAcademie();
         Province prov = inscritService.loadProvince();
         serieBac = inscritService.loadSerie();
         Etape etape = inscritService.loadEtape();
         Pays pays = inscritService.loadPay();
-        for (int i = 1 ; i<100;i = i+1){
-            Inscrit ins= new Inscrit();
-            ins.setAdresse("Adresse"+i);
-            ins.setAdresseTuteur("AdresseTut"+i);
-            ins.setCin("CIN"+i);
-            ins.setCinTuteur("CINTut"+i);
+        for (int i = 1; i < 100; i = i + 1) {
+            Inscrit ins = new Inscrit();
+            ins.setAdresse("Adresse" + i);
+            ins.setAdresseTuteur("AdresseTut" + i);
+            ins.setCin("CIN" + i);
+            ins.setCinTuteur("CINTut" + i);
             ins.setCiv(new Byte("1"));
-            ins.setCne("CNE"+i);
-            ins.setEmail("Email"+i);
-            ins.setLieuNaiss("Lieu"+i);
+            ins.setCne("CNE" + i);
+            ins.setEmail("Email" + i);
+            ins.setLieuNaiss("Lieu" + i);
             ins.setMentionBac("TB");
-            ins.setNom("Nom"+i);
-            ins.setPrenom("Prenom"+i);
+            ins.setNom("Nom" + i);
+            ins.setPrenom("Prenom" + i);
             ins.setVALID(false);
-            
-       
+
             Bac bac = new Bac();
             bac.setSerieBac(serieBac);
             bac.setAcademie(academie);
@@ -248,11 +262,11 @@ public class InscritController implements Serializable {
             ins.setEtape(etape);
             ins.setPaysNaiss(pays);
             ins.setProvinceNaiss(prov);
-            
-             inscriptions.add(ins);
-             System.out.println("Inscrit"+i+"Injecté");
+
+            inscriptions.add(ins);
+            System.out.println("Inscrit" + i + "Injecté");
         };
-        
+
         inscritService.saveAll(inscriptions);
     }
 

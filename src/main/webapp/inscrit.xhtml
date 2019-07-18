@@ -9,7 +9,6 @@
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="content">
-        <!--                    <p:messages id="messages"/>-->
         <f:metadata>
             <f:viewAction  action="#{inscritController.initialize()}"/>
             <f:viewParam name="selectedCne" value="#{inscritController.selectedCne}"/>
@@ -57,7 +56,13 @@
                                 <f:selectItems value="#{inscritController.pays}" var="pays" itemLabel="#{pays.lib}" itemValue="#{pays.id}"/>
                             </p:selectOneMenu>
                             <p:inputText placeholder="Téléphone" value="#{inscritController.inscrit.tel}" required="true" requiredMessage="Le champ Téléphone est obligatoire"/>
-                            <p:inputText placeholder="Email" value="#{inscritController.inscrit.email}" required="true" requiredMessage="Le champ Email est obligatoire"/>
+                            <p:inputText placeholder="Email" value="#{inscritController.inscrit.email}" 
+                                         required="true" requiredMessage="Le champ Email est obligatoire"
+                                         validatorMessage="Le format de l'email est invalid">
+                                <f:validateRegex
+                                    pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+
+                            </p:inputText>  
                             <p:inputTextarea placeholder="Adresse Personelle Actuelle" value="#{inscritController.inscrit.adresse}" required="true" requiredMessage="Le champ 'Adresse Personelle Actuelle est obligatoire"/>   
                         </p:panelGrid>
                     </div>
@@ -74,8 +79,22 @@
                             <!--<p:inputText placeholder="اسم الأم"  value="#{inscritController.inscrit.prenomMereAr}"  dir="rtl" required="true" requiredMessage="Le champ اسم الأم est obligatoire"/>-->
                             <p:inputText placeholder="CIN Père ou Tuteur" value="#{inscritController.inscrit.cinTuteur}" required="true" requiredMessage="Le champ CIN Père ou Tuteur est obligatoire"/>
                             <p:inputText placeholder="Téléphone du Tuteur" value="#{inscritController.inscrit.tel}" required="true" requiredMessage="Le champ Téléphone du Tuteur est obligatoire"/>
+                            <p:selectOneMenu  value="#{inscritController.inscrit.pcsPere.id}" required="true" requiredMessage="Le champ Profession du père du Bac est obligatoire">
+                                <f:selectItem itemLabel="Profession du père" itemValue="" noSelectionOption="true" />
+                                <f:selectItems value="#{inscritController.pcsList}" var="pcs" itemLabel="#{pcs.lib}" itemValue="#{pcs.id}"/>
+                            </p:selectOneMenu>
+                            <p:selectOneMenu  value="#{inscritController.inscrit.pcsMere.id}" required="true" requiredMessage="Le champ Série du Bac est obligatoire">
+                                <f:selectItem itemLabel="Profession de la mère" itemValue="" noSelectionOption="true" />
+                                <f:selectItems value="#{inscritController.pcsList}" var="pcs" itemLabel="#{pcs.lib}" itemValue="#{pcs.id}"/>
+                            </p:selectOneMenu>
                             <p:inputTextarea placeholder="Adresse Actuelle du Tuteur" value="#{inscritController.inscrit.adresseTuteur}" required="true" requiredMessage="Le champ Adresse Actuelle du Tuteur est obligatoire"/>   
                         </p:panelGrid>
+                    </div>
+                </div>
+
+                <div class="Container50 Responsive50">
+                    <div class="ContainerIndent ui-fluid">
+
                         <h2 class="BigTopic">
                             BACCALAUREAT
                         </h2>
@@ -86,14 +105,20 @@
                                 <f:selectItem itemLabel="Série du Bac" itemValue="" noSelectionOption="true" />
                                 <f:selectItems value="#{inscritController.seriesBac}" var="serieBac" itemLabel="#{serieBac.lib}" itemValue="#{serieBac.id}"/>
                             </p:selectOneMenu>
-                            <p:selectOneMenu  value="#{inscritController.inscrit.bac.provinceBac.id}" required="true" requiredMessage="Le champ Province d'obtention du Bac est obligatoire">
-                                <f:selectItem itemLabel="Province d'obtention du Bac" itemValue="" noSelectionOption="true" />
-                                <f:selectItems value="#{inscritController.provinces}" var="province" itemLabel="#{province.lib}" itemValue="#{province.id}"/>
-                            </p:selectOneMenu>
                             <p:selectOneMenu placeholder="Mention du Bac" value="#{inscritController.inscrit.bac.montion}" required="true" requiredMessage="Le champ Mention du Bac est obligatoire">
                                 <f:selectItem itemLabel="Mention du Bac" itemValue="" noSelectionOption="true" />
                                 <f:selectItems value="#{inscritController.mentions}" var="mention" itemLabel="#{mention.libMention}" itemValue="#{mention.codMontion}"/>
                             </p:selectOneMenu>
+                            <br/>
+                            <p:selectOneRadio id="codeTpe" value="#{inscritController.inscrit.codeTpe}" required="true" requiredMessage="Le champ Type Lycée est obligatoire">>
+                                <f:selectItem itemLabel="Lycée Privé" itemValue="22" />
+                                <f:selectItem itemLabel="Lycée Public" itemValue="23" />
+                            </p:selectOneRadio>
+                            <p:selectOneMenu  value="#{inscritController.inscrit.bac.provinceBac.id}" required="true" requiredMessage="Le champ Province d'obtention du Bac est obligatoire">
+                                <f:selectItem itemLabel="Province d'obtention du Bac" itemValue="" noSelectionOption="true" />
+                                <f:selectItems value="#{inscritController.provinces}" var="province" itemLabel="#{province.lib}" itemValue="#{province.id}"/>
+                            </p:selectOneMenu>
+
                             <p:selectOneMenu  value="#{inscritController.inscrit.bac.academie.id}" required="true" requiredMessage="Le champ Académie est obligatoire">
                                 <f:selectItem itemLabel="Académie" itemValue="" noSelectionOption="true" />
                                 <f:selectItems value="#{inscritController.academies}" var="academie" itemLabel="#{academie.lib}" itemValue="#{academie.id}"/>
@@ -147,8 +172,12 @@
                         <!--<h:commandButton value="VALIDER" class ="ui-button ui-button-text"  action="#{inscritController.save()}"> </h:commandButton>--> 
                         <sec:authorize ifAnyGranted="ROLE_ADMIN, ROLE_OPERATOR">
                             <p:button value="RETOUR" outcome="inscritList.xhtml"  icon="fa fa-save Fs16 white"  />
-                        </sec:authorize>   
-                        <p:commandButton value="ENREGISTER"  action="#{inscritController.save()}" update="messages"  icon="fa fa-save Fs16 white"  />
+                        </sec:authorize>  
+                        <ui:fragment  rendered="#{inscritController.inscrit.id != null}"  >
+                            <p:button value="Imprimer Reçue" outcome="printConfirmation.xhtml"  icon="fa fa-print Fs16 white"  />
+                        </ui:fragment>
+
+                        <p:commandButton value="ENREGISTER"  action="#{inscritController.save()}" update="@form"  icon="fa fa-save Fs16 white"  />
                         <h:panelGroup id="validationButton">
                             <sec:authorize ifAnyGranted="ROLE_ADMIN, ROLE_OPERATOR" id="validationButton">
                                 <ui:fragment  rendered="#{not inscritController.inscrit.VALID}"  >
@@ -166,9 +195,7 @@
                 </div>
                 <!--</div>-->
             </div>
-            <p:commandButton value="Print" type="button" icon="fa fa-print Fs16 white" style="display:block;margin-bottom: 20px">
-                <p:printer target="inscritForm" />
-            </p:commandButton>
+
         </h:form> 
 
     </ui:define>

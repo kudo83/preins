@@ -5,6 +5,7 @@
  */
 package ac.encg.preins.entity;
 
+import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -17,6 +18,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,7 +30,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "USER")
+@Table(name = "USER",uniqueConstraints = {@UniqueConstraint(columnNames={"USERNAME"})})
 public class User {
 
     @Id
@@ -35,10 +38,12 @@ public class User {
     @Column(name = "ID_USER")
     private int id;
     
-     @Column(name = "USERNAME")
+    @Column(name = "USERNAME")
+    @NotNull
     private String username;
 
     @Column(name = "PASSWORD")
+    @NotNull
     private String password;
     
     @Column(name = "EMAIL")
@@ -47,10 +52,9 @@ public class User {
     @Column(name = "ACTIVE")
     private int active;
     
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(name = "USER_ROLE", joinColumns = @JoinColumn(name = "ID_USER"), inverseJoinColumns = @JoinColumn(name = "ID_ROLE"))
-    private Set<Role> roles;
-
+    private Set<Role> roles = new HashSet<>();
     public User() {
     }
 

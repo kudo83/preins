@@ -18,6 +18,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
+import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -35,6 +36,7 @@ public class Inscrit implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID_INS")
     private Long id;
+    
     @Column(name = "VALIDE")
     private boolean isVALID;
 
@@ -50,9 +52,11 @@ public class Inscrit implements Serializable {
     @Column(name = "PRENOM_AR")
     private String prenomAr;
 
+    @NotNull
     @Column(name = "CNE")
     private String cne;
 
+    @NotNull
     @Column(name = "CIN")
     private String cin;
 
@@ -98,6 +102,17 @@ public class Inscrit implements Serializable {
 
     @Column(name = "PHOTO_FILENAME")
     private String photoFileName;
+    
+    @Column(name = "COD_TPE")
+    private byte codeTpe;
+    
+    @ManyToOne
+    @JoinColumn(name = "FK_ID_PCS_PERE")
+    private Pcs pcsPere = new Pcs();
+    
+    @ManyToOne
+    @JoinColumn(name = "FK_ID_PCS_MERE")
+    private Pcs pcsMere = new Pcs();
 
     @ManyToOne
     @JoinColumn(name = "FK_ID_PROVINCE")

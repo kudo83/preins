@@ -57,4 +57,20 @@ public class UserHelper {
 
         return false;
     }
+    public static boolean isRoleOperator(Authentication authentication) {
+        if (authentication != null) {
+            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+
+            List<String> roles = new ArrayList<String>();
+
+            for (GrantedAuthority a : authorities) {
+                roles.add(a.getAuthority());
+            }
+            if (roles.contains("ROLE_OPERATOR")) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

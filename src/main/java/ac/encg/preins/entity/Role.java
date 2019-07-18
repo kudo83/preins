@@ -1,6 +1,7 @@
 package ac.encg.preins.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +17,7 @@ public class Role {
     private int id;
 
     @Column(name = "LIB_ROLE")
+    @NotNull
     private String lib;
 
     public Role() {

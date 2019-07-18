@@ -10,6 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,7 +27,9 @@ public class Province implements Serializable {
     @Id
     @Column(name = "ID_PROVINCE")
     private Long id;
+    
     @Column(name = "LIB_PROVINCE")
+    @NotNull
     private String lib;
 
 }

@@ -16,7 +16,7 @@
         <h:form id="inscritListForm" enctype="multipart/form-data">
             <p:growl id="messages"/>
             <p:focus context="inscritListForm" />
-            <div class="layout-portlets-box ui-fluid">
+            <div class="layout-portlets-box-print ui-fluid">
 
                 <div class="Container100 Responsive100">
                     <div class="ContainerIndent ui-fluid">
@@ -36,6 +36,9 @@
                                     <p:inputText id="globalFilter" onkeyup="PF('inscritsTable').filter()" style="width:150px" placeholder="Mot clef"/>
                                 </p:outputPanel>
                             </f:facet>
+                            <p:column headerText="Référence" filterBy="#{inscrit.id}">
+                                <h:outputText value="#{inscrit.id}" class="fontNum" />
+                            </p:column>
                             <p:column headerText="CNE" filterBy="#{inscrit.cne}">
                                 <h:outputText value="#{inscrit.cne.toUpperCase()}" class="fontNum" />
                             </p:column>
@@ -62,12 +65,12 @@
                                     </p:selectOneButton>
                                 </f:facet>
                                 <p:graphicImage class="fa fa-check green" rendered="#{inscrit.VALID}"/>
-                                <p:graphicImage class="fa fa-check grey"  rendered="#{not inscrit.VALID}"/>
+                                <p:graphicImage class="fa fa-check red"  rendered="#{not inscrit.VALID}"/>
                             </p:column>
 
                             <p:column headerText="ACTIONS" style="text-align: center;" class="table-actions">
                                 <h:link outcome="inscrit.xhtml?faces-redirect=true" includeViewParams="true">
-                                    <i class="fa fa-search"/>
+                                    <i class="fa fa-edit"/>
                                     <f:param name="selectedCne" value="#{inscrit.cne}" />
                                 </h:link>
 

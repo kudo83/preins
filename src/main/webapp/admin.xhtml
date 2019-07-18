@@ -6,20 +6,33 @@
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="content">
-        <h1>ADMIN PAGE</h1>
-        
-         <h:outputLink value="logout" class="Animated05" ><i class="fa fa-sign-out"></i>Logout</h:outputLink>
-   
-    
-    <h:form enctype="multipart/form-data">
-    <p:growl id="messages" showDetail="true" />
-     
-    <p:fileUpload value="#{inscritController.uploadedFile}" mode="simple" skinSimple="true"/>
-     
-    <br /> <br />
-     
-    <p:commandButton value="Submit" ajax="false" action="#{inscritController.preview()}"/>
-</h:form>
-    
+        <div id="print" class="layout-portlets-box ui-fluid">
+
+            <div class="Container100 Responsive">
+                <div class="ContainerIndent ui-fluid">
+                    <h2 class="BigTopic">
+                        UPLOAD ADMIS
+                    </h2>
+
+                    <h:form enctype="multipart/form-data">
+                        <p:growl id="messages" />
+
+                        <!--<p:fileUpload value="#{inscritController.uploadedFile}" mode="simple" skinSimple="true"/>-->
+                        <!--<p:commandButton value="Upload" action="#{admisController.uploadAdmis()}" />-->
+                        <p:fileUpload  value="#{admisController.excelUpload}" fileUploadListener="#{admisController.uploadAdmis}" mode="advanced" dragDropSupport="false"
+                                       allowTypes="/(\.|\/)(xls)$/" update="messages" />
+
+                        <br /> <br />
+
+                        <p:commandButton value="Submit" ajax="false" action="#{inscritController.preview()}"/>
+                        
+                        <p:commandButton value="Send Mail" ajax="false" action="#{admisController.sendEmail()}"/>
+                        <p:commandButton value="Send Confirmation Mail" ajax="false" action="#{admisController.sendConfirmationMail()}"/>
+                        
+                    </h:form>
+                </div>
+            </div>
+        </div>
+
     </ui:define>      
 </ui:composition>

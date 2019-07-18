@@ -1,9 +1,3 @@
--------------------------------------------------------
-
-
---
--- Dumping data for table `ACADEMIE`
---
 
 INSERT INTO `ACADEMIE` (`ID_ACADEMIE`, `LIB_ACADEMIE`) VALUES
 (0, 'ETRANGERE'),
@@ -28,12 +22,7 @@ INSERT INTO `ACADEMIE` (`ID_ACADEMIE`, `LIB_ACADEMIE`) VALUES
 (19, 'AUTRE'),
 (20, 'CASA-BEN M\'SIK');
 
--- --------------------------------------------------------
 
-
---
--- Dumping data for table `PAYS`
---
 
 INSERT INTO `PAYS` (`ID_PAYS`, `LIB_PAYS`) VALUES
 (100, 'EXFRANCE'),
@@ -257,10 +246,7 @@ INSERT INTO `PAYS` (`ID_PAYS`, `LIB_PAYS`) VALUES
 (990, 'AUTRES pays'),
 (996, 'FRANCE');
 
--- --------------------------------------------------------
---
--- Dumping data for table `PROVINCE`
---
+
 
 INSERT INTO `PROVINCE` (`ID_PROVINCE`, `LIB_PROVINCE`) VALUES
 (1, 'RABAT'),
@@ -358,11 +344,7 @@ INSERT INTO `PROVINCE` (`ID_PROVINCE`, `LIB_PROVINCE`) VALUES
 (998, 'FKIH BEN SALEH'),
 (999, 'BENGUERIR');
 
--- --------------------------------------------------------
 
---
--- Dumping data for table `SERIE_BAC`
---
 
 INSERT INTO `SERIE_BAC` (`ID_SERIE_BAC`, `LIB_SERIE_BAC`) VALUES
 (1, 'Agriculture'),
@@ -490,10 +472,7 @@ INSERT INTO `SERIE_BAC` (`ID_SERIE_BAC`, `LIB_SERIE_BAC`) VALUES
 (998, 'Sc.Math A -Option Anglais'),
 (999, 'Arts Appliquée');
 
--- --------------------------------------------------------
---
--- Dumping data for table `ETAPE`
---
+
 INSERT INTO `ETAPE` (`COD_ETP`, `LIB_ETP`) VALUES
 ('GITCT1', '1ère année Tronc Commun'),
 ('GITCT2', '2ème année Tronc Commun'),
@@ -507,9 +486,7 @@ INSERT INTO `ETAPE` (`COD_ETP`, `LIB_ETP`) VALUES
 ('GIMRH5', '5ème année MRH');
 
 
---
--- Dumping data for table `role`
---
+
 
 INSERT INTO `ROLE` (`ID_ROLE`, `LIB_ROLE`) VALUES
 (1, 'ADMIN'),
@@ -519,7 +496,7 @@ INSERT INTO `ROLE` (`ID_ROLE`, `LIB_ROLE`) VALUES
 
 INSERT INTO `USER` (`ID_USER`, `ACTIVE`, `PASSWORD`, `USERNAME` ) VALUES
 
-(1, TRUE, 'tabit' , 'aissam'),
+(1, TRUE, 'tabit' , 'admin'),
 (2, TRUE, '123456' , 'op1'),
 (3, TRUE, '123456' , 'D123456');
 
@@ -531,6 +508,8 @@ INSERT INTO `USER_ROLE` (`ID_USER`, `ID_ROLE`) VALUES
 (3, 3);
 
 
+
+INSERT INTO `PCS` VALUES (10,'Agriculteur exploitant'),(11,'décidé'),(12,'retraité'),(13,'Pêcheur'),(14,'Adoule'),(15,'Immigré'),(21,'Artisan'),(22,'Commerçant et assimilé'),(23,'Chef entreprise 10 salariés ou plus'),(31,'Profession libérale'),(33,'Cadre de la fonction publique'),(34,'Professeur, profession scientifique'),(35,'Profession information/arts/spectacles'),(37,'Cadre administratif et commercial d\'entr'),(38,'Ingénieur cadre technique d\'entreprise'),(42,'Instituteur et assimilé'),(43,'Profession interm santé et  trav. social'),(44,'Imams-religieux'),(45,'Profession interm adm de la fonction pub'),(46,'Profession interm adm et commerc. entrep'),(47,'Technicien'),(48,'Contremaître-agent de maîtrise'),(52,'Employé civil-agent de service de la FP'),(53,'Policier et militaire'),(54,'Employé administratif d\'entreprise'),(55,'Employé de commerce'),(56,'Person. service direct aux particuliers'),(62,'Ouvrier qualifié de type industriel'),(63,'Ouvrier qualifié de type artisanal'),(64,'Chauffeur'),(65,'Ouvrier qualifié de la manutention,trsp'),(66,'Ouvrier non qualifié de type industriel'),(67,'Ouvrier non qualifié de type artisanal'),(69,'Ouvrier agricole'),(71,'Ancien agriculteur exploitant'),(72,'Ancien artisan-commerce-chef entrepris'),(81,'Sans emploi'),(82,'Eleve,Etudiant,sans activité profes'),(83,'Militaires du contingent'),(85,'Personne sans activité profes de -60 ans'),(86,'Personne sans activité profes de +60 ans'),(87,'\nMembres des corps législatifs,élus loc'),(88,'Cadre supérieurs et membres des professi'),(89,'Membres des FAR'),(90,'Cadre moyens'),(91,'Employés'),(92,'Commerçants, intermédiaires commerciaux'),(93,'Exploitants agricoles, pêcheurs, foresti'),(94,'Artisans et ouvriers qualifiés des métie'),(95,'Conducteurs dinstallations et de machin'),(96,'Manuvres non agricoles, manutentionnair'),(99,'Non renseigné (Inconnu)');
 
 
 

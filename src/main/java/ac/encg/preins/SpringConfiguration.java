@@ -70,9 +70,10 @@ public class SpringConfiguration {
         dataSource.setConnectionTestQuery("show tables");
 
         //Server test
-//        dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/preinstest?serverTimezone=UTC");
+//        dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/preinstest?serverTimezone=UTC&useUnicode=yes&characterEncoding=UTF-8");
 //        dataSource.setUsername("root");
 //        dataSource.setPassword("ENCGdbuser@2019");
+
         return dataSource;
 
     }

@@ -10,26 +10,23 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
  *
- * @author Aissam
+ * @author kudo
  */
+
 @Entity
 @Getter
 @Setter
-@Table(name = "PAYS")
-public class Pays implements Serializable {
-
+@Table(name = "PCS")
+public class Pcs implements Serializable {
     @Id
-    @Column(name = "ID_PAYS")
+    @Column(name = "ID_PCS")
     private Long id;
     
-    @NotNull
-    @Column(name = "LIB_PAYS")
+    @Column(name = "LIB_PCS")
     private String lib;
-
 }
