@@ -56,6 +56,8 @@ import org.springframework.stereotype.Controller;
 @Named("inscritController")
 public class InscritController implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Autowired
     private InscritService inscritService;
 
@@ -63,11 +65,10 @@ public class InscritController implements Serializable {
     private UserService userService;
 
     //Local
-   private String uploadFolder = "D:\\PreinsUploads\\";
-    
+    private String uploadFolder = "D:\\PreinsUploads\\";
+
     //Server
-  //  private String uploadFolder = "/opt/apache-tomcat-9.0.20/webapps/PreinsUploads/";
-    
+    //  private String uploadFolder = "/opt/apache-tomcat-9.0.20/webapps/PreinsUploads/";
     private UploadedFile uploadedPhoto;
     private UploadedFile uploadedCin;
     private InputStream inputStreamPhoto;
@@ -109,7 +110,7 @@ public class InscritController implements Serializable {
         }
 
         inscritService.save(inscrit);
-        SendMail.sendConfirmationMail(inscrit.getEmail(), inscrit.getId());
+        SendMail.sendInscriptionConfirmationMail(inscrit.getEmail(), inscrit.getId());
 
         FacesContext.getCurrentInstance().
                 addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Votre Inscription à été faite avec succès!", null));
@@ -180,8 +181,6 @@ public class InscritController implements Serializable {
 
                 } else {
                     inscrit = new Inscrit();
-                    inscrit.setCne(user.getUsername());
-                    inscrit.setCin(user.getPassword());
                     photoContentsAsBase64 = null;
                 }
             }
@@ -207,7 +206,7 @@ public class InscritController implements Serializable {
         inscritService.save(inscrit);
         FacesContext.getCurrentInstance().
                 addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "L'inscription à été Validée avec succès!", null));
-     //   FacesContext.getCurrentInstance().getExternalContext().redirect("inscritList.xhtml");
+        //   FacesContext.getCurrentInstance().getExternalContext().redirect("inscritList.xhtml");
 
     }
 
@@ -216,7 +215,7 @@ public class InscritController implements Serializable {
         inscritService.save(inscrit);
         FacesContext.getCurrentInstance().
                 addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "L'inscription à été invalidée avec succès!", null));
-      //  FacesContext.getCurrentInstance().getExternalContext().redirect("inscritList.xhtml");
+        //  FacesContext.getCurrentInstance().getExternalContext().redirect("inscritList.xhtml");
 
     }
 

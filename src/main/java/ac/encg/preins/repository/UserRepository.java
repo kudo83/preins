@@ -8,12 +8,15 @@ package ac.encg.preins.repository;
 import ac.encg.preins.entity.User;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
 /**
  *
  * @author kudo
  */
-public interface UserRepository extends JpaRepository<User, Long> {
- 
-    Optional<User> findByUsername(String username);
+public interface UserRepository extends JpaRepository<User, Long>,  QuerydslPredicateExecutor<User> {
+
+    public Optional<User> findByUsername(String username);
+
+
 }

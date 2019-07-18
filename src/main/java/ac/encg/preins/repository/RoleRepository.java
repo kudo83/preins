@@ -5,18 +5,19 @@
  */
 package ac.encg.preins.repository;
 
-import ac.encg.preins.entity.Inscrit;
-import com.querydsl.core.types.Predicate;
+import ac.encg.preins.entity.Role;
+import ac.encg.preins.entity.User;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
 /**
  *
- * @author Aissam
+ * @author kudo
  */
-public interface InscritRepository extends JpaRepository<Inscrit, Long>, QuerydslPredicateExecutor<Inscrit> {
+public interface RoleRepository extends JpaRepository<Role, Long>,  QuerydslPredicateExecutor<Role> {
 
-    public Optional<Inscrit> findByCne(String cne);
+    public Role findByLib(String roleLib);
+
 
 }

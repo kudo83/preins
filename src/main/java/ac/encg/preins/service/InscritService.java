@@ -12,7 +12,6 @@ import ac.encg.preins.entity.Inscrit;
 import ac.encg.preins.entity.Pays;
 import ac.encg.preins.entity.Pcs;
 import ac.encg.preins.entity.Province;
-import ac.encg.preins.predicate.InscritPredicate;
 import ac.encg.preins.repository.AcademieRepository;
 import ac.encg.preins.repository.EtapeRepository;
 import java.io.Serializable;
@@ -80,7 +79,7 @@ public class InscritService implements Serializable {
     }
 
     public Optional<Inscrit> getInscrit(String cne) {
-        return inscritRepo.findOne(InscritPredicate.hasCne(cne));
+        return inscritRepo.findByCne(cne);
     }
 
     public List<Etape> loadEtapes() {

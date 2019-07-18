@@ -35,22 +35,23 @@ import org.springframework.stereotype.Controller;
 @Named("admisController")
 public class AdmisController implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    
     @Autowired
     private UserService userService;
 
     private String EXCEL_FILE_LOCATION = "/opt/apache-tomcat-9.0.20/webapps/accounts/comptes.xls";
-    
+
     private UploadedFile excelUpload;
 
     private List<User> users = new ArrayList<>();
 
     public void uploadAdmis(FileUploadEvent event) {
-        
-        
+
         Workbook workbook = null;
         try {
-          //  workbook = Workbook.getWorkbook(new File(EXCEL_FILE_LOCATION));
-          workbook = Workbook.getWorkbook(event.getFile().getInputstream());
+            //  workbook = Workbook.getWorkbook(new File(EXCEL_FILE_LOCATION));
+            workbook = Workbook.getWorkbook(event.getFile().getInputstream());
 
             Sheet sheet = workbook.getSheet(0);
             int cellCount = sheet.getColumn(0).length;
@@ -68,31 +69,31 @@ public class AdmisController implements Serializable {
                 newUser.getRoles().add(userRole);
                 users.add(newUser);
             }
-        if (!users.isEmpty())  {
-            userService.saveUsers(users);
-        }  
+            if (!users.isEmpty()) {
+                userService.saveUsers(users);
+            }
 
         } catch (IOException | BiffException e) {
             e.printStackTrace();
-        } catch (Exception e){ 
-             FacesContext.getCurrentInstance().
-                addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Un ou plusieur étudiants existe déjà dans la base!", null));
-        }finally {
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Un ou plusieur étudiants existe déjà dans la base!", null));
+        } finally {
 
             if (workbook != null) {
                 workbook.close();
             }
-            
 
         }
 
     }
-    
-    public void sendEmail(){
+
+    public void sendEmail() {
         SendMail.send();
     }
-    public void sendConfirmationMail(){
-    //    SendMail.sendConfirmationMail("ai.izimi@gmail.com");
+
+    public void sendConfirmationMail() {
+        //    SendMail.sendConfirmationMail("ai.izimi@gmail.com");
     }
 //
 //    public void uploadExcelApache() {

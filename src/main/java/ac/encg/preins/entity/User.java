@@ -45,12 +45,10 @@ public class User {
     @Column(name = "PASSWORD")
     @NotNull
     private String password;
-    
-    @Column(name = "EMAIL")
-    private String email;
+   
     
     @Column(name = "ACTIVE")
-    private int active;
+    private boolean enabled;
     
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(name = "USER_ROLE", joinColumns = @JoinColumn(name = "ID_USER"), inverseJoinColumns = @JoinColumn(name = "ID_ROLE"))
@@ -59,8 +57,7 @@ public class User {
     }
 
     public User(User user) {
-        this.active = user.getActive();
-        this.email = user.getEmail();
+        this.enabled = user.isEnabled();
         this.roles = user.getRoles();
         this.username = user.getUsername();
         this.id = user.getId();

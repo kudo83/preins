@@ -5,18 +5,18 @@
  */
 package ac.encg.preins.repository;
 
-import ac.encg.preins.entity.Inscrit;
-import com.querydsl.core.types.Predicate;
-import java.util.Optional;
+import ac.encg.preins.entity.VerificationToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
 /**
  *
- * @author Aissam
+ * @author kudo
  */
-public interface InscritRepository extends JpaRepository<Inscrit, Long>, QuerydslPredicateExecutor<Inscrit> {
+public interface TokenRepository extends JpaRepository<VerificationToken, Long>,  QuerydslPredicateExecutor<VerificationToken>{
 
-    public Optional<Inscrit> findByCne(String cne);
+    public VerificationToken findByToken(String token);
+
+
 
 }

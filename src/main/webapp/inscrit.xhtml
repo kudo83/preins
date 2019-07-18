@@ -25,13 +25,14 @@
                         </h2>
 
                         <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;">
+                             <p:inputText placeholder="Code Massar" value="#{inscritController.inscrit.cne}" required="true" requiredMessage="Le champ Code Massar est obligatoire"/>
+                              <p:inputText placeholder="CIN" value="#{inscritController.inscrit.cin}" required="true" requiredMessage="Le champ CIN est obligatoire"/>
                             <p:inputText placeholder="Nom" value="#{inscritController.inscrit.nom}" required="true" requiredMessage="Le champ Nom est obligatoire"/>
                             <p:inputText placeholder="النسب"  value="#{inscritController.inscrit.nomAr}" dir="rtl" required="true" requiredMessage="Le champ النسب est obligatoire">
                             </p:inputText>    
                             <p:inputText placeholder="Prénom" value="#{inscritController.inscrit.prenom}" required="true" requiredMessage="Le champ Prénom est obligatoire"/>
                             <p:inputText placeholder="الاسم"  value="#{inscritController.inscrit.prenomAr}"  dir="rtl" required="true" requiredMessage="Le champ الاسم est obligatoire"/>
-                            <!--<p:inputText placeholder="CNE" value="#{inscritController.inscrit.cne}" disabled="false" required="true" requiredMessage="Le champ CNE est obligatoire"/>-->
-                            <!--<p:inputText placeholder="CIN ou N° Passport pour les étrangers" value="#{inscritController.inscrit.cin}" required="true" requiredMessage="Le champ CIN est obligatoire"/>-->
+                           
                             <p:selectOneMenu placeholder="SEX" value="#{inscritController.inscrit.sex}" required="true" requiredMessage="Le champ SEX est obligatoire">
                                 <f:selectItem itemLabel="SEX" itemValue="" noSelectionOption="true" />
                                 <f:selectItems value="#{inscritController.sexes}" var="sex" itemLabel="#{sex.libSex}" itemValue="#{sex.codSex}"/>
@@ -56,13 +57,7 @@
                                 <f:selectItems value="#{inscritController.pays}" var="pays" itemLabel="#{pays.lib}" itemValue="#{pays.id}"/>
                             </p:selectOneMenu>
                             <p:inputText placeholder="Téléphone" value="#{inscritController.inscrit.tel}" required="true" requiredMessage="Le champ Téléphone est obligatoire"/>
-                            <p:inputText placeholder="Email" value="#{inscritController.inscrit.email}" 
-                                         required="true" requiredMessage="Le champ Email est obligatoire"
-                                         validatorMessage="Le format de l'email est invalid">
-                                <f:validateRegex
-                                    pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
-
-                            </p:inputText>  
+                            
                             <p:inputTextarea placeholder="Adresse Personelle Actuelle" value="#{inscritController.inscrit.adresse}" required="true" requiredMessage="Le champ 'Adresse Personelle Actuelle est obligatoire"/>   
                         </p:panelGrid>
                     </div>

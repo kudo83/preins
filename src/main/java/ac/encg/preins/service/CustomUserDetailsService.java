@@ -23,6 +23,13 @@ public class CustomUserDetailsService implements UserDetailsService {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         optionalUser
                 .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
+        if (optionalUser.isPresent()){
+            User user = optionalUser.get();
+            if (! user.isEnabled()){
+                throw new UsernameNotFoundException("Utilisateur inactif!");
+            }
+        }
+        
         return optionalUser
                 .map(CustomUserDetails::new).get();
 
