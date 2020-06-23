@@ -39,7 +39,7 @@
                         <div class="EmptyBox50"></div>
                         <h:graphicImage name="images/logo.png" library="spark-layout" styleClass="MarAuto MarTop20 MarBot10" style="height:80px; width:3#0px;"/>
                         <div class="EmptyBox20"></div>
-                        <p:messages id="messages" autoUpdate="true"/>  
+                        <p:messages id="messages" autoUpdate="true" styleClass="Container80 Fnone MarAuto Fs18"/>
                         <div class="EmptyBox20"></div>
                         <p:inputText id="username" value="#{accountController.registeredUser.username}" placeholder="Email" 
                                      styleClass="Container80 Fnone MarAuto Fs18"
@@ -55,6 +55,7 @@
                                     required="true"
                                     validatorMessage="Le mot de passe de confirmation n'est pas conforme!"
                                     styleClass="Container80 Fnone MarAuto Fs18" feedback="false"/>
+                        <div class="EmptyBox10"></div>
                         <p:password id="passwordConfirmation" value="#{accountController.registeredUser.password}" 
                                     placeholder="Confirmer Mot de passe" styleClass="Container80 Fnone MarAuto Fs18" feedback="false"
                                     required="true"
@@ -67,7 +68,7 @@
                                                 </div>-->
                         <div class="EmptyBox30"></div>
                         <!--<h:commandButton  value="Login" styleClass="Fs16"/>-->
-                        <p:commandButton value="S'inscrire"  action="#{accountController.registerNewUser()}" ajax="false" style="width: 50%" update="@form"/>
+                        <p:commandButton value="S'inscrire"  action="#{accountController.registerNewUser()}" style="width: 50%" update="messages" ajax="false"/>
                         <div class="EmptyBox10"></div>
                         <div class="Seperator"></div>
                         <div class="EmptyBox10"></div>

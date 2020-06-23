@@ -528,3 +528,9 @@ li{list-style:none;}
     background: url("#{resource['img/myImg2.png']}") no-repeat;
 }
 
+.ui-outputlabel{
+    font-size: 12px;
+}
+
+
+

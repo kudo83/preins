@@ -17,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
@@ -53,6 +54,16 @@ public class User {
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(name = "USER_ROLE", joinColumns = @JoinColumn(name = "ID_USER"), inverseJoinColumns = @JoinColumn(name = "ID_ROLE"))
     private Set<Role> roles = new HashSet<>();
+    
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "INSCRIT_ID_FK", referencedColumnName = "ID_INS")
+    public Inscrit inscrit;
+    
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "ADMIS_ID_FK", referencedColumnName = "ID_ADMIS")
+    public Admis admis;
+    
+    
     public User() {
     }
 

@@ -1,6 +1,7 @@
 package ac.encg.preins.controller;
 
 import ac.encg.preins.entity.Academie;
+import ac.encg.preins.entity.Admis;
 import ac.encg.preins.entity.Bac;
 import ac.encg.preins.entity.Etape;
 import ac.encg.preins.entity.SerieBac;
@@ -8,6 +9,7 @@ import ac.encg.preins.entity.Inscrit;
 import ac.encg.preins.entity.Pcs;
 import ac.encg.preins.entity.Pays;
 import ac.encg.preins.entity.Province;
+import ac.encg.preins.entity.User;
 import ac.encg.preins.helper.FilesHelper;
 import ac.encg.preins.helper.InscritHelper;
 import ac.encg.preins.helper.UserHelper;
@@ -37,10 +39,12 @@ import ac.encg.preins.nonPersistable.Civility;
 import ac.encg.preins.nonPersistable.LoggedUser;
 import ac.encg.preins.nonPersistable.Mention;
 import ac.encg.preins.nonPersistable.Sex;
+import ac.encg.preins.service.AdmisService;
 import ac.encg.preins.service.UserService;
 import ac.encg.preins.utility.SendMail;
+import java.sql.Date;
 import org.primefaces.event.FileUploadEvent;
-import org.primefaces.model.UploadedFile;
+import org.primefaces.model.file.UploadedFile;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -62,6 +66,9 @@ public class InscritController implements Serializable {
     private InscritService inscritService;
 
     @Autowired
+    private AdmisService admisService;
+
+    @Autowired
     private UserService userService;
 
     //Local
@@ -70,7 +77,7 @@ public class InscritController implements Serializable {
     //Server
     //  private String uploadFolder = "/opt/apache-tomcat-9.0.20/webapps/PreinsUploads/";
     private UploadedFile uploadedPhoto;
-    private UploadedFile uploadedCin;
+  //  private UploadedFile uploadedCin;
     private InputStream inputStreamPhoto;
     private String photoContentsAsBase64;
 
@@ -96,24 +103,88 @@ public class InscritController implements Serializable {
 
     public void save() throws IOException {
 
-        if (photoContentsAsBase64 != null) {
-            //       InscritHelper.copyFileAndRename(inscrit, uploadedPhoto, inputStreamPhoto, uploadFolder);
-            if (uploadedPhoto != null) {
-                FilesHelper.savePhoto(photoContentsAsBase64, uploadFolder + inscrit.getCin() + FilesHelper.getFileExtension(uploadedPhoto.getFileName()));
-                inscrit.setPhotoFileName(inscrit.getCin() + FilesHelper.getFileExtension(uploadedPhoto.getFileName()));
+        List<Inscrit> inscritList = inscritService.findByCneOrCin(inscrit.getCne(), inscrit.getCin());
+
+        if (inscrit.getId() == null) {
+            if (!inscritList.isEmpty()) {
+                FacesContext.getCurrentInstance().
+                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Un condidat est déjà inscrit avec ce Code Massar ou CIN! Veuillez contacter l'administration!", null));
+                return;
             }
-        } else {
+            User user;
+            LoggedUser loggedUser = UserHelper.getLoggedUser(userService.getAuthentication());
+            Optional<User> optional = userService.getUser(loggedUser.getUsername());
+            if (optional.isPresent()) {
+                user = optional.get();
+
+                List<Admis> admisList = admisService.findByCneOrCin(inscrit.getCne(), inscrit.getCin());
+
+                if (admisList.isEmpty()) {
+                    FacesContext.getCurrentInstance().
+                            addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Vous ne figurez pas sur la liste des Admis! Veuillez contacter l'administration!", null));
+                    return;
+                } else {
+                    Admis admis = admisList.get(0);
+                    if (admis.getUser() == null) {
+                        user.setAdmis(admis);
+                    } else {
+                        if (user.getId() != admis.getUser().getId()) {
+                            FacesContext.getCurrentInstance().
+                                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Un condidat est déjà inscrit avec ce Code Massar ou CIN! Veuillez contacter l'administration!", null));
+                            return;
+                        }
+                    }
+
+                }
+
+                inscrit.setDateCreat(new Date(System.currentTimeMillis()));
+                if (photoContentsAsBase64 != null) {
+                    //       InscritHelper.copyFileAndRename(inscrit, uploadedPhoto, inputStreamPhoto, uploadFolder);
+                    if (uploadedPhoto != null) {
+                        FilesHelper.savePhoto(photoContentsAsBase64, uploadFolder + inscrit.getCin() + FilesHelper.getFileExtension(uploadedPhoto.getFileName()));
+                        inscrit.setPhotoFileName(inscrit.getCin() + FilesHelper.getFileExtension(uploadedPhoto.getFileName()));
+                    }
+                } else {
+                    FacesContext.getCurrentInstance().
+                            addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Le champ Photo Personnelle est obligatoire", null));
+                    return;
+
+                }
+
+                inscritService.save(inscrit);
+
+                user.setInscrit(inscrit);
+                userService.save(user);
+                SendMail.sendInscriptionConfirmationMail(user.getUsername(), inscrit.getId());
+
+            } else {
+                FacesContext.getCurrentInstance().
+                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "L'opération a rencontré un problème interne. Si le problème persiste veuillez contacter l'admin!", null));
+                return;
+            }
+
             FacesContext.getCurrentInstance().
-                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Le champ Photo Personnelle est obligatoire", null));
-            return;
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Votre Inscription a été faite avec succès!", null));
 
+        } else {
+
+            if (photoContentsAsBase64 != null) {
+                //       InscritHelper.copyFileAndRename(inscrit, uploadedPhoto, inputStreamPhoto, uploadFolder);
+                if (uploadedPhoto != null) {
+                    FilesHelper.savePhoto(photoContentsAsBase64, uploadFolder + inscrit.getCin() + FilesHelper.getFileExtension(uploadedPhoto.getFileName()));
+                    inscrit.setPhotoFileName(inscrit.getCin() + FilesHelper.getFileExtension(uploadedPhoto.getFileName()));
+                }
+            } else {
+                FacesContext.getCurrentInstance().
+                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Le champ Photo Personnelle est obligatoire", null));
+                return;
+
+            }
+
+            inscritService.save(inscrit);
+            FacesContext.getCurrentInstance().
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Votre Inscription a été modifiée avec succès!", null));
         }
-
-        inscritService.save(inscrit);
-        SendMail.sendInscriptionConfirmationMail(inscrit.getEmail(), inscrit.getId());
-
-        FacesContext.getCurrentInstance().
-                addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Votre Inscription à été faite avec succès!", null));
 
     }
 
@@ -132,12 +203,12 @@ public class InscritController implements Serializable {
 //        System.out.println(loggedUsername);
     }
 
-    public void uploadPhoto(FileUploadEvent event) {
+    public void handleUploadPhoto(FileUploadEvent event) {
 
         try {
             uploadedPhoto = event.getFile();
-            inputStreamPhoto = uploadedPhoto.getInputstream();
-            photoContentsAsBase64 = Base64.getEncoder().encodeToString(uploadedPhoto.getContents());
+            inputStreamPhoto = uploadedPhoto.getInputStream();
+            photoContentsAsBase64 = Base64.getEncoder().encodeToString(uploadedPhoto.getContent());
         } catch (IOException ex) {
             Logger.getLogger(InscritController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -167,12 +238,17 @@ public class InscritController implements Serializable {
     public void loadInscrit() {
 
         if (UserHelper.isRoleUser(userService.getAuthentication())) {
-            LoggedUser user = UserHelper.getLoggedUser(userService.getAuthentication());
-            if (user != null) {
-                Optional<Inscrit> optional = inscritService.getInscrit(user.getUsername());
-                if (optional.isPresent()) {
+
+            LoggedUser loggedUser = UserHelper.getLoggedUser(userService.getAuthentication());
+            Optional<User> optional = userService.getUser(loggedUser.getUsername());
+            if (optional.isPresent()) {
+                User user = optional.get();
+
+                inscrit = user.getInscrit();
+
+                if (inscrit != null) {
                     try {
-                        inscrit = optional.get();
+
                         byte[] contents = Files.readAllBytes(Paths.get(uploadFolder + inscrit.getPhotoFileName()));
                         photoContentsAsBase64 = Base64.getEncoder().encodeToString(contents);
                     } catch (IOException ex) {
@@ -186,10 +262,10 @@ public class InscritController implements Serializable {
             }
         } else {
             if (selectedCne != null) {
-                Optional<Inscrit> optional = inscritService.getInscrit(selectedCne);
-                if (optional.isPresent()) {
+                Optional<Inscrit> optionalIns = inscritService.getInscritByCne(selectedCne);
+                if (optionalIns.isPresent()) {
                     try {
-                        inscrit = optional.get();
+                        inscrit = optionalIns.get();
                         byte[] contents = Files.readAllBytes(Paths.get(uploadFolder + inscrit.getPhotoFileName()));
                         photoContentsAsBase64 = Base64.getEncoder().encodeToString(contents);
                     } catch (IOException ex) {
@@ -246,7 +322,7 @@ public class InscritController implements Serializable {
             ins.setCinTuteur("CINTut" + i);
             ins.setCiv(new Byte("1"));
             ins.setCne("CNE" + i);
-            ins.setEmail("Email" + i);
+///            ins.setEmail("Email" + i);
             ins.setLieuNaiss("Lieu" + i);
             ins.setMentionBac("TB");
             ins.setNom("Nom" + i);

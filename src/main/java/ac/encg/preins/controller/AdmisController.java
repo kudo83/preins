@@ -1,8 +1,7 @@
 package ac.encg.preins.controller;
 
-import ac.encg.preins.entity.Role;
-import ac.encg.preins.entity.User;
-import ac.encg.preins.service.UserService;
+import ac.encg.preins.entity.Admis;
+import ac.encg.preins.service.AdmisService;
 import ac.encg.preins.utility.SendMail;
 import java.io.IOException;
 import java.io.Serializable;
@@ -20,7 +19,7 @@ import jxl.read.biff.BiffException;
 import lombok.Getter;
 import lombok.Setter;
 import org.primefaces.event.FileUploadEvent;
-import org.primefaces.model.UploadedFile;
+import org.primefaces.model.file.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -38,39 +37,40 @@ public class AdmisController implements Serializable {
     private static final long serialVersionUID = 1L;
     
     @Autowired
-    private UserService userService;
+    private AdmisService userService;
 
     private String EXCEL_FILE_LOCATION = "/opt/apache-tomcat-9.0.20/webapps/accounts/comptes.xls";
 
     private UploadedFile excelUpload;
 
-    private List<User> users = new ArrayList<>();
+    private List<Admis> admisList = new ArrayList<>();
 
     public void uploadAdmis(FileUploadEvent event) {
 
         Workbook workbook = null;
         try {
             //  workbook = Workbook.getWorkbook(new File(EXCEL_FILE_LOCATION));
-            workbook = Workbook.getWorkbook(event.getFile().getInputstream());
+            workbook = Workbook.getWorkbook(event.getFile().getInputStream());
 
             Sheet sheet = workbook.getSheet(0);
             int cellCount = sheet.getColumn(0).length;
             boolean hasValue = true;
 
-            Role userRole = new Role();
-            userRole.setId(3);
-            userRole.setLib("USER");
+//            Role userRole = new Role();
+//            userRole.setId(3);
+//            userRole.setLib("USER");
             for (int i = 0; i < cellCount; i++) {
                 Cell cell1 = sheet.getCell(0, i);
                 Cell cell2 = sheet.getCell(1, i);
-                User newUser = new User();
-                newUser.setUsername(cell1.getContents());
-                newUser.setPassword(cell2.getContents());
-                newUser.getRoles().add(userRole);
-                users.add(newUser);
+                Cell cell3 = sheet.getCell(2, i);
+                Admis newAdmis = new Admis();
+                newAdmis.setCne(cell1.getContents());
+                newAdmis.setCin(cell2.getContents());
+                newAdmis.setNom(cell3.getContents());
+                admisList.add(newAdmis);
             }
-            if (!users.isEmpty()) {
-                userService.saveUsers(users);
+            if (!admisList.isEmpty()) {
+                userService.saveAdmisList(admisList);
             }
 
         } catch (IOException | BiffException e) {

@@ -14,11 +14,11 @@ import java.util.List;
 import ac.encg.preins.nonPersistable.Civility;
 import ac.encg.preins.nonPersistable.Mention;
 import ac.encg.preins.nonPersistable.Sex;
-import com.sun.faces.facelets.util.Path;
-import static java.nio.file.Files.copy;
 import java.nio.file.StandardCopyOption;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import org.primefaces.model.UploadedFile;
+import java.util.Date;
+import org.primefaces.model.file.UploadedFile;
 
 /**
  *
@@ -35,41 +35,42 @@ public class InscritHelper {
 //            System.out.println(ex.getMessage());
 //        }
 
-        Files.copy(inputStreamPhoto, Paths.get(uploadFolder+inscrit.getCin()+FilesHelper.getFileExtension(uploadedPhoto.getFileName())), StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(inputStreamPhoto, Paths.get(uploadFolder + inscrit.getCin() + FilesHelper.getFileExtension(uploadedPhoto.getFileName())), StandardCopyOption.REPLACE_EXISTING);
 //        FilesHelper.copyFile(photoFileName, inputStreamPhoto, uploadFolder);
         inscrit.setPhotoFileName(photoFileName);
     }
 
     public static List<Civility> loadListCivilities() {
         List<Civility> civilities = new ArrayList<>();
-           civilities.add(new Civility(new Byte("1"), "Célibataire"));
-            civilities.add(new Civility(new Byte("2"), "Marié(e)"));
-        
-    return civilities;
+        civilities.add(new Civility(new Byte("1"), "Célibataire"));
+        civilities.add(new Civility(new Byte("2"), "Marié(e)"));
+
+        return civilities;
     }
-    
+
     public static List<Sex> loadListSexes() {
         List<Sex> sexes = new ArrayList<>();
-           sexes.add(new Sex('H', "Masculin"));
-            sexes.add(new Sex('F', "Féminin"));
-        
-    return sexes;
+        sexes.add(new Sex('H', "Masculin"));
+        sexes.add(new Sex('F', "Féminin"));
+
+        return sexes;
     }
-    
-    
+
     public static List<Mention> loadListMentions() {
         List<Mention> mentions = new ArrayList<>();
-           mentions.add(new Mention("P", "PASSABLE"));
-           mentions.add(new Mention("AB", "ASSEZ BIEN"));
-           mentions.add(new Mention("B", "BIEN"));
-           mentions.add(new Mention("TB", "TRES BIEN"));
-           mentions.add(new Mention("E", "EXCELENT"));
-        
-    return mentions;
+        mentions.add(new Mention("P", "PASSABLE"));
+        mentions.add(new Mention("AB", "ASSEZ BIEN"));
+        mentions.add(new Mention("B", "BIEN"));
+        mentions.add(new Mention("TB", "TRES BIEN"));
+        mentions.add(new Mention("E", "EXCELENT"));
+
+        return mentions;
     }
-     
-    
-    
-   
+
+    public static String formatteDate(Date date) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 'à' HH:mm:ss z");
+       
+        return formatter.format(date);
+    }
 
 }

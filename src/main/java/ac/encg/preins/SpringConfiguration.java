@@ -64,7 +64,7 @@ public class SpringConfiguration {
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
 
         //local
-        dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/preinsdb?serverTimezone=UTC");
+        dataSource.setJdbcUrl("jdbc:mysql://localhost:3310/preinsdb?serverTimezone=UTC");
         dataSource.setUsername("root");
         dataSource.setPassword("tabit");
         dataSource.setConnectionTestQuery("show tables");

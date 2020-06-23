@@ -62,8 +62,13 @@ public class AccountController implements Serializable {
              userService.save(registeredUser);
              String token = UUID.randomUUID().toString();
              userService.createVerificationToken(registeredUser,token);
-             
+             System.out.println("Sending mail . . .");
              SendMail.sendEmailConfirmationMail(registeredUser, token);
+             System.out.println("Success");
+             registeredUser = new User();
+             FacesContext.getCurrentInstance().
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Un email de vérification a été envoyé à votre adresse email!", null));
+             
         }
 
     }

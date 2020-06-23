@@ -14,7 +14,9 @@
             <f:viewParam name="selectedCne" value="#{inscritController.selectedCne}"/>
         </f:metadata>
         <h:form id="inscritForm" enctype="multipart/form-data">
-            <p:growl id="messages"/>
+            <p:messages id="messages" showSummary="false" showDetail="true" closable="true">
+                <p:autoUpdate />
+            </p:messages>
             <p:focus context="inscritForm" />
             <div id="print" class="layout-portlets-box ui-fluid">
 
@@ -23,16 +25,26 @@
                         <h2 class="BigTopic">
                             INFORMATIONS ETUDIANT
                         </h2>
+                        <ui:fragment  rendered="#{inscritController.inscrit.id == null}"  >
+
+                            <div class="ui-g-12 ui-md-3" style="width: 100%;">
+                                <p:staticMessage severity="warn" summary="Attention!" detail="Le code massar et le CIN ne peuvent plus être modifier après enregistrement!" />
+                            </div>
+                        </ui:fragment> 
 
                         <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;">
-                             <p:inputText placeholder="Code Massar" value="#{inscritController.inscrit.cne}" required="true" requiredMessage="Le champ Code Massar est obligatoire"/>
-                              <p:inputText placeholder="CIN" value="#{inscritController.inscrit.cin}" required="true" requiredMessage="Le champ CIN est obligatoire"/>
+                            <p:inputText placeholder="Code Massar" value="#{inscritController.inscrit.cne}" required="true" 
+                                         disabled="#{not(empty inscritController.inscrit.id)}"
+                                         requiredMessage="Le champ Code Massar est obligatoire"/>
+                            <p:inputText placeholder="CIN" value="#{inscritController.inscrit.cin}" required="true"
+                                         disabled="#{not(empty inscritController.inscrit.id)}"
+                                         requiredMessage="Le champ CIN est obligatoire"/>
                             <p:inputText placeholder="Nom" value="#{inscritController.inscrit.nom}" required="true" requiredMessage="Le champ Nom est obligatoire"/>
                             <p:inputText placeholder="النسب"  value="#{inscritController.inscrit.nomAr}" dir="rtl" required="true" requiredMessage="Le champ النسب est obligatoire">
                             </p:inputText>    
                             <p:inputText placeholder="Prénom" value="#{inscritController.inscrit.prenom}" required="true" requiredMessage="Le champ Prénom est obligatoire"/>
                             <p:inputText placeholder="الاسم"  value="#{inscritController.inscrit.prenomAr}"  dir="rtl" required="true" requiredMessage="Le champ الاسم est obligatoire"/>
-                           
+
                             <p:selectOneMenu placeholder="SEX" value="#{inscritController.inscrit.sex}" required="true" requiredMessage="Le champ SEX est obligatoire">
                                 <f:selectItem itemLabel="SEX" itemValue="" noSelectionOption="true" />
                                 <f:selectItems value="#{inscritController.sexes}" var="sex" itemLabel="#{sex.libSex}" itemValue="#{sex.codSex}"/>
@@ -56,8 +68,8 @@
                                 <f:selectItem itemLabel="Pays de Naissance" itemValue="" noSelectionOption="true" />
                                 <f:selectItems value="#{inscritController.pays}" var="pays" itemLabel="#{pays.lib}" itemValue="#{pays.id}"/>
                             </p:selectOneMenu>
-                            <p:inputText placeholder="Téléphone" value="#{inscritController.inscrit.tel}" required="true" requiredMessage="Le champ Téléphone est obligatoire"/>
-                            
+                            <p:inputMask mask="9999999999" placeholder="Téléphone" value="#{inscritController.inscrit.tel}" required="true" requiredMessage="Le champ Téléphone est obligatoire"/>
+
                             <p:inputTextarea placeholder="Adresse Personelle Actuelle" value="#{inscritController.inscrit.adresse}" required="true" requiredMessage="Le champ 'Adresse Personelle Actuelle est obligatoire"/>   
                         </p:panelGrid>
                     </div>
@@ -67,13 +79,13 @@
                         <h2 class="BigTopic">
                             INFORMATIONS PARENTS
                         </h2>
-                        <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="ui-panelgrid ui-widget ui-panelgrid-blank"   >
+                        <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;">
                             <p:inputText placeholder="Prénom du Père ou Tuteur" value="#{inscritController.inscrit.prenomPere}" required="true" requiredMessage="Le champ Prénom du Père ou Tuteur est obligatoire"/>
                             <!--<p:inputText placeholder="اسم الأب أو الوالي"  value="#{inscritController.inscrit.prenomPereAr}"  dir="rtl" required="true" requiredMessage="Le champ اسم الأب أو الوالي est obligatoire"/>-->
                             <p:inputText placeholder="Prénom de la Mère" value="#{inscritController.inscrit.prenomMere}" required="true" requiredMessage="Le champ Prénom de la Mère est obligatoire"/>
                             <!--<p:inputText placeholder="اسم الأم"  value="#{inscritController.inscrit.prenomMereAr}"  dir="rtl" required="true" requiredMessage="Le champ اسم الأم est obligatoire"/>-->
                             <p:inputText placeholder="CIN Père ou Tuteur" value="#{inscritController.inscrit.cinTuteur}" required="true" requiredMessage="Le champ CIN Père ou Tuteur est obligatoire"/>
-                            <p:inputText placeholder="Téléphone du Tuteur" value="#{inscritController.inscrit.tel}" required="true" requiredMessage="Le champ Téléphone du Tuteur est obligatoire"/>
+                            <p:inputMask mask="9999999999" placeholder="Téléphone du Tuteur" value="#{inscritController.inscrit.telTuteur}" required="true" requiredMessage="Le champ Téléphone du Tuteur est obligatoire"/>
                             <p:selectOneMenu  value="#{inscritController.inscrit.pcsPere.id}" required="true" requiredMessage="Le champ Profession du père du Bac est obligatoire">
                                 <f:selectItem itemLabel="Profession du père" itemValue="" noSelectionOption="true" />
                                 <f:selectItems value="#{inscritController.pcsList}" var="pcs" itemLabel="#{pcs.lib}" itemValue="#{pcs.id}"/>
@@ -138,7 +150,7 @@
                                 </ui:fragment>
                             </h:panelGroup>
 
-                            <p:fileUpload styleClass="photoUpload" value="#{inscritController.uploadedPhoto}" fileUploadListener="#{inscritController.uploadPhoto}" mode="advanced" dragDropSupport="false"
+                            <p:fileUpload styleClass="photoUpload" value="#{inscritController.uploadedPhoto}" listener="#{inscritController.handleUploadPhoto}" mode="advanced" dragDropSupport="false"
                                           update="photo" auto="true" sizeLimit="1000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"  />
                         </p:panelGrid>
 

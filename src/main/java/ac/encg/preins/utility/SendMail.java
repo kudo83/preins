@@ -163,7 +163,7 @@ public class SendMail {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(from));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-            message.setSubject("Image (No replay)");
+            message.setSubject("ENCG AGADIR (No replay)");
             // This mail has 2 part, the BODY and the embedded image
             MimeMultipart multipart = new MimeMultipart("related");
 
@@ -175,8 +175,13 @@ public class SendMail {
                     + "<br/>"
                     + "Bonjour,"
                     + "<br/>"
-                    + "Prière de confirmer votre adresse email en cliquant sur le lien ci-dessous:"
+                    +"Vous recevez cet email parce que votre adresse email a été utiliser pour effectuer une pré-inscription à l'ENCG AGADIR."
                     + "<br/>"
+                    +"Si vous n'êtes pas à l'origine de cette action, veillez ignorer cet email."
+                    + "<br/>"
+                    + "Sinon, prière de confirmer votre adresse email en cliquant sur le lien ci-dessous:"
+                    + "<br/>"
+    //TODO Modifier l'adresse locale
                     + "<a href='http://localhost:8080/preins/validation.xhtml?token="+ token
                     + "'>"
                     + "Lien de Confirmation</a>"
