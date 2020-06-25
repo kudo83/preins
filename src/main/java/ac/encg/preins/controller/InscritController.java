@@ -379,11 +379,11 @@ public class InscritController implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         response = (HttpServletResponse) context.getExternalContext().getResponse();
         response.setContentType("application/pdf");
-        response.setHeader("Content-disposition", "inline=filename=recu-inscripion.pdf");
+        response.setHeader("Content-disposition", "attachment; filename=\"Reçu_Pré-ins_ENCGA_" + inscrit.getCne() + ".pdf\"");
         PdfWriter.getInstance(document, new DataOutputStream(response.getOutputStream()))
                 .setInitialLeading(16);
 
-        Chunk tab100 = new Chunk(new VerticalPositionMark(), 100, true);
+        Chunk tab = new Chunk(new VerticalPositionMark(), 160, true);
 
         document.open();
 //        document.add(new Paragraph("Hello word"));
@@ -392,11 +392,11 @@ public class InscritController implements Serializable {
         ServletContext servletContext = request.getServletContext();
         String absoluteDiskPath = servletContext.getRealPath(relativeWebPath);
         //  Path path = Paths.get(ClassLoader.getSystemResource("images/logo.jpg").toURI());
-        Image img = Image.getInstance(absoluteDiskPath);
-        img.setAlignment(Image.ALIGN_CENTER);
-        img.scalePercent(50);
-        img.setSpacingAfter(100);
-        document.add(img);
+        Image logo = Image.getInstance(absoluteDiskPath);
+        logo.setAlignment(Image.ALIGN_CENTER);
+        logo.scalePercent(50);
+        logo.setSpacingAfter(100);
+        document.add(logo);
 
         document.add(Chunk.NEWLINE);
         document.add(Chunk.NEWLINE);
@@ -408,37 +408,42 @@ public class InscritController implements Serializable {
 
         document.add(Chunk.NEWLINE);
         document.add(Chunk.NEWLINE);
-        document.add(Chunk.NEWLINE);
-        document.add(new Chunk(tab100));
+
+        document.add(new Chunk(tab));
         document.add(new Chunk("Référence   :    ", COURRIER_BOLD_14));
         document.add(new Chunk("Pré-2020-" + inscrit.getId().toString(), COURRIER_NORMAL_14));
         document.add(Chunk.NEWLINE);
 
-        document.add(new Chunk(tab100));
+        document.add(new Chunk(tab));
         document.add(new Chunk("Nom         :    ", COURRIER_BOLD_14));
         document.add(new Chunk(inscrit.getNom(), COURRIER_NORMAL_14));
         document.add(Chunk.NEWLINE);
-
-        document.add(new Chunk(tab100));
+        
+        document.add(new Chunk(tab));
         document.add(new Chunk("Prénom      :    ", COURRIER_BOLD_14));
         document.add(new Chunk(inscrit.getPrenom(), COURRIER_NORMAL_14));
         document.add(Chunk.NEWLINE);
-        
-        document.add(new Chunk(tab100));
+
+        document.add(new Chunk(tab));
         document.add(new Chunk("Code Massar :    ", COURRIER_BOLD_14));
         document.add(new Chunk(inscrit.getCne(), COURRIER_NORMAL_14));
         document.add(Chunk.NEWLINE);
+
+        Image photo = Image.getInstance(uploadFolder + inscrit.getPhotoFileName());
+        photo.scaleAbsolute(105, 105);
+        document.add(new Chunk(photo, 25, 0, false));
         
-        document.add(new Chunk(tab100));
+        document.add(new Chunk(tab));
         document.add(new Chunk("CIN         :    ", COURRIER_BOLD_14));
         document.add(new Chunk(inscrit.getCin(), COURRIER_NORMAL_14));
-        document.add(Chunk.NEWLINE);
+
         
-        document.add(new Chunk(tab100));
-        document.add(new Chunk("Niveau      :    ", COURRIER_BOLD_14));
-        document.add(new Chunk(inscrit.getEtape().getLib(), COURRIER_NORMAL_14));
         document.add(Chunk.NEWLINE);
 
+        document.add(new Chunk(tab));
+        document.add(new Chunk("Niveau      :    ", COURRIER_BOLD_14));
+        document.add(new Chunk(inscrit.getEtape().getLib(), COURRIER_NORMAL_14));
+        
 
         document.close();
 
