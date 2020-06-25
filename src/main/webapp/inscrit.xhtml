@@ -1,5 +1,3 @@
-
-
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
@@ -181,8 +179,8 @@
                             <p:button value="RETOUR" outcome="inscritList.xhtml"  icon="fa fa-save Fs16 white"  />
                         </sec:authorize>  
                         <ui:fragment  rendered="#{inscritController.inscrit.id != null}"  >
-                            <!--<p:button value="Imprimer Reçue" outcome="printConfirmation.xhtml"  icon="fa fa-print Fs16 white"  />-->
-                            <p:commandButton value="RECU"  action="#{inscritController.createReceipe(request, response)}" update="messages, validationButton"  icon="fa fa-save Fs16 white" ajax="false" />
+                           <p:button value="Imprimer Reçue" outcome="printConfirmation.xhtml"  icon="fa fa-print Fs16 white"  />
+                            <p:commandButton value="RECU"  action="#{inscritController.createReceipe(request, response)}" update="messages, validationButton"  icon="fa fa-file-pdf-o Fs16 white" class="GreenButton" ajax="false" />
                         </ui:fragment>
 
                         <p:commandButton value="ENREGISTER"  action="#{inscritController.save()}" update="@form"  icon="fa fa-save Fs16 white"  />
@@ -192,7 +190,7 @@
                                     <p:commandButton value="VALIDER"  action="#{inscritController.validateInscrition()}" update="messages, validationButton"  icon="fa fa-save Fs16 white"  />
                                 </ui:fragment>
                                 <ui:fragment  rendered="#{inscritController.inscrit.VALID}"  >
-                                    <p:commandButton value="INVALIDER"  action="#{inscritController.inValidateInscrition()}" update="messages, validationButton"  icon="fa fa-save Fs16 white"  />
+                                    <p:commandButton value="INVALIDER"  action="#{inscritController.inValidateInscrition()}" update="messages, validationButton"  icon="fa fa-save Fs16 white"   />
                                 </ui:fragment>
                             </sec:authorize>    
                         </h:panelGroup>  

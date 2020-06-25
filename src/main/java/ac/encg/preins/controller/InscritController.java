@@ -42,30 +42,23 @@ import ac.encg.preins.nonPersistable.Sex;
 import ac.encg.preins.service.AdmisService;
 import ac.encg.preins.service.UserService;
 import ac.encg.preins.utility.SendMail;
-import com.itextpdf.text.Anchor;
-import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Chapter;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Font.FontFamily;
-import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
-import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Section;
-import com.itextpdf.text.pdf.PdfDocument;
-import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.draw.VerticalPositionMark;
 
-import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.net.URISyntaxException;
-import java.nio.file.Path;
 import java.sql.Date;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.primefaces.event.FileUploadEvent;
@@ -127,8 +120,13 @@ public class InscritController implements Serializable {
     private String loggedUsername;
 
     private String photoTemp = "default.gif";
-    
-    public static final Font COURRIER_BOLD_14 = new Font(FontFamily.COURIER, 14,  Font.BOLD);
+
+    public static final Font COURRIER_BOLD_16 = new Font(FontFamily.COURIER, 16, Font.BOLD);
+    public static final Font COURRIER_NORMAL_16 = new Font(FontFamily.COURIER, 16, Font.NORMAL);
+    public static final Font COURRIER_BOLD_14 = new Font(FontFamily.COURIER, 14, Font.BOLD);
+    public static final Font COURRIER_NORMAL_14 = new Font(FontFamily.COURIER, 14, Font.NORMAL);
+    public static final Font COURRIER_BOLD_12 = new Font(FontFamily.COURIER, 12, Font.BOLD);
+    public static final Font COURRIER_NORMAL_12 = new Font(FontFamily.COURIER, 12, Font.NORMAL);
 
     public void save() throws IOException {
 
@@ -380,10 +378,13 @@ public class InscritController implements Serializable {
         Document document = new Document();
         FacesContext context = FacesContext.getCurrentInstance();
         response = (HttpServletResponse) context.getExternalContext().getResponse();
-        PdfWriter.getInstance(document, new DataOutputStream(response.getOutputStream()))
-                .setInitialLeading(16);
         response.setContentType("application/pdf");
         response.setHeader("Content-disposition", "inline=filename=recu-inscripion.pdf");
+        PdfWriter.getInstance(document, new DataOutputStream(response.getOutputStream()))
+                .setInitialLeading(16);
+
+        Chunk tab100 = new Chunk(new VerticalPositionMark(), 100, true);
+
         document.open();
 //        document.add(new Paragraph("Hello word"));
 //        document.close();
@@ -396,57 +397,55 @@ public class InscritController implements Serializable {
         img.scalePercent(50);
         img.setSpacingAfter(100);
         document.add(img);
+
+        document.add(Chunk.NEWLINE);
+        document.add(Chunk.NEWLINE);
+        document.add(Chunk.NEWLINE);
+
+        Paragraph titre = new Paragraph("Reçu de pré-inscription \n \n", COURRIER_BOLD_16);
+        titre.setAlignment(Element.ALIGN_CENTER);
+        document.add(titre);
+
+        document.add(Chunk.NEWLINE);
+        document.add(Chunk.NEWLINE);
+        document.add(Chunk.NEWLINE);
+        document.add(new Chunk(tab100));
+        document.add(new Chunk("Référence   :    ", COURRIER_BOLD_14));
+        document.add(new Chunk("Pré-2020-" + inscrit.getId().toString(), COURRIER_NORMAL_14));
+        document.add(Chunk.NEWLINE);
+
+        document.add(new Chunk(tab100));
+        document.add(new Chunk("Nom         :    ", COURRIER_BOLD_14));
+        document.add(new Chunk(inscrit.getNom(), COURRIER_NORMAL_14));
+        document.add(Chunk.NEWLINE);
+
+        document.add(new Chunk(tab100));
+        document.add(new Chunk("Prénom      :    ", COURRIER_BOLD_14));
+        document.add(new Chunk(inscrit.getPrenom(), COURRIER_NORMAL_14));
+        document.add(Chunk.NEWLINE);
         
+        document.add(new Chunk(tab100));
+        document.add(new Chunk("Code Massar :    ", COURRIER_BOLD_14));
+        document.add(new Chunk(inscrit.getCne(), COURRIER_NORMAL_14));
         document.add(Chunk.NEWLINE);
+        
+        document.add(new Chunk(tab100));
+        document.add(new Chunk("CIN         :    ", COURRIER_BOLD_14));
+        document.add(new Chunk(inscrit.getCin(), COURRIER_NORMAL_14));
         document.add(Chunk.NEWLINE);
+        
+        document.add(new Chunk(tab100));
+        document.add(new Chunk("Niveau      :    ", COURRIER_BOLD_14));
+        document.add(new Chunk(inscrit.getEtape().getLib(), COURRIER_NORMAL_14));
         document.add(Chunk.NEWLINE);
 
-        document.add(new Paragraph("Reçu de pré-inscription \n \n", COURRIER_BOLD_14));
-         
-        document.add(Chunk.NEWLINE);
-        document.add(Chunk.NEWLINE);
-        document.add(Chunk.NEWLINE);
 
-        document.add(new Paragraph("Test Pareag"));
         document.close();
 
-        //PdfPTable table = new PdfPTable(3);
-//        Anchor anchor = new Anchor("First Chapter", new Font(Font.FontFamily.TIMES_ROMAN, 18,
-//                Font.BOLD));
-//        anchor.setName("First Chapter");
-//
-//        // Second parameter is the number of the section
-//        Chapter chapter = new Chapter(new Paragraph(anchor), 1);
-//
-//        Paragraph paragraph = new Paragraph("Subcategory 1", new Font(Font.FontFamily.TIMES_ROMAN, 16,
-//                Font.BOLD));
-//        Section section = chapter.addSection(paragraph);
-//        section.add(new Paragraph("Hello"));
-//
-//        paragraph = new Paragraph("Subcategory 2", new Font(Font.FontFamily.TIMES_ROMAN, 16,
-//                Font.BOLD));
-//        section = chapter.addSection(paragraph);
-//        section.add(new Paragraph("Paragraph 1"));
-//        section.add(new Paragraph("Paragraph 2"));
-//        section.add(new Paragraph("Paragraph 3"));
-//
-//        // now add all this to the document
-//        document.add(chapter);
-//
-//        // Next section
-//        anchor = new Anchor("Second Chapter", new Font(Font.FontFamily.TIMES_ROMAN, 16,
-//                Font.BOLD));
-//        anchor.setName("Second Chapter");
-//
-//        // Second parameter is the number of the section
-//        chapter = new Chapter(new Paragraph(anchor), 1);
-//
-//        paragraph = new Paragraph("Subcategory", new Font(Font.FontFamily.TIMES_ROMAN, 16,
-//                Font.BOLD));
-//        section = chapter.addSection(paragraph);
-//        section.add(new Paragraph("This is a very important message"));
-//
-//        // now add all this to the document
+//        servletOutputStream.flush();
+//        servletOutputStream.close();
+        FacesContext.getCurrentInstance().responseComplete();
+
     }
 
 }
