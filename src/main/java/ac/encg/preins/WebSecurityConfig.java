@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -36,9 +37,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // require all requests to be authenticated except for the resources   
-        http.authorizeRequests().antMatchers("/javax.faces.resource/**","/contact*","/registration*","/validation*")
+        http.authorizeRequests().antMatchers("/javax.faces.resource/**", "/contact*", "/registration*", "/validation*")
                 .permitAll().anyRequest().authenticated();
-        
+
         // login
         http.formLogin().loginPage("/login.xhtml").permitAll()
                 .failureUrl("/login.xhtml?error=true").
@@ -59,7 +60,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //    public void configure(WebSecurity web) throws Exception {
 //        web.ignoring().antMatchers("/contact.xhtml");
 //    }
-
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 //        auth
@@ -77,20 +77,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return authProvider;
     }
 
+//    @Bean
+//    public PasswordEncoder passwordEncoder() {
+//        //   return new BCryptPasswordEncoder();
+//        return new PasswordEncoder() {
+//            @Override
+//            public String encode(CharSequence charSequence) {
+//                return charSequence.toString();
+//            }
+//
+//            @Override
+//            public boolean matches(CharSequence charSequence, String s) {
+//                return encode(charSequence).equals(s);
+//            }
+//        };
+//    }
     @Bean
     public PasswordEncoder passwordEncoder() {
-        //   return new BCryptPasswordEncoder();
-        return new PasswordEncoder() {
-            @Override
-            public String encode(CharSequence charSequence) {
-                return charSequence.toString();
-            }
-
-            @Override
-            public boolean matches(CharSequence charSequence, String s) {
-                return encode(charSequence).equals(s);
-            }
-        };
+        return new BCryptPasswordEncoder();
     }
 
 }

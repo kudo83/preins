@@ -11,6 +11,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
@@ -73,9 +75,10 @@ public class SpringConfiguration {
 //        dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/preinstest?serverTimezone=UTC&useUnicode=yes&characterEncoding=UTF-8");
 //        dataSource.setUsername("root");
 //        dataSource.setPassword("ENCGdbuser@2019");
-
         return dataSource;
 
     }
+
+   
 
 }
