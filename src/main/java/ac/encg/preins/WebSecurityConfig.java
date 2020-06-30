@@ -37,7 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // require all requests to be authenticated except for the resources   
-        http.authorizeRequests().antMatchers("/javax.faces.resource/**", "/contact*", "/registration*", "/validation*")
+        http.authorizeRequests().antMatchers("/javax.faces.resource/**", "/contact*", "/registration*", "/validation*", "/*-password*")
                 .permitAll().anyRequest().authenticated();
 
         // login
@@ -62,9 +62,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //    }
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-//        auth
-//                .inMemoryAuthentication()
-//                .withUser("aissam").password(passwordEncoder().encode("tabit")).roles("USER");
+        auth
+                .inMemoryAuthentication()
+                .withUser("kudo").password(passwordEncoder().encode("tabit")).roles("USER");
         auth.authenticationProvider(authenticationProvider());
     }
 

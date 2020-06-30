@@ -39,5 +39,10 @@
             <renderer-class>org.primefaces.spark.component.menu.SparkMenuRenderer</renderer-class>
         </renderer>
     </render-kit>
+    <lifecycle>
+        <phase-listener>
+            ac.encg.preins.MultiPageMessagesSupport
+        </phase-listener>	
+    </lifecycle>
     
 </faces-config>

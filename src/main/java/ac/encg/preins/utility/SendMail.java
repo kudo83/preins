@@ -215,5 +215,76 @@ public class SendMail {
         }
     }
     
+    public static void sendPasswordUpdateMail(User user, String token) {
+        String to = user.getUsername();
+        String from = "preins.encg@uiz.ac.ma";
+        String host = "smtp.gmail.com";//or IP address  
+     
+        //Get the session object  
+        defineProperties();
+        Session session = Session.getInstance(prop, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication("preins.encg@uiz.ac.ma", "ENCG@2019/");
+            }
+        });
+        
+        //compose the message  
+        try {
+            // Create a  default MimeMessage object.
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(from));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+            message.setSubject("Récupération du mot de passe Pré-inscition ENCG AGADIR (No replay)");
+            // This mail has 2 part, the BODY and the embedded image
+            MimeMultipart multipart = new MimeMultipart("related");
+
+            // first part(the html)
+            BodyPart messageBodyPart = new MimeBodyPart();
+            //  String htmlText = "<H1>Hello</H1><img src=\"cid:image\">";
+
+            String htmlText = "<img src=\"cid:image\" height=\"68\" width=\"250\">"
+                    + "<br/>"
+                    + "Bonjour,"
+                    + "<br/>"
+                    +"Un utilisateur a demandé un nouveau mot de passe pour le compte suivant sur la plateforme de pré-inscription à l'ENCG AGADIR."
+                    + "<br/>"
+                    +"Si vous n'êtes pas à l'origine de cette action, veillez ignorer cet email."
+                    + "<br/>"
+                    + "Sinon, cliquez ici pour réinitialiser votre mot de passe:"
+                    + "<br/>"
+    //TODO Modifier l'adresse locale
+                    + "<a href='http://localhost:8080/preins/update-password.xhtml?token="+ token
+                    + "'>"
+                    + "Mise à jours du mot de passe</a>"
+                    ;
+           
+            messageBodyPart.setContent(htmlText, "text/html");
+            // add it
+            multipart.addBodyPart(messageBodyPart);
+            // second part (the image)
+            messageBodyPart = new MimeBodyPart();
+
+            String relativeWebPath = "resources/spark-layout/images/";
+            ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+            String absoluteDiskPath = servletContext.getRealPath(relativeWebPath);
+            File file = new File(absoluteDiskPath, "logo.png");
+
+            DataSource fds = new FileDataSource(file);
+
+            messageBodyPart.setDataHandler(new DataHandler(fds));
+            messageBodyPart.setHeader("Content-ID", "<image>");
+            multipart.addBodyPart(messageBodyPart);
+
+            // put everything together
+            message.setContent(multipart);
+            // Send message
+            Transport.send(message);
+
+            System.out.println("Sent message successfully....");
+        } catch (MessagingException mex) {
+            mex.printStackTrace();
+        }
+    }
 
 }

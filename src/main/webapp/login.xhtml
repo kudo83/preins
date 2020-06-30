@@ -39,12 +39,15 @@
                         <div class="EmptyBox50"></div>
                         <h:graphicImage name="images/logo.png" library="spark-layout" styleClass="MarAuto MarTop20 MarBot10" style="height:80px; width:3#0px;"/>
                         <div class="EmptyBox20"></div>
-                        <p:outputLabel value="L'email ou le mot de passe sont érroné ou le compte est inactif!!" styleClass="red"
+                         <p:messages id="messages" showSummary="false" showDetail="true" closable="true">
+                            <p:autoUpdate />
+                        </p:messages>
+                        <p:outputLabel value="L'email ou le mot de passe est érroné ou le compte est INACTIF!!" styleClass="red"
                                        rendered="${!empty param['error']}" />
                         <div class="EmptyBox20"></div>
-                        <p:inputText id="username" value="" placeholder="Username" styleClass="Container80 Fnone MarAuto Fs18"/>
+                        <p:inputText id="username" value="" placeholder="username" styleClass="Container80 Fnone MarAuto Fs18"/>
                         <div class="EmptyBox10"></div>
-                        <p:password id="password" value="" placeholder="Password" styleClass="Container80 Fnone MarAuto Fs18" feedback="false"/>
+                        <p:password id="password" value="" placeholder="password" styleClass="Container80 Fnone MarAuto Fs18" feedback="false"/>
                         <!--                        <div class="EmptyBox20"></div>
                                                 <div class="Container85 Fnone MarAuto softgray">
                                                     <div class="EmptyBox5"></div>
@@ -52,13 +55,15 @@
                                                 </div>-->
                         <div class="EmptyBox30"></div>
                         <!--<h:commandButton  value="Login" styleClass="Fs16"/>-->
-                        <p:commandButton value="Connexion" ajax="false" />
+                        <p:commandButton id="login" value="Connexion" ajax="false" />
                         <p:button value="Créer un Compte" outcome="registration.xhtml" />
                         <div class="EmptyBox10"></div>
                         <div class="Seperator"></div>
                         <div class="EmptyBox10"></div>
                         <!--<p:commandButton  value="Login"  ajax="false" styleClass="Fs16" style="width: 50%"/>-->
-                        <h:link  value="Contact Admin ?" styleClass="Fs12" outcome="contact.xhtml"  style="width: 50%"/>
+                        <h:link value="Contact Admin" styleClass="Fs12" outcome="contact.xhtml"  style="width: 50%"/>
+                        &#xA0; &#xA0;
+                        <h:link  value="Mot de passe oublié?" styleClass="Fs12" outcome="reset-password.xhtml"  style="width: 50%"/>
                         <div class="EmptyBox50"></div>
                     </h:form>
                 </div>

@@ -5,11 +5,13 @@
  */
 package ac.encg.preins.controller;
 
+import ac.encg.preins.entity.PasswordResetToken;
 import ac.encg.preins.entity.Role;
 import ac.encg.preins.entity.User;
 import ac.encg.preins.entity.VerificationToken;
 import ac.encg.preins.service.UserService;
 import ac.encg.preins.utility.SendMail;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Optional;
@@ -17,9 +19,14 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,11 +92,83 @@ public class AccountController implements Serializable {
                     addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Le code d'activation est invalide!", null));
         } else {
             User user = verificationToken.getUser();
-            user.setEnabled(true);
-            userService.save(user);
-            FacesContext.getCurrentInstance().
-                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Votre compte est activé avec Succès", null));
+            if (user.isEnabled()) {
+                FacesContext.getCurrentInstance().
+                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Vous avez déjà activé votre compte !", null));
+            } else {
+                user.setEnabled(true);
+                userService.save(user);
+                FacesContext.getCurrentInstance().
+                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Votre compte est activé avec Succès", null));
+            }
         }
+    }
+
+    public void resetPassword() {
+
+        Optional<User> optional = userService.getUser(registeredUser.getUsername());
+        if (!optional.isPresent()) {
+            FacesContext.getCurrentInstance().
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cet Email ne coresspond à aucun utilisateur inscrit!", null));
+            return;
+        } else {
+            User user = optional.get();
+            String token = UUID.randomUUID().toString();
+            userService.createPasswordResetTokenForUser(user, token);
+            SendMail.sendPasswordUpdateMail(user, token);
+            FacesContext.getCurrentInstance().
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Veuillez consulter votre boite email!", null));
+
+        }
+
+    }
+
+    public void updatePassword() throws IOException {
+//        Optional<User> optional = userService.getUser(registeredUser.getUsername());
+        PasswordResetToken passwordToken = userService.getPasswordResetToken(submittedToken);
+        if (passwordToken == null) {
+            FacesContext.getCurrentInstance().
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Un erreur interne s'est produit. Veuillez réessayer!", null));
+            return;
+        } else {
+//            User user = optional.get();
+            String encodedPassword = passwordEncoder.encode(registeredUser.getPassword());
+//            user.setPassword(encodedPassword);
+            passwordToken.getUser().setPassword(encodedPassword);
+            passwordToken.setUsed(true);
+            userService.savePasswordResetToken(passwordToken);
+            userService.save(passwordToken.getUser());
+            FacesContext.getCurrentInstance().
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Votre mot de passe a été mis à jours. Veuillez vous connecter!", null));
+            FacesContext.getCurrentInstance().getExternalContext().redirect("login.xhtml");
+        }
+    }
+
+    //Monter la page login si le token n'est pas valide
+    public void showChangePasswordPage() throws IOException {
+        PasswordResetToken passwordToken = userService.getPasswordResetToken(submittedToken);
+        if (passwordToken == null || passwordToken.isUsed()) {
+            FacesContext.getCurrentInstance().
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Token invalide!", null));
+
+            FacesContext.getCurrentInstance().getExternalContext().redirect("login.xhtml");
+        } else {
+            registeredUser = passwordToken.getUser();
+        }
+
+    }
+
+    public void doLogin() throws ServletException, IOException {
+         ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+
+        RequestDispatcher dispatcher = ((ServletRequest) context.getRequest())
+                .getRequestDispatcher("/j_spring_security_check");
+
+        dispatcher.forward((ServletRequest) context.getRequest(),
+                (ServletResponse) context.getResponse());
+
+        FacesContext.getCurrentInstance().responseComplete();
+
     }
 
 }

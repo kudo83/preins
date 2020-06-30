@@ -39,7 +39,9 @@
                         <div class="EmptyBox50"></div>
                         <h:graphicImage name="images/logo.png" library="spark-layout" styleClass="MarAuto MarTop20 MarBot10" style="height:80px; width:3#0px;"/>
                         <div class="EmptyBox20"></div>
-                        <p:messages id="messages" autoUpdate="true" styleClass="Container80 Fnone MarAuto Fs18"/>
+                         <p:messages id="messages" showSummary="false" showDetail="true" closable="true">
+                            <p:autoUpdate />
+                        </p:messages>
                         <div class="EmptyBox20"></div>
                         <p:inputText id="username" value="#{accountController.registeredUser.username}" placeholder="Email" 
                                      styleClass="Container80 Fnone MarAuto Fs18"
