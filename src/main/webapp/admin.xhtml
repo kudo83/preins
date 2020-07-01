@@ -19,7 +19,7 @@
 
                         <!--<p:fileUpload value="#{inscritController.uploadedFile}" mode="simple" skinSimple="true"/>-->
                         <!--<p:commandButton value="Upload" action="#{admisController.uploadAdmis()}" />-->
-                        <p:fileUpload  value="#{admisController.excelUpload}" fileUploadListener="#{admisController.uploadAdmis}" mode="advanced" dragDropSupport="false"
+                        <p:fileUpload  value="#{admisController.excelUpload}" listener="#{admisController.uploadAdmis}" mode="advanced" dragDropSupport="false"
                                        allowTypes="/(\.|\/)(xls)$/" update="messages" />
 
                         <br /> <br />
