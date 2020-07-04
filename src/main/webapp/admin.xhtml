@@ -3,35 +3,91 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:sec="http://www.springframework.org/security/tags"
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="content">
+        
+         <f:metadata>
+             <f:viewAction  action="#{adminController.initStatistics()}"/>
+        </f:metadata>
+        <sec:authorize access="!isAuthenticated()">
+            <meta http-equiv="refresh" content="0;url=login.xhtml" /> 
+        </sec:authorize>
         <div id="print" class="layout-portlets-box ui-fluid">
-
-            <div class="Container100 Responsive">
+            <p:messages id="messages" showSummary="false" showDetail="true" closable="true">
+                <p:autoUpdate />
+            </p:messages>
+            <div class="Container50 Responsive50">
                 <div class="ContainerIndent ui-fluid">
                     <h2 class="BigTopic">
                         UPLOAD ADMIS
                     </h2>
 
                     <h:form enctype="multipart/form-data">
-                        <p:growl id="messages" />
 
-                        <!--<p:fileUpload value="#{inscritController.uploadedFile}" mode="simple" skinSimple="true"/>-->
-                        <!--<p:commandButton value="Upload" action="#{admisController.uploadAdmis()}" />-->
-                        <p:fileUpload  value="#{admisController.excelUpload}" listener="#{admisController.uploadAdmis}" mode="advanced" dragDropSupport="false"
+                        <div class="EmptyBox20"></div>
+                        <span class="Wid100 DispBlock Fs25 green fa fa-align-left ">Exemple</span>
+                        <h:graphicImage name="images/excel.png" library="spark-layout" styleClass="MarAuto MarTop20 MarBot10" />
+                     
+                        <div class="EmptyBox20"></div>
+                        <p:fileUpload  value="#{adminController.excelUpload}" listener="#{adminController.uploadAdmis}" mode="advanced" dragDropSupport="false"
                                        allowTypes="/(\.|\/)(xls)$/" update="messages" />
 
-                        <br /> <br />
 
-                        <p:commandButton value="Submit" ajax="false" action="#{inscritController.preview()}"/>
-                        
-                        <p:commandButton value="Send Mail" ajax="false" action="#{admisController.sendEmail()}"/>
-                        <p:commandButton value="Send Confirmation Mail" ajax="false" action="#{admisController.sendConfirmationMail()}"/>
-                        
+
+
+
                     </h:form>
                 </div>
             </div>
+            <div class="Container50 Responsive50">
+                <div class="ContainerIndent ui-fluid">
+                    <h2 class="BigTopic">
+                        STATISTIQUES
+                    </h2>
+                    <div class="Container100">
+                        <div class="Wid45 BorderedBox Fleft TexAlCenter">
+                            <div class="ContainerIndent">
+                                <div class="EmptyBox10"></div>
+                                <div class="Fs14 gray FontRalewayRegular">Utilisateurs en ligne</div>
+                                <div class="EmptyBox10"></div>
+                                <div class="Fs30 red FontRalewayLight animated pulse infinite"><i class="fa fa-desktop Fs24"></i> 5</div>
+                                <div class="EmptyBox10"></div>
+                            </div>
+                        </div>
+                        <div class="Wid45 BorderedBox Fright TexAlCenter">
+                            <div class="ContainerIndent">
+                                <div class="EmptyBox10"></div>
+                                <div class="Fs14 gray FontRalewayRegular">Utilisateurs</div>
+                                <div class="EmptyBox10"></div>
+                                <div class="Fs30 blue FontRalewayLight"> #{adminController.nbrUsers}</div>
+                                <div class="EmptyBox10"></div>
+                            </div>
+                        </div>
+                        <div class="Wid45 BorderedBox Fleft TexAlCenter">
+                            <div class="ContainerIndent">
+                                <div class="EmptyBox10"></div>
+                                <div class="Fs14 gray FontRalewayRegular">Admis</div>
+                                <div class="EmptyBox10"></div>
+                                <div class="Fs30 blue FontRalewayLight"> #{adminController.nbrAdmis}</div>
+                                <div class="EmptyBox10"></div>
+                            </div>
+                        </div>
+                        <div class="Wid45 BorderedBox Fright TexAlCenter">
+                            <div class="ContainerIndent">
+                                <div class="EmptyBox10"></div>
+                                <div class="Fs14 gray FontRalewayRegular">Inscrits</div>
+                                <div class="EmptyBox10"></div>
+                                <div class="Fs30 green FontRalewayLight"> #{adminController.nbrInscrits}</div>
+                                <div class="EmptyBox10"></div>
+                            </div>
+                        </div>    
+                    </div>
+
+                </div>
+            </div>
+
         </div>
 
     </ui:define>      

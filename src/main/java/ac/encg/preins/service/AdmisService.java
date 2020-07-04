@@ -28,10 +28,7 @@ public class AdmisService {
         return SecurityContextHolder.getContext().getAuthentication();
     }
 
-    /**
-     *
-     * @param users
-     */
+    
     public void saveAdmisList(List<Admis> admisList) {
         admisRepo.saveAll(admisList);
 
@@ -40,11 +37,18 @@ public class AdmisService {
     public void save(Admis user) {
         admisRepo.save(user);
     }
-    
-    public List<Admis> findByCneOrCin(String cne, String cin){
-        
+
+    public List<Admis> findByCneOrCin(String cne, String cin) {
+
         return (List<Admis>) admisRepo.findAll(AdmisPredicate.existCneOrCin(cne, cin));
-     //   return null;
+    }
+
+    public boolean existByCneOrCin(String cne, String cin) {
+
+        return admisRepo.exists(AdmisPredicate.existCneOrCin(cne, cin));
+    }
+      public List<Admis> loadAll() {
+        return admisRepo.findAll();
     }
 
 }

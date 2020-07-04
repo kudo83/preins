@@ -3,15 +3,31 @@
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:ps="http://primefaces.org/spark"
     xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:p="http://primefaces.org/ui">
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:sec="http://www.springframework.org/security/tags">
     <h:form>
         <ps:menu>
 
-            <p:menuitem value="ACCEUIL" outcome="contact.xhtml"  icon="fa fa-home"/>
+            <sec:authorize ifAnyGranted="ROLE_ADMIN">
+                <p:menuitem value="TABLEAU DE BORD" outcome="admin.xhtml"  icon="fa fa-file-text-o"/>
+                <p:separator />
+            </sec:authorize>
 
-            <p:separator />
+            <sec:authorize ifAnyGranted="ROLE_USER">
+                <p:menuitem value="INSCRIPTION" outcome="inscrit.xhtml"  icon="fa fa-file-text-o"/>
+                <p:separator />
+            </sec:authorize>
 
+            <sec:authorize ifAnyGranted="ROLE_OPERATOR,ROLE_ADMIN">
+                <p:menuitem value="LISTE INSCRITS" outcome="listInscrit.xhtml"  icon="fa fa-users"/>
+                <p:separator />
+                <p:menuitem value="LISTE ADMIS" outcome="listAdmis.xhtml"  icon="fa fa-list-alt"/>
+                <p:separator />
+            </sec:authorize>
             <p:menuitem value="CONTACT" outcome="contact.xhtml"  icon="fa fa-envelope"/>
+
+
+
 
         </ps:menu>
     </h:form>

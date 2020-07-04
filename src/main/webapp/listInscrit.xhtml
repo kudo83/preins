@@ -13,6 +13,9 @@
         <f:metadata>
             <f:viewAction  action="#{inscritController.loadListInscrit()}"/>
         </f:metadata>
+        <sec:authorize access="!isAuthenticated()">
+            <meta http-equiv="refresh" content="0;url=login.xhtml" /> 
+        </sec:authorize>
         <h:form id="inscritListForm" enctype="multipart/form-data">
             <p:growl id="messages"/>
             <p:focus context="inscritListForm" />

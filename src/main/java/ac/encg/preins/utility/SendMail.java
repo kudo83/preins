@@ -41,8 +41,8 @@ public class SendMail {
         prop.put("mail.smtp.starttls.enable", "true"); //TLS
     }
 
-    public static void send() {
-        String to = "ai.izimi@gmail.com";//change accordingly  
+    public static void sendRecalamation(String cne, String email, String text) {
+        String to = "preins.encg@uiz.ac.ma";//change accordingly  
         String from = "preins.encg@uiz.ac.ma";//change accordingly  
         String host = "smtp.gmail.com";//or IP address  
 
@@ -65,9 +65,10 @@ public class SendMail {
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(from));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-            message.setSubject("Ping (No replay)");
+            message.setSubject(cne+ "-Réclamation");
             //  message.setText("Hello, this is example of sending email  ");
-            message.setContent("<h1>Hello, this is example of sending email  </h1>", "text/html");
+            message.setContent("Email:" + "<br/>"+email
+                    +  "<br/><br/>"+text, "text/html");
 
             // Send message  
             Transport.send(message);

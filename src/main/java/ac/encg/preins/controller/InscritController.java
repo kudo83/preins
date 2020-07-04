@@ -10,6 +10,7 @@ import ac.encg.preins.entity.Pcs;
 import ac.encg.preins.entity.Pays;
 import ac.encg.preins.entity.Province;
 import ac.encg.preins.entity.User;
+import ac.encg.preins.helper.CommonHelper;
 import ac.encg.preins.helper.FilesHelper;
 import ac.encg.preins.helper.InscritHelper;
 import ac.encg.preins.helper.UserHelper;
@@ -56,6 +57,7 @@ import com.itextpdf.text.pdf.draw.VerticalPositionMark;
 import java.io.DataOutputStream;
 import java.net.URISyntaxException;
 import java.sql.Date;
+import java.time.LocalDate;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -121,6 +123,8 @@ public class InscritController implements Serializable {
 
     private String photoTemp = "default.gif";
 
+    public static final Font COURRIER_BOLD_18 = new Font(FontFamily.COURIER, 18, Font.BOLD);
+    public static final Font COURRIER_NORMAL_18 = new Font(FontFamily.COURIER, 18, Font.NORMAL);
     public static final Font COURRIER_BOLD_16 = new Font(FontFamily.COURIER, 16, Font.BOLD);
     public static final Font COURRIER_NORMAL_16 = new Font(FontFamily.COURIER, 16, Font.NORMAL);
     public static final Font COURRIER_BOLD_14 = new Font(FontFamily.COURIER, 14, Font.BOLD);
@@ -372,7 +376,7 @@ public class InscritController implements Serializable {
         inscritService.saveAll(inscriptions);
     }
 
-    public void createReceipe(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, DocumentException, URISyntaxException {
+    public void createReceipeForUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, DocumentException, URISyntaxException {
 
         //          Document document =              new Document(PageSize.A4, 50, 50, 50, 50);
         Document document = new Document();
@@ -418,7 +422,7 @@ public class InscritController implements Serializable {
         document.add(new Chunk("Nom         :    ", COURRIER_BOLD_14));
         document.add(new Chunk(inscrit.getNom(), COURRIER_NORMAL_14));
         document.add(Chunk.NEWLINE);
-        
+
         document.add(new Chunk(tab));
         document.add(new Chunk("Prénom      :    ", COURRIER_BOLD_14));
         document.add(new Chunk(inscrit.getPrenom(), COURRIER_NORMAL_14));
@@ -432,19 +436,98 @@ public class InscritController implements Serializable {
         Image photo = Image.getInstance(uploadFolder + inscrit.getPhotoFileName());
         photo.scaleAbsolute(105, 105);
         document.add(new Chunk(photo, 25, 0, false));
-        
+
         document.add(new Chunk(tab));
         document.add(new Chunk("CIN         :    ", COURRIER_BOLD_14));
         document.add(new Chunk(inscrit.getCin(), COURRIER_NORMAL_14));
 
-        
         document.add(Chunk.NEWLINE);
 
         document.add(new Chunk(tab));
         document.add(new Chunk("Niveau      :    ", COURRIER_BOLD_14));
         document.add(new Chunk(inscrit.getEtape().getLib(), COURRIER_NORMAL_14));
-        
 
+        document.close();
+
+//        servletOutputStream.flush();
+//        servletOutputStream.close();
+        FacesContext.getCurrentInstance().responseComplete();
+
+    }
+
+    public void createReceipeForOperator(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, DocumentException, URISyntaxException {
+
+        //          Document document =              new Document(PageSize.A4, 50, 50, 50, 50);
+        Document document = new Document();
+        FacesContext context = FacesContext.getCurrentInstance();
+        response = (HttpServletResponse) context.getExternalContext().getResponse();
+        response.setContentType("application/pdf");
+        response.setHeader("Content-disposition", "attachment; filename=\"Reçu_Dépo-Dos_ENCGA_" + inscrit.getCne() + ".pdf\"");
+        PdfWriter.getInstance(document, new DataOutputStream(response.getOutputStream()))
+                .setInitialLeading(16);
+
+        Chunk tab = new Chunk(new VerticalPositionMark(), 50, true);
+
+        document.open();
+//        document.add(new Paragraph("Hello word"));
+//        document.close();
+        String relativeWebPath = "resources/spark-layout/images/headerPdf.jpg";
+        ServletContext servletContext = request.getServletContext();
+        String absoluteDiskPath = servletContext.getRealPath(relativeWebPath);
+        //  Path path = Paths.get(ClassLoader.getSystemResource("images/logo.jpg").toURI());
+        Image logo = Image.getInstance(absoluteDiskPath);
+        logo.setAlignment(Image.ALIGN_CENTER);
+        logo.scalePercent(50);
+        logo.setSpacingAfter(100);
+        document.add(logo);
+
+        document.add(Chunk.NEWLINE);
+        document.add(Chunk.NEWLINE);
+        document.add(Chunk.NEWLINE);
+        document.add(Chunk.NEWLINE);
+        document.add(Chunk.NEWLINE);
+
+        Paragraph titre = new Paragraph("CERTIFICAT DE DEPOT DE DOSSIER \n \n", COURRIER_BOLD_18);
+        titre.setAlignment(Element.ALIGN_CENTER);
+        document.add(titre);
+
+        document.add(Chunk.NEWLINE);
+        document.add(Chunk.NEWLINE);
+        document.add(new Chunk("L'adminstration de l'Ecole Nationale de Commerce et de Gestion d'Agadir, certifie que l'étudiant(e) ", COURRIER_NORMAL_14));
+        document.add(new Chunk(inscrit.getNom() + " " + inscrit.getPrenom(), COURRIER_BOLD_14));
+
+        document.add(Chunk.NEWLINE);
+        document.add(new Chunk("a déposé un dossier pour l'inscription en ", COURRIER_NORMAL_14));
+        document.add(new Chunk(inscrit.getEtape().getLib(), COURRIER_BOLD_14));
+
+        //   document.add(Chunk.NEWLINE);
+        document.add(new Chunk(" sous le numéro :", COURRIER_NORMAL_14));
+        document.add(new Chunk("Pré-2020-" + inscrit.getId().toString(), COURRIER_BOLD_14));
+
+        document.add(Chunk.NEWLINE);
+        document.add(new Chunk("au titre de l'année universitaire : ", COURRIER_NORMAL_14));
+        document.add(new Chunk("2020 / 2021", COURRIER_BOLD_14));
+
+        document.add(Chunk.NEWLINE);
+        document.add(Chunk.NEWLINE);
+        document.add(Chunk.NEWLINE);
+        document.add(new Chunk(new VerticalPositionMark(), 300, true));
+        document.add(new Chunk("Date : ", COURRIER_BOLD_14));
+        document.add(new Chunk(CommonHelper.formateDate(LocalDate.now()), COURRIER_BOLD_14));
+
+        document.add(Chunk.NEWLINE);
+        document.add(Chunk.NEWLINE);
+        document.add(Chunk.NEWLINE);
+        document.add(Chunk.NEWLINE);
+        document.add(Chunk.NEWLINE);
+        document.add(Chunk.NEWLINE);
+        document.add(Chunk.NEWLINE);
+        document.add(Chunk.NEWLINE);
+
+        document.add(new Chunk("NB: L'étudiant(e) ne sera considéré(e) définitivement inscrit(e) que lorsqu'il lui sera délivré"
+                + " l'Attestation d'inscription.", COURRIER_NORMAL_12));
+
+        document.setMargins(100, 100, 0, 0);
         document.close();
 
 //        servletOutputStream.flush();

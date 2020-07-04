@@ -11,6 +11,9 @@
             <f:viewAction  action="#{inscritController.initialize()}"/>
             <f:viewParam name="selectedCne" value="#{inscritController.selectedCne}"/>
         </f:metadata>
+        <sec:authorize access="!isAuthenticated()">
+            <meta http-equiv="refresh" content="0;url=login.xhtml" /> 
+        </sec:authorize>
         <h:form id="inscritForm" enctype="multipart/form-data">
             <p:messages id="messages" showSummary="false" showDetail="true" closable="true">
                 <p:autoUpdate />
@@ -176,21 +179,30 @@
                         <!--<p:commandButton value="VALIDER" class ="GreenButton" action="#{inscritController.save()}" update="messages"  icon="fa fa-save Fs16 white"  />-->
                         <!--<h:commandButton value="VALIDER" class ="ui-button ui-button-text"  action="#{inscritController.save()}"> </h:commandButton>--> 
                         <sec:authorize ifAnyGranted="ROLE_ADMIN, ROLE_OPERATOR">
-                            <p:button value="RETOUR" outcome="inscritList.xhtml"  icon="fa fa-save Fs16 white"  />
+                            <p:button value="RETOUR" outcome="listInscrit.xhtml"  icon="fa fa-save Fs16 white"  />
                         </sec:authorize>  
-                        <ui:fragment  rendered="#{inscritController.inscrit.id != null}"  >
-                           <!--<p:button value="Imprimer Reçue" outcome="printConfirmation.xhtml"  icon="fa fa-print Fs16 white"  />-->
-                            <p:commandButton value="RECU"  action="#{inscritController.createReceipe(request, response)}" update="messages, validationButton"  icon="fa fa-file-pdf-o Fs16 white" class="GreenButton" ajax="false" />
-                        </ui:fragment>
+                        <sec:authorize ifAnyGranted="ROLE_ADMIN, ROLE_OPERATOR">
+                            <ui:fragment  rendered="#{inscritController.inscrit.id != null}"  >
+                                <!--<p:button value="Imprimer Reçue" outcome="printConfirmation.xhtml"  icon="fa fa-print Fs16 white"  />-->
+                                <p:commandButton value="RECU DEPOT"  action="#{inscritController.createReceipeForOperator(request, response)}" update="messages, validationButton"  icon="fa fa-file-pdf-o Fs16 white" class="OrangeButton" ajax="false" />
+                            </ui:fragment>
+                        </sec:authorize> 
+                        <sec:authorize ifAnyGranted="ROLE_ADMIN, ROLE_USER">
+                            <ui:fragment  rendered="#{inscritController.inscrit.id != null}"  >
+                                <!--<p:button value="Imprimer Reçue" outcome="printConfirmation.xhtml"  icon="fa fa-print Fs16 white"  />-->
+                               <p:commandButton value="RECU DEPOT"  action="#{inscritController.createReceipeForOperator(request, response)}" update="messages, validationButton"  icon="fa fa-file-pdf-o Fs16 white" class="OrangeButton" ajax="false" />
+                            </ui:fragment>
+                        </sec:authorize>   
 
                         <p:commandButton value="ENREGISTER"  action="#{inscritController.save()}" update="@form"  icon="fa fa-save Fs16 white"  />
                         <h:panelGroup id="validationButton">
                             <sec:authorize ifAnyGranted="ROLE_ADMIN, ROLE_OPERATOR" id="validationButton">
                                 <ui:fragment  rendered="#{not inscritController.inscrit.VALID}"  >
-                                    <p:commandButton value="VALIDER"  action="#{inscritController.validateInscrition()}" update="messages, validationButton"  icon="fa fa-save Fs16 white"  />
+                                    <p:commandButton value="VALIDER"  action="#{inscritController.validateInscrition()}" update="messages, validationButton"  icon="fa fa-save Fs16 white"  class="GreenButton"/>
                                 </ui:fragment>
                                 <ui:fragment  rendered="#{inscritController.inscrit.VALID}"  >
-                                    <p:commandButton value="INVALIDER"  action="#{inscritController.inValidateInscrition()}" update="messages, validationButton"  icon="fa fa-save Fs16 white"   />
+                                    <p:commandButton value="INVALIDER"  action="#{inscritController.inValidateInscrition()}" update="messages, validationButton"  icon="fa fa-save Fs16 white" class="RedButton"  />
+                                    
                                 </ui:fragment>
                             </sec:authorize>    
                         </h:panelGroup>  

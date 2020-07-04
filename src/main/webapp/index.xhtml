@@ -8,19 +8,23 @@ and open the template in the editor.
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:sec="http://www.springframework.org/security/tags">
     <head>
-        <title>TODO supply a title</title>
-        <sec:authorize ifAnyGranted="ROLE_ADMIN, ROLE_OPERATOR">
-            <meta http-equiv="refresh" content="0;url=inscritList.xhtml" /> 
-        </sec:authorize>
+        <title>redirect</title>
+
         <sec:authorize ifAnyGranted="ROLE_USER">
             <meta http-equiv="refresh" content="0;url=inscrit.xhtml" /> 
         </sec:authorize>
         <sec:authorize access="!isAuthenticated()">
-             <meta http-equiv="refresh" content="0;url=login.xhtml" /> 
+            <meta http-equiv="refresh" content="0;url=login.xhtml" /> 
         </sec:authorize>
-        
+        <sec:authorize ifAnyGranted="ROLE_OPERATOR">
+            <meta http-equiv="refresh" content="0;url=listInscrit.xhtml" /> 
+        </sec:authorize>
+        <sec:authorize ifAnyGranted="ROLE_ADMIN">
+            <meta http-equiv="refresh" content="0;url=admin.xhtml" /> 
+        </sec:authorize>        
+
     </head>
     <body>
-<!--        <div>TODO write content</div>-->
+        <!--        <div>TODO write content</div>-->
     </body>
 </html>

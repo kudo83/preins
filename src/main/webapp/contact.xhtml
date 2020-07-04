@@ -12,7 +12,7 @@
             <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
             <meta name="apple-mobile-web-app-capable" content="yes" />
         </f:facet>
-        <title>PrimeFaces Spark</title>
+        <title>Contacter l'administration</title>
         <h:outputScript name="js/layout.js" library="spark-layout" />
 
         <h:outputText value="&lt;!--[if gte IE 9]&gt;" escape="false" />
@@ -31,32 +31,30 @@
                  styline="margin-top:5%; background-image:url(#{resource['spark-layout:images/loginpageillust.svg']}); background-repeat:no-repeat; background-position:center; background-size:cover;">
                 <div class="Container90 Fnone MarAuto TexAlCenter">
                     <h:form prependId="false">
-                      
-                        <div class="EmptyBox50"></div>
-                        <h:graphicImage name="images/logo.png" library="spark-layout" styleClass="MarAuto MarTop20 MarBot10" style="height:80px; width:3#0px;"/>
-                        <div class="EmptyBox20"></div>
-                         <p:outputLabel value="Le CNE ou le CIN que vous avez introduit est érroné!" styleClass="red"
-                                       rendered="${!empty param['error']}" />
+                            <div class="EmptyBox50"></div>
+                            <h:graphicImage name="images/logo.png" library="spark-layout" styleClass="MarAuto MarTop20 MarBot10" style="height:80px; width:3#0px;"/>
+                            <p:messages id="messages" showSummary="false" showDetail="true" closable="true">
+                                <p:autoUpdate />
+                            </p:messages>
 
-                        <p:inputText id="username" value="" placeholder="Username" styleClass="Container80 Fnone MarAuto Fs18"/>
+                            <p:inputText id="email" value="#{contactController.email}" placeholder="Email" style="width: 80%;" required="true" requiredMessage="Le champ Email de Naissance est obligatoire"/>
+                             <div class="EmptyBox10"/>
+                            <p:inputText id="cne" value="#{contactController.cne}" placeholder="Code Massar" style="width: 80%;" required="true" requiredMessage="Le champ Code Massar est obligatoire"/>
+                            <div class="EmptyBox10"/>
+                            <!--<p:inputTextarea id="text" value="#{contactController.text}" placeholder="Votre message" style="width: 80%;" maxlength="300" required="true" requiredMessage="Le champ Message est obligatoire"/>-->
+                            <p:editor id="editor" widgetVar="editorWidget" value="#{contactController.text}"/>
+                            
+                            <div class="EmptyBox20"/>
+                            <p:commandButton value="Envoyer" action="#{contactController.sendReclamation()}" ajax="false" update="messages" icon="fa fa-send-o (alias) Fs16 white"/>
+                             <p:button value="RETOUR" outcome="index.xhtml"  icon="fa fa-arrow-circle-left Fs16 white"  />
                         <div class="EmptyBox10"></div>
-                        <p:password id="password" value="" placeholder="Password" styleClass="Container80 Fnone MarAuto Fs18" feedback="false"/>
-<!--                        <div class="EmptyBox20"></div>
-                        <div class="Container85 Fnone MarAuto softgray">
-                            <div class="EmptyBox5"></div>
-                            <p:selectBooleanCheckbox value="accept" itemLabel="I Accept Terms And Policies"/>
-                        </div>-->
-                        <div class="EmptyBox30"></div>
-                        <!--<h:commandButton  value="Login" styleClass="Fs16"/>-->
-                        <p:commandButton value="Send" ajax="false" style="width: 50%"/>
-                        <div class="EmptyBox10"></div>
-                        <div class="Seperator"></div>
-                        <div class="EmptyBox10"></div>
+
                         <!--<p:commandButton  value="Login"  ajax="false" styleClass="Fs16" style="width: 50%"/>-->
-<!--                        <h:link  value="Contact Admin ?" styleClass="Fs16 OrangeButton" href="contact.xhtml"  style="width: 50%"/>-->
+                        <!--                        <h:link  value="Contact Admin ?" styleClass="Fs16 OrangeButton" href="contact.xhtml"  style="width: 50%"/>-->
                         <div class="EmptyBox50"></div>
                     </h:form>
                 </div>
+                            
             </div>
         </div>
 

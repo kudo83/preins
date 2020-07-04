@@ -1,0 +1,87 @@
+
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:sec="http://www.springframework.org/security/tags"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+        <!--                    <p:messages id="messages"/>-->
+        <f:metadata>
+            <f:viewAction  action="#{adminController.loadListAdmis()}"/>
+            <f:viewAction  action="#{adminController.initStatistics()}"/>
+        </f:metadata>
+
+        <p:messages id="messages" showSummary="false" showDetail="true" closable="true">
+            <p:autoUpdate />
+        </p:messages>
+        <div class="layout-portlets-box-print ui-fluid">
+            <h:form enctype="multipart/form-data">
+
+                <div class="Container50 Responsive50">
+                    <div class="ContainerIndent ui-fluid">
+                        <h2 class="BigTopic">
+                            <i class="fa fa-upload" /> UPLOAD ADMIS
+                        </h2>
+
+
+
+                        <div class="EmptyBox20"></div>
+                        <span class="Wid100 DispBlock Fs25 green fa fa-align-left ">Exemple</span>
+                        <h:graphicImage name="images/excel.png" library="spark-layout" styleClass="MarAuto MarTop20 MarBot10" />
+                        <div class="EmptyBox20"></div>
+                        <p:fileUpload  value="#{adminController.excelUpload}" listener="#{adminController.uploadAdmis}" mode="advanced" dragDropSupport="false"
+                                       allowTypes="/(\.|\/)(xls)$/" update="messages" />
+
+
+
+
+
+
+                    </div>
+                </div>
+                <div class="Container50 Responsive50">
+                    <div class="ContainerIndent ui-fluid">
+                        <h2 class="BigTopic">
+                            <i class="fa fa-users" /> LIST DES ADMIS
+                        </h2>
+
+                        <p:dataTable var="admis" value="#{adminController.admisList}"  widgetVar="admisTable" draggableColumns="true"
+                                     rows="10" paginator="true"   rowsPerPageTemplate="10,20,30" 
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowKey="#{admis.cne}" rowIndexVar="rowIndex"
+                                     emptyMessage="Pas d'inscrit pour cette recherche" filteredValue="#{adminController.filteredAdmisList}">
+
+                            <f:facet name="header">
+                                <p:outputPanel>
+                                    <h:outputText value="Recherche Globale : " />
+                                    <p:inputText id="globalFilter" onkeyup="PF('admisTable').filter()" style="width:150px" placeholder="Mot clef"/>
+                                </p:outputPanel>
+                            </f:facet>
+                            <p:column headerText="CNE" filterBy="#{admis.cne}">
+                                <h:outputText value="#{admis.cne}" class="fontNum" />
+                            </p:column>
+
+                            <p:column headerText="NOM" filterBy="#{admis.cin}">
+                                <h:outputText value="#{admis.cin}" class="fontNum" />
+                            </p:column>
+
+                            <p:column headerText="PRENOM" filterBy="#{admis.nom}">
+                                <h:outputText value="#{admis.nom}" class="fontNum" />
+                            </p:column>
+
+
+                        </p:dataTable>
+                        
+                    </div>
+                </div> 
+            </h:form>
+        </div>
+
+
+    </ui:define>
+
+</ui:composition>

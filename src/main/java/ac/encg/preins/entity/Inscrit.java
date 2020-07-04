@@ -18,6 +18,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,7 +30,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "INSCRIT")
+@Table(name = "INSCRIT", uniqueConstraints={@UniqueConstraint(columnNames={"CNE","CIN"})})
 public class Inscrit implements Serializable {
 
     @Id
@@ -68,9 +69,6 @@ public class Inscrit implements Serializable {
 
     @Column(name = "TEL")
     private String tel;
-
-//    @Column(name = "EMAIL")
-//    private String email;
 
     @Column(name = "ADRESSE")
     private String adresse;

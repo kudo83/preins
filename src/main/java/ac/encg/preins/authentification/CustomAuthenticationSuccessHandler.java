@@ -58,7 +58,7 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         }
  
         if (isOperator(roles)) {
-            url = "/inscritList.xhtml";
+            url = "/listInscrit.xhtml";
         } else if (isAdmin(roles)) {
             url = "/admin.xhtml";
         } else if (isUser(roles)) {
