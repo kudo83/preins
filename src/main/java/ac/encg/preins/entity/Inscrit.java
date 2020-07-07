@@ -18,8 +18,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
-import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.NotNull;
+import static javax.persistence.TemporalType.DATE;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,7 +29,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "INSCRIT", uniqueConstraints={@UniqueConstraint(columnNames={"CNE","CIN"})})
+@Table(name = "INSCRIT")
 public class Inscrit implements Serializable {
 
     @Id
@@ -53,11 +52,9 @@ public class Inscrit implements Serializable {
     @Column(name = "PRENOM_AR")
     private String prenomAr;
 
-    @NotNull
     @Column(name = "CNE")
     private String cne;
 
-    @NotNull
     @Column(name = "CIN")
     private String cin;
 
@@ -138,6 +135,28 @@ public class Inscrit implements Serializable {
     private Etape etape = new Etape();
 
     @Column(name = "DATE_CREAT")
+    @Temporal(DATE)
     private Date dateCreat;
+    
+    @Column(name = "DATE_MODIF")
+    @Temporal(DATE)
+    private Date dateModif;
+    
+    @OneToOne(mappedBy = "inscrit")
+    private User userModif;
+    
+    @Column(name = "DATE_VALID")
+    @Temporal(DATE)
+    private Date dateValid;
+    
+    @OneToOne(mappedBy = "inscrit")
+    private User userValid;
+    
+    @Column(name = "DATE_INVALID")
+    @Temporal(DATE)
+    private Date dateInvalid;
+    
+    @OneToOne(mappedBy = "inscrit")
+    private User userInValid;
 
 }

@@ -20,7 +20,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -40,11 +39,9 @@ public class User {
     private int id;
     
     @Column(name = "USERNAME")
-    @NotNull
     private String username;
 
     @Column(name = "PASSWORD")
-    @NotNull
     private String password;
    
     

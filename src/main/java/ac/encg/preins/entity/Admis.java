@@ -5,6 +5,7 @@
  */
 package ac.encg.preins.entity;
 
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,8 +13,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Temporal;
+import static javax.persistence.TemporalType.DATE;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,7 +25,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "ADMIS",uniqueConstraints={@UniqueConstraint(columnNames={"CNE","CIN"})})
+@Table(name = "ADMIS")
 public class Admis {
 
     @Id
@@ -33,21 +34,35 @@ public class Admis {
     private int id;
 
     @Column(name = "CNE")
-    @NotNull
     private String cne;
 
     @Column(name = "CIN")
-    @NotNull
     private String cin;
 
     @Column(name = "NOM")
-    @NotNull
     private String nom;
-    
+
     @OneToOne(mappedBy = "admis")
     private User user;
-    
+
+    @Column(name = "DATE_CREAT")
+    @Temporal(DATE)
+    private Date dateCREAT;
+
+    @OneToOne(mappedBy = "admis")
+    private User userCreat;
+
+    @Column(name = "DATE_MODIF")
+    @Temporal(DATE)
+    private Date dateModif;
+
+    @OneToOne(mappedBy = "admis")
+    private User userModif;
+
+ 
     public Admis() {
     }
+
+    
 
 }

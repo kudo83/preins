@@ -14,9 +14,15 @@ import java.time.format.DateTimeFormatter;
  */
 public class CommonHelper {
 
-
     public static String formateDate(LocalDate date) {
-       DateTimeFormatter formatters = DateTimeFormatter.ofPattern("dd/MM/uuuu");
+        DateTimeFormatter formatters = DateTimeFormatter.ofPattern("dd/MM/uuuu");
         return date.format(formatters);
+    }
+
+    public static boolean isNullOrEmpty(String str) {
+        if (str != null && !str.isEmpty()) {
+            return false;
+        }
+        return true;
     }
 }

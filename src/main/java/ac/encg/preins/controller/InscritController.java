@@ -58,9 +58,9 @@ import java.io.DataOutputStream;
 import java.net.URISyntaxException;
 import java.sql.Date;
 import java.time.LocalDate;
+import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.primefaces.event.FileUploadEvent;
@@ -118,6 +118,8 @@ public class InscritController implements Serializable {
     private List<Mention> mentions = new ArrayList<>();
 
     private String selectedCne;
+    
+    private User connectedUser;
 
     private String loggedUsername;
 
@@ -133,90 +135,66 @@ public class InscritController implements Serializable {
     public static final Font COURRIER_NORMAL_12 = new Font(FontFamily.COURIER, 12, Font.NORMAL);
 
     public void save() throws IOException {
+        
+        if (photoContentsAsBase64 != null) {
+            if (uploadedPhoto != null) {
+                FilesHelper.savePhoto(photoContentsAsBase64, uploadFolder + inscrit.getCin() + FilesHelper.getFileExtension(uploadedPhoto.getFileName()));
+                inscrit.setPhotoFileName(inscrit.getCin() + FilesHelper.getFileExtension(uploadedPhoto.getFileName()));
+            }
+        } else {
+            FacesContext.getCurrentInstance().
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Le champ Photo Personnelle est obligatoire", null));
+            return;
 
+        }
+        
         List<Inscrit> inscritList = inscritService.findByCneOrCin(inscrit.getCne(), inscrit.getCin());
 
-        if (inscrit.getId() == null) {
-            if (!inscritList.isEmpty()) {
-                FacesContext.getCurrentInstance().
-                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Un condidat est déjà inscrit avec ce Code Massar ou CIN! Veuillez contacter l'administration!", null));
-                return;
-            }
-            User user;
-            LoggedUser loggedUser = UserHelper.getLoggedUser(userService.getAuthentication());
-            Optional<User> optional = userService.getUser(loggedUser.getUsername());
-            if (optional.isPresent()) {
-                user = optional.get();
-
-                List<Admis> admisList = admisService.findByCneOrCin(inscrit.getCne(), inscrit.getCin());
-
-                if (admisList.isEmpty()) {
-                    FacesContext.getCurrentInstance().
-                            addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Vous ne figurez pas sur la liste des Admis! Veuillez contacter l'administration!", null));
-                    return;
-                } else {
-                    Admis admis = admisList.get(0);
-                    if (admis.getUser() == null) {
-                        user.setAdmis(admis);
-                    } else {
-                        if (user.getId() != admis.getUser().getId()) {
-                            FacesContext.getCurrentInstance().
-                                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Un condidat est déjà inscrit avec ce Code Massar ou CIN! Veuillez contacter l'administration!", null));
-                            return;
-                        }
-                    }
-
-                }
-
-                inscrit.setDateCreat(new Date(System.currentTimeMillis()));
-                if (photoContentsAsBase64 != null) {
-                    //       InscritHelper.copyFileAndRename(inscrit, uploadedPhoto, inputStreamPhoto, uploadFolder);
-                    if (uploadedPhoto != null) {
-                        FilesHelper.savePhoto(photoContentsAsBase64, uploadFolder + inscrit.getCin() + FilesHelper.getFileExtension(uploadedPhoto.getFileName()));
-                        inscrit.setPhotoFileName(inscrit.getCin() + FilesHelper.getFileExtension(uploadedPhoto.getFileName()));
-                    }
-                } else {
-                    FacesContext.getCurrentInstance().
-                            addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Le champ Photo Personnelle est obligatoire", null));
-                    return;
-
-                }
-
-                inscritService.save(inscrit);
-
-                user.setInscrit(inscrit);
-                userService.save(user);
-                SendMail.sendInscriptionConfirmationMail(user.getUsername(), inscrit.getId());
-
-            } else {
-                FacesContext.getCurrentInstance().
-                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "L'opération a rencontré un problème interne. Si le problème persiste veuillez contacter l'admin!", null));
-                return;
-            }
-
+        if (inscrit.getId() == null && !inscritList.isEmpty()) {
             FacesContext.getCurrentInstance().
-                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Votre Inscription a été faite avec succès!", null));
-
-        } else {
-
-            if (photoContentsAsBase64 != null) {
-                //       InscritHelper.copyFileAndRename(inscrit, uploadedPhoto, inputStreamPhoto, uploadFolder);
-                if (uploadedPhoto != null) {
-                    FilesHelper.savePhoto(photoContentsAsBase64, uploadFolder + inscrit.getCin() + FilesHelper.getFileExtension(uploadedPhoto.getFileName()));
-                    inscrit.setPhotoFileName(inscrit.getCin() + FilesHelper.getFileExtension(uploadedPhoto.getFileName()));
-                }
-            } else {
-                FacesContext.getCurrentInstance().
-                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Le champ Photo Personnelle est obligatoire", null));
-                return;
-
-            }
-
-            inscritService.save(inscrit);
-            FacesContext.getCurrentInstance().
-                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Votre Inscription a été modifiée avec succès!", null));
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Un condidat est déjà inscrit avec ce Code Massar ou CIN! Veuillez contacter l'administration!", null));
+            return;
         }
 
+        User user;
+        LoggedUser loggedUser = UserHelper.getLoggedUser(userService.getAuthentication());
+        Optional<User> optional = userService.getUser(loggedUser.getUsername());
+        if (!optional.isPresent()) {
+            FacesContext.getCurrentInstance().
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "L'opération a rencontré un problème interne. Si le problème persiste veuillez contacter l'admin!", null));
+            return;
+        }
+        user = optional.get();
+        Optional<Admis> optionalAdmis = admisService.findByCneOrCin(inscrit.getCne(), inscrit.getCin());
+        if (!optionalAdmis.isPresent()) {
+            FacesContext.getCurrentInstance().
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Vous ne figurez pas sur la liste des Admis! Veuillez contacter l'administration!", null));
+            return;
+        } else {
+            Admis admis = optionalAdmis.get();
+            if (admis.getUser() == null) {
+                user.setAdmis(admis);
+            } else {
+                if (user.getId() != admis.getUser().getId()) {
+                    FacesContext.getCurrentInstance().
+                            addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Un condidat est déjà inscrit avec ce Code Massar ou CIN! Veuillez contacter l'administration!", null));
+                    return;
+                }
+            }
+
+        }
+
+        if (inscrit.getId() == null) {
+            inscrit.setDateCreat(new Date(System.currentTimeMillis()));
+        } else {
+            inscrit.setDateModif(new Date(System.currentTimeMillis()));
+        }
+        inscritService.save(inscrit);
+        user.setInscrit(inscrit);
+        userService.save(user);
+        SendMail.sendInscriptionConfirmationMail(user.getUsername(), inscrit.getId());
+        FacesContext.getCurrentInstance().
+                addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Votre Inscription a été enregistré avec succès!", null));
     }
 
     public void loadLists() {
@@ -240,8 +218,10 @@ public class InscritController implements Serializable {
             uploadedPhoto = event.getFile();
             inputStreamPhoto = uploadedPhoto.getInputStream();
             photoContentsAsBase64 = Base64.getEncoder().encodeToString(uploadedPhoto.getContent());
+
         } catch (IOException ex) {
-            Logger.getLogger(InscritController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(InscritController.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -256,12 +236,15 @@ public class InscritController implements Serializable {
 
             }
         } catch (IOException ex) {
-            Logger.getLogger(InscritController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(InscritController.class
+                    .getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 input.close();
+
             } catch (IOException ex) {
-                Logger.getLogger(InscritController.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(InscritController.class
+                        .getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -282,8 +265,10 @@ public class InscritController implements Serializable {
 
                         byte[] contents = Files.readAllBytes(Paths.get(uploadFolder + inscrit.getPhotoFileName()));
                         photoContentsAsBase64 = Base64.getEncoder().encodeToString(contents);
+
                     } catch (IOException ex) {
-                        Logger.getLogger(InscritController.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(InscritController.class
+                                .getName()).log(Level.SEVERE, null, ex);
                     }
 
                 } else {
@@ -299,8 +284,10 @@ public class InscritController implements Serializable {
                         inscrit = optionalIns.get();
                         byte[] contents = Files.readAllBytes(Paths.get(uploadFolder + inscrit.getPhotoFileName()));
                         photoContentsAsBase64 = Base64.getEncoder().encodeToString(contents);
+
                     } catch (IOException ex) {
-                        Logger.getLogger(InscritController.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(InscritController.class
+                                .getName()).log(Level.SEVERE, null, ex);
                     }
 
                 }
@@ -310,6 +297,16 @@ public class InscritController implements Serializable {
 
     public void validateInscrition() throws IOException {
         inscrit.setVALID(true);
+
+        LoggedUser loggedUser = UserHelper.getLoggedUser(userService.getAuthentication());
+        Optional<User> optional = userService.getUser(loggedUser.getUsername());
+        if (optional.isPresent()) {
+            User userValid = optional.get();
+            inscrit.setUserValid(userValid);
+        }
+
+        inscrit.setDateValid(new Date(System.currentTimeMillis()));
+
         inscritService.save(inscrit);
         FacesContext.getCurrentInstance().
                 addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "L'inscription à été Validée avec succès!", null));
@@ -319,6 +316,16 @@ public class InscritController implements Serializable {
 
     public void inValidateInscrition() throws IOException {
         inscrit.setVALID(false);
+
+        LoggedUser loggedUser = UserHelper.getLoggedUser(userService.getAuthentication());
+        Optional<User> optional = userService.getUser(loggedUser.getUsername());
+        if (optional.isPresent()) {
+            User userInvalid = optional.get();
+            inscrit.setUserInValid(userInvalid);
+        }
+
+        inscrit.setDateValid(new Date(System.currentTimeMillis()));
+
         inscritService.save(inscrit);
         FacesContext.getCurrentInstance().
                 addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "L'inscription à été invalidée avec succès!", null));
@@ -513,7 +520,7 @@ public class InscritController implements Serializable {
         document.add(Chunk.NEWLINE);
         document.add(new Chunk(new VerticalPositionMark(), 300, true));
         document.add(new Chunk("Date : ", COURRIER_BOLD_14));
-        document.add(new Chunk(CommonHelper.formateDate(LocalDate.now()), COURRIER_BOLD_14));
+        document.add(new Chunk(CommonHelper.formateDate(LocalDate.now()), COURRIER_NORMAL_14));
 
         document.add(Chunk.NEWLINE);
         document.add(Chunk.NEWLINE);
@@ -533,6 +540,19 @@ public class InscritController implements Serializable {
 //        servletOutputStream.flush();
 //        servletOutputStream.close();
         FacesContext.getCurrentInstance().responseComplete();
+
+    }
+    
+    public void loadLoggedUser() throws IOException {
+        LoggedUser loggedUser = UserHelper.getLoggedUser(userService.getAuthentication());
+        Optional<User> optional = userService.getUser(loggedUser.getUsername());
+        if (optional.isPresent()) {
+            connectedUser = optional.get();
+        }else{
+            FacesContext.getCurrentInstance().
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Veuillez vous reconnecter!", null));
+             FacesContext.getCurrentInstance().getExternalContext().redirect("login.xhtml");
+        }
 
     }
 

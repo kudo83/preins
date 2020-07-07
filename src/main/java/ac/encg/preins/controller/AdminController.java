@@ -1,13 +1,19 @@
 package ac.encg.preins.controller;
 
 import ac.encg.preins.entity.Admis;
+import ac.encg.preins.entity.User;
+import ac.encg.preins.helper.CommonHelper;
+import ac.encg.preins.helper.UserHelper;
+import ac.encg.preins.nonPersistable.LoggedUser;
 import ac.encg.preins.service.AdmisService;
 import ac.encg.preins.service.StatService;
+import ac.encg.preins.service.UserService;
 import java.io.IOException;
 import java.io.Serializable;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.PostConstruct;
+import java.util.Optional;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
@@ -19,7 +25,9 @@ import jxl.Workbook;
 import jxl.read.biff.BiffException;
 import lombok.Getter;
 import lombok.Setter;
+import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.event.RowEditEvent;
 import org.primefaces.model.file.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -41,7 +49,12 @@ public class AdminController implements Serializable {
     private AdmisService admisService;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private StatService statService;
+
+    private User connectedUser;
 
     private int nombreDuplique = 0;
     private int nombreInsérer = 0;
@@ -54,7 +67,9 @@ public class AdminController implements Serializable {
     private long nbrInscrits = 0;
     private long nbrUsers = 0;
 
-    private Admis admis = new Admis();
+    private String cneAdmis;
+    private String cinAdmis;
+    private String nomAdmis;
 
     private List<Admis> filteredAdmisList;
 
@@ -71,7 +86,7 @@ public class AdminController implements Serializable {
             workbook = Workbook.getWorkbook(event.getFile().getInputStream());
 
             Sheet sheet = workbook.getSheet(0);
-            int cellCount = sheet.getColumn(0).length;
+            int cellCount = sheet.getColumn(2).length;
             boolean hasValue = true;
 
             for (int i = 0; i < cellCount; i++) {
@@ -79,7 +94,8 @@ public class AdminController implements Serializable {
                 Cell cell2 = sheet.getCell(1, i);
                 Cell cell3 = sheet.getCell(2, i);
 
-                if (admisService.existByCneOrCin(cell1.getContents(), cell2.getContents())) {
+                if ((!CommonHelper.isNullOrEmpty(cell1.getContents()) && admisService.existByCne(cell1.getContents()))
+                        || (!CommonHelper.isNullOrEmpty(cell2.getContents()) && admisService.existByCin(cell2.getContents()))) {
                     nombreDuplique++;
                 } else {
 
@@ -97,9 +113,17 @@ public class AdminController implements Serializable {
                 admisService.saveAdmisList(admisList);
 
             }
-            FacesContext.getCurrentInstance().
-                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
-                            String.valueOf(nombreInsérer) + " admis inséré est " + String.valueOf(nombreDuplique) + " dupliquations rejetés", null));
+            if (nombreInsérer > 0) {
+                FacesContext.getCurrentInstance().
+                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+                                String.valueOf(nombreInsérer) + " admis insérés", null));
+            }
+            if (nombreDuplique > 0) {
+                FacesContext.getCurrentInstance().
+                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                String.valueOf(nombreDuplique) + " dupliquations rejetés", null));
+            }
+
             nombreInsérer = 0;
             nombreDuplique = 0;
         } catch (IOException | BiffException e) {
@@ -130,6 +154,111 @@ public class AdminController implements Serializable {
     public void loadListAdmis() {
         admisList = admisService.loadAll();
 
+    }
+
+    public void modifierAdmis(RowEditEvent<Admis> event) {
+        Optional<Admis> optionalAdmis;
+        if (!CommonHelper.isNullOrEmpty(event.getObject().getCne())) {
+            optionalAdmis = admisService.findByCne(event.getObject().getCne());
+            if (optionalAdmis.isPresent() && (event.getObject().getId() != optionalAdmis.get().getId())) {
+                FacesContext.getCurrentInstance().
+                        addMessage("Erreur:", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Le CNE saisie existe déjà pour un autre admis!", null));
+                return;
+            }
+        }
+
+        if (!CommonHelper.isNullOrEmpty(event.getObject().getCin())) {
+            optionalAdmis = admisService.findByCin(event.getObject().getCin());
+            if (optionalAdmis.isPresent() && (event.getObject().getId() != optionalAdmis.get().getId())) {
+                FacesContext.getCurrentInstance().
+                        addMessage("Erreur:", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Le CIN saisie existe déjà pour un autre admis!", null));
+                return;
+            }
+        }
+        
+//        Admis admis = event.getObject();
+//        admis.setCne(event.getObject().getCne());
+//        admis.setCin(event.getObject().getCin());
+//        admis.setNom(event.getObject().getNom());
+//        admis.setDateModif(new Date(System.currentTimeMillis()));
+//        admis.setUserModif(connectedUser);
+//        admisService.save(admis);
+//        FacesContext.getCurrentInstance().
+//                addMessage("Info:", new FacesMessage(FacesMessage.SEVERITY_INFO, "L'admis a été ajouté avec succée!", null));
+//        admisList = admisService.loadAll();
+//        cneAdmis = "";
+//        cinAdmis = "";
+//        nomAdmis = "";
+
+        admisService.saveAdmisList(admisList);
+        FacesMessage msg = new FacesMessage("Admis modifié", event.getObject().getNom());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+
+    }
+    
+//    public void validCne(RowEditEvent<Admis> event) {
+//       if (!CommonHelper.isNullOrEmpty(event.getObject().getCne())) {
+//           Optional<Admis> optionalAdmis = admisService.findByCne(event.getObject().getCne());
+//            if (optionalAdmis.isPresent() && (event.getObject().getId() != optionalAdmis.get().getId())) {
+//                FacesContext.getCurrentInstance().
+//                        addMessage("Erreur:", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Le CNE saisie existe déjà pour un autre admis!", null));
+//            }
+//        }
+//    }
+//    
+//     public void onCellEdit(CellEditEvent event) {
+//        Object oldValue = event.getOldValue();
+//        Object newValue = event.getNewValue();
+//         
+//        if(newValue != null && !newValue.equals(oldValue)) {
+//            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cell Changed", "Old: " + oldValue + ", New:" + newValue);
+//            FacesContext.getCurrentInstance().addMessage(null, msg);
+//        }
+//    }
+//
+//    public void modifCancel(RowEditEvent<Admis> event) {
+//        FacesMessage msg = new FacesMessage("Modification annulée", event.getObject().getNom());
+//        FacesContext.getCurrentInstance().addMessage(null, msg);
+//    }
+
+    public void ajouterAdmis() throws IOException {
+        if (!CommonHelper.isNullOrEmpty(cneAdmis) && admisService.existByCne(cneAdmis)) {
+            FacesContext.getCurrentInstance().
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Le CNE saisie existe déjà dans la base!", null));
+        } else if (!CommonHelper.isNullOrEmpty(cinAdmis) && admisService.existByCin(cinAdmis)) {
+            FacesContext.getCurrentInstance().
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Le CIN saisie existe déjà dans la base!", null));
+
+        } else {
+            Admis newAdmis = new Admis();
+            newAdmis.setCne(cneAdmis);
+            newAdmis.setCin(cinAdmis);
+            newAdmis.setNom(nomAdmis);
+            newAdmis.setDateCREAT(new Date(System.currentTimeMillis()));
+            newAdmis.setUserCreat(connectedUser);
+            admisService.save(newAdmis);
+            FacesContext.getCurrentInstance().
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "L'admis a été ajouté avec succée!", null));
+            admisList = admisService.loadAll();
+            cneAdmis = "";
+            cinAdmis = "";
+            nomAdmis = "";
+        }
+    }
+
+    public void loadConnectedUser() throws IOException {
+        LoggedUser loggedUser = UserHelper.getLoggedUser(userService.getAuthentication());
+        if (loggedUser != null) {
+            Optional<User> optional = userService.getUser(loggedUser.getUsername());
+            if (optional.isPresent()) {
+                connectedUser = optional.get();
+            } else {
+                FacesContext.getCurrentInstance().
+                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Veuillez vous reconnecter!", null));
+                FacesContext.getCurrentInstance().getExternalContext().redirect("login.xhtml");
+            }
+
+        }
     }
 
 }

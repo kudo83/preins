@@ -10,7 +10,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,7 +27,6 @@ public class Pays implements Serializable {
     @Column(name = "ID_PAYS")
     private Long id;
     
-    @NotNull
     @Column(name = "LIB_PAYS")
     private String lib;
 
