@@ -494,18 +494,19 @@ INSERT INTO `ROLE` (`ID_ROLE`, `LIB_ROLE`) VALUES
 (3, 'USER');
 
 
-INSERT INTO `USER` (`ID_USER`, `ACTIVE`, `PASSWORD`, `USERNAME` ) VALUES
+INSERT INTO `USER` (`ID_USER`, `ACTIVE`, `PASSWORD`, `USERNAME`, `NOM` ) VALUES
 
-(1, TRUE, 'tabit' , 'admin'),
-(2, TRUE, '123456' , 'op1'),
-(3, TRUE, '123456' , 'D123456');
+(1, TRUE, '$2a$10$SMRsZPaMaIxyaGu.lJ33OOCEVyZ8t5c0zE.1eB.mGj8qMJln9B2ny' , 'admin', 'AISSAM IZIMI'),
+(2, TRUE, '123456' , 'op1', 'SMAIL ELOUALI');
+
 
 
 INSERT INTO `USER_ROLE` (`ID_USER`, `ID_ROLE`) VALUES
 
 (1, 1),
-(2, 2),
-(3, 3);
+(2, 2);
+
+
 
 
 

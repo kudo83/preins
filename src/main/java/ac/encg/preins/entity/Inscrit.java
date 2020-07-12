@@ -6,6 +6,7 @@
 package ac.encg.preins.entity;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -18,7 +19,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
-import static javax.persistence.TemporalType.DATE;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -134,29 +134,27 @@ public class Inscrit implements Serializable {
     @JoinColumn(name = "FK_COD_ETAPE")
     private Etape etape = new Etape();
 
-    @Column(name = "DATE_CREAT")
-    @Temporal(DATE)
-    private Date dateCreat;
-    
+  
+     @Column(name = "DATE_CREAT")
+    private Timestamp dateCreat;
+
     @Column(name = "DATE_MODIF")
-    @Temporal(DATE)
-    private Date dateModif;
-    
-    @OneToOne(mappedBy = "inscrit")
-    private User userModif;
+    private Timestamp dateModif;
+
+    @Column(name = "USER_MODIF")
+    private String userModif;
     
     @Column(name = "DATE_VALID")
-    @Temporal(DATE)
-    private Date dateValid;
+    private Timestamp dateValid;
     
-    @OneToOne(mappedBy = "inscrit")
-    private User userValid;
+    @Column(name = "USER_VALID")
+    private String userValid;
     
     @Column(name = "DATE_INVALID")
-    @Temporal(DATE)
-    private Date dateInvalid;
+    private Timestamp dateInvalid;
     
-    @OneToOne(mappedBy = "inscrit")
-    private User userInValid;
+    @Column(name = "USER_INVALID")
+    private String userInValid;
+
 
 }

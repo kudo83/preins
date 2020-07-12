@@ -13,6 +13,7 @@ import ac.encg.preins.entity.Inscrit;
 import ac.encg.preins.entity.Pays;
 import ac.encg.preins.entity.Pcs;
 import ac.encg.preins.entity.Province;
+import ac.encg.preins.entity.QInscrit;
 import ac.encg.preins.predicate.InscritPredicate;
 import ac.encg.preins.repository.AcademieRepository;
 import ac.encg.preins.repository.EtapeRepository;
@@ -95,6 +96,9 @@ public class InscritService implements Serializable {
 
     public List<Inscrit> loadAll() {
         return inscritRepo.findAll();
+    }
+    public Iterable<Inscrit> loadAllValid() {
+        return inscritRepo.findAll(QInscrit.inscrit.isVALID.eq(Boolean.TRUE));
     }
 
     public List<Inscrit> saveAll(List<Inscrit> inscrits) {

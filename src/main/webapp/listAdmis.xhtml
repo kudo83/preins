@@ -18,7 +18,7 @@
         <sec:authorize access="!isAuthenticated()">
             <meta http-equiv="refresh" content="0;url=login.xhtml" /> 
         </sec:authorize>
-        <p:messages id="messages" showSummary="true" showDetail="true" closable="true">
+        <p:messages id="messages" showDetail="true" closable="true">
             <p:autoUpdate />
         </p:messages>
         <div class="layout-portlets-box-print ui-fluid">
@@ -44,11 +44,11 @@
                         <h2 class="BigTopic">
                             <i class="fa fa-list-alt" /> LIST DES ADMIS
                         </h2>
-                        <p:panelGrid columns="3" layout="grid" style="border:0px !important; background:none;" styleClass="ui-panelgrid ui-widget ui-panelgrid-blank"   >
-                            <p:inputText id="cne" value="#{adminController.cneAdmis}" placeholder="CNE" styleClass="Container80 Fnone MarAuto Fs18"/>
-                            <p:inputText id="cin" value="#{adminController.cinAdmis}" placeholder="CIN" styleClass="Container80 Fnone MarAuto Fs18" />
-                            <p:inputText id="nom" value="#{adminController.nomAdmis}" placeholder="NOM ET PRENOM" styleClass="Container80 Fnone MarAuto Fs18" />
-                            <p:commandButton value="AJOUTER"  action="#{adminController.ajouterAdmis()}" update="messages, tableAdmis"  icon="fa fa-user-plus Fs16 white" class="GreenButton" />
+                        <p:panelGrid id="ajoutAdmisPanel" columns="3" layout="grid" style="border:0px !important; background:none;" styleClass="ui-panelgrid ui-widget ui-panelgrid-blank"   >
+                            <p:inputText id="cne" value="#{adminController.cneAdmis}" placeholder="CNE" styleClass="Container80 Fnone MarAuto Fs18" style="text-transform: uppercase" />
+                            <p:inputText id="cin" value="#{adminController.cinAdmis}" placeholder="CIN" styleClass="Container80 Fnone MarAuto Fs18" style="text-transform: uppercase"/>
+                            <p:inputText id="nom" value="#{adminController.nomAdmis}" placeholder="NOM ET PRENOM" styleClass="Container80 Fnone MarAuto Fs18" style="text-transform: uppercase"/>
+                            <p:commandButton value="AJOUTER"  action="#{adminController.ajouterAdmis()}" update="messages, tableAdmis, ajoutAdmisPanel"  icon="fa fa-user-plus Fs16 white" class="GreenButton" />
                         </p:panelGrid>
                         <div class="EmptyBox20"></div>
                         <p:dataTable id="tableAdmis" var="admis" value="#{adminController.admisList}"  widgetVar="admisTable" draggableColumns="true" editable="false"

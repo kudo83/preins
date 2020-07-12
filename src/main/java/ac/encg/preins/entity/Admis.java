@@ -5,7 +5,8 @@
  */
 package ac.encg.preins.entity;
 
-import java.util.Date;
+import java.io.Serializable;
+import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,8 +14,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import static javax.persistence.TemporalType.DATE;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,7 +25,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "ADMIS")
-public class Admis {
+public class Admis implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -46,18 +45,17 @@ public class Admis {
     private User user;
 
     @Column(name = "DATE_CREAT")
-    @Temporal(DATE)
-    private Date dateCREAT;
+    private Timestamp dateCREAT;
 
-    @OneToOne(mappedBy = "admis")
-    private User userCreat;
+    
+    @Column(name = "USER_CREAT")
+    private String userCreat;
 
     @Column(name = "DATE_MODIF")
-    @Temporal(DATE)
-    private Date dateModif;
+    private Timestamp dateModif;
 
-    @OneToOne(mappedBy = "admis")
-    private User userModif;
+    @Column(name = "USER_MODIF")
+    private String userModif;
 
  
     public Admis() {

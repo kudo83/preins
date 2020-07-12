@@ -10,8 +10,11 @@ import ac.encg.preins.service.StatService;
 import ac.encg.preins.service.UserService;
 import java.io.IOException;
 import java.io.Serializable;
-import java.sql.Date;
+
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import javax.faces.application.FacesMessage;
@@ -101,9 +104,13 @@ public class AdminController implements Serializable {
 
                     Admis newAdmis = new Admis();
 
-                    newAdmis.setCne(cell1.getContents());
-                    newAdmis.setCin(cell2.getContents());
-                    newAdmis.setNom(cell3.getContents());
+                    newAdmis.setCne(cell1.getContents().toUpperCase());
+                    newAdmis.setCin(cell2.getContents().toUpperCase());
+                    newAdmis.setNom(cell3.getContents().toUpperCase());
+
+                    Date date = new Date();
+                    newAdmis.setDateCREAT(new Timestamp(date.getTime()));
+                    newAdmis.setUserCreat(connectedUser.getNom());
 
                     admisList.add(newAdmis);
                     nombreInsérer++;
@@ -175,7 +182,7 @@ public class AdminController implements Serializable {
                 return;
             }
         }
-        
+
 //        Admis admis = event.getObject();
 //        admis.setCne(event.getObject().getCne());
 //        admis.setCin(event.getObject().getCin());
@@ -189,13 +196,12 @@ public class AdminController implements Serializable {
 //        cneAdmis = "";
 //        cinAdmis = "";
 //        nomAdmis = "";
-
         admisService.saveAdmisList(admisList);
         FacesMessage msg = new FacesMessage("Admis modifié", event.getObject().getNom());
         FacesContext.getCurrentInstance().addMessage(null, msg);
 
     }
-    
+
 //    public void validCne(RowEditEvent<Admis> event) {
 //       if (!CommonHelper.isNullOrEmpty(event.getObject().getCne())) {
 //           Optional<Admis> optionalAdmis = admisService.findByCne(event.getObject().getCne());
@@ -220,22 +226,37 @@ public class AdminController implements Serializable {
 //        FacesMessage msg = new FacesMessage("Modification annulée", event.getObject().getNom());
 //        FacesContext.getCurrentInstance().addMessage(null, msg);
 //    }
-
     public void ajouterAdmis() throws IOException {
+        boolean noteValid = false;
+        if (CommonHelper.isNullOrEmpty(nomAdmis)) {
+            noteValid = true;
+            FacesContext.getCurrentInstance().
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erreur!", "Veuillez entrer le nom et le prénom du condidat"));
+        }
+        if (CommonHelper.isNullOrEmpty(cinAdmis) && CommonHelper.isNullOrEmpty(cneAdmis)) {
+            noteValid = true;
+            FacesContext.getCurrentInstance().
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erreur!", "Veuillez renseigner le CNE ou le CIN du condidat"));
+        }
+        if (noteValid) {
+            return;
+        }
         if (!CommonHelper.isNullOrEmpty(cneAdmis) && admisService.existByCne(cneAdmis)) {
             FacesContext.getCurrentInstance().
-                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Le CNE saisie existe déjà dans la base!", null));
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erreur!", "Le CNE saisie existe déjà dans la base"));
         } else if (!CommonHelper.isNullOrEmpty(cinAdmis) && admisService.existByCin(cinAdmis)) {
             FacesContext.getCurrentInstance().
-                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Le CIN saisie existe déjà dans la base!", null));
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erreur!", "Le CIN saisie existe déjà dans la base"));
 
         } else {
             Admis newAdmis = new Admis();
-            newAdmis.setCne(cneAdmis);
-            newAdmis.setCin(cinAdmis);
-            newAdmis.setNom(nomAdmis);
-            newAdmis.setDateCREAT(new Date(System.currentTimeMillis()));
-            newAdmis.setUserCreat(connectedUser);
+            newAdmis.setCne(cneAdmis.toUpperCase());
+            newAdmis.setCin(cinAdmis.toUpperCase());
+            newAdmis.setNom(nomAdmis.toUpperCase());
+
+            Date date = new Date();
+            newAdmis.setDateCREAT(new Timestamp(date.getTime()));
+            newAdmis.setUserCreat(connectedUser.getNom());
             admisService.save(newAdmis);
             FacesContext.getCurrentInstance().
                     addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "L'admis a été ajouté avec succée!", null));
@@ -243,6 +264,7 @@ public class AdminController implements Serializable {
             cneAdmis = "";
             cinAdmis = "";
             nomAdmis = "";
+
         }
     }
 

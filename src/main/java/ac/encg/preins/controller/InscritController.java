@@ -56,9 +56,10 @@ import com.itextpdf.text.pdf.draw.VerticalPositionMark;
 
 import java.io.DataOutputStream;
 import java.net.URISyntaxException;
-import java.sql.Date;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDate;
-import javax.annotation.PostConstruct;
+import java.util.Date;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -105,6 +106,7 @@ public class InscritController implements Serializable {
 
     private Inscrit inscrit = new Inscrit();
     private List<Inscrit> inscrits = new ArrayList<>();
+    private Iterable<Inscrit> inscritsValid = new ArrayList<>();
     private List<Inscrit> filteredInscrits;
 
     private List<Etape> etapes = new ArrayList<>();
@@ -118,7 +120,7 @@ public class InscritController implements Serializable {
     private List<Mention> mentions = new ArrayList<>();
 
     private String selectedCne;
-    
+
     private User connectedUser;
 
     private String loggedUsername;
@@ -135,7 +137,7 @@ public class InscritController implements Serializable {
     public static final Font COURRIER_NORMAL_12 = new Font(FontFamily.COURIER, 12, Font.NORMAL);
 
     public void save() throws IOException {
-        
+
         if (photoContentsAsBase64 != null) {
             if (uploadedPhoto != null) {
                 FilesHelper.savePhoto(photoContentsAsBase64, uploadFolder + inscrit.getCin() + FilesHelper.getFileExtension(uploadedPhoto.getFileName()));
@@ -147,7 +149,7 @@ public class InscritController implements Serializable {
             return;
 
         }
-        
+
         List<Inscrit> inscritList = inscritService.findByCneOrCin(inscrit.getCne(), inscrit.getCin());
 
         if (inscrit.getId() == null && !inscritList.isEmpty()) {
@@ -183,16 +185,20 @@ public class InscritController implements Serializable {
             }
 
         }
-
+        Date date = new java.util.Date();
         if (inscrit.getId() == null) {
-            inscrit.setDateCreat(new Date(System.currentTimeMillis()));
+            inscrit.setDateCreat(new Timestamp(date.getTime()));
+            inscritService.save(inscrit);
+            user.setInscrit(inscrit);
+            user.setNom(inscrit.getNom() + " " + inscrit.getPrenom());
+            userService.save(user);
+            SendMail.sendInscriptionConfirmationMail(user.getUsername(), inscrit.getId());
         } else {
-            inscrit.setDateModif(new Date(System.currentTimeMillis()));
+            inscrit.setDateModif(new Timestamp(date.getTime()));
+            inscrit.setUserModif(connectedUser.getNom());
+            inscritService.save(inscrit);
         }
-        inscritService.save(inscrit);
-        user.setInscrit(inscrit);
-        userService.save(user);
-        SendMail.sendInscriptionConfirmationMail(user.getUsername(), inscrit.getId());
+
         FacesContext.getCurrentInstance().
                 addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Votre Inscription a été enregistré avec succès!", null));
     }
@@ -296,16 +302,12 @@ public class InscritController implements Serializable {
     }
 
     public void validateInscrition() throws IOException {
+
         inscrit.setVALID(true);
 
-        LoggedUser loggedUser = UserHelper.getLoggedUser(userService.getAuthentication());
-        Optional<User> optional = userService.getUser(loggedUser.getUsername());
-        if (optional.isPresent()) {
-            User userValid = optional.get();
-            inscrit.setUserValid(userValid);
-        }
-
-        inscrit.setDateValid(new Date(System.currentTimeMillis()));
+        Date date = new Date();
+        inscrit.setDateValid(new Timestamp(date.getTime()));
+        inscrit.setUserValid(connectedUser.getNom());
 
         inscritService.save(inscrit);
         FacesContext.getCurrentInstance().
@@ -316,17 +318,11 @@ public class InscritController implements Serializable {
 
     public void inValidateInscrition() throws IOException {
         inscrit.setVALID(false);
-
-        LoggedUser loggedUser = UserHelper.getLoggedUser(userService.getAuthentication());
-        Optional<User> optional = userService.getUser(loggedUser.getUsername());
-        if (optional.isPresent()) {
-            User userInvalid = optional.get();
-            inscrit.setUserInValid(userInvalid);
-        }
-
-        inscrit.setDateValid(new Date(System.currentTimeMillis()));
-
+        Date date = new Date();
+        inscrit.setDateInvalid(new Timestamp(date.getTime()));
+        inscrit.setUserInValid(connectedUser.getNom());
         inscritService.save(inscrit);
+        
         FacesContext.getCurrentInstance().
                 addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "L'inscription à été invalidée avec succès!", null));
         //  FacesContext.getCurrentInstance().getExternalContext().redirect("inscritList.xhtml");
@@ -344,48 +340,13 @@ public class InscritController implements Serializable {
 
     }
 
-    public void injectData() {
-        List<Inscrit> inscriptions = new ArrayList<>();
-        SerieBac serieBac = new SerieBac();
-        Academie academie = inscritService.loadAcademie();
-        Province prov = inscritService.loadProvince();
-        serieBac = inscritService.loadSerie();
-        Etape etape = inscritService.loadEtape();
-        Pays pays = inscritService.loadPay();
-        for (int i = 1; i < 100; i = i + 1) {
-            Inscrit ins = new Inscrit();
-            ins.setAdresse("Adresse" + i);
-            ins.setAdresseTuteur("AdresseTut" + i);
-            ins.setCin("CIN" + i);
-            ins.setCinTuteur("CINTut" + i);
-            ins.setCiv(new Byte("1"));
-            ins.setCne("CNE" + i);
-///            ins.setEmail("Email" + i);
-            ins.setLieuNaiss("Lieu" + i);
-            ins.setMentionBac("TB");
-            ins.setNom("Nom" + i);
-            ins.setPrenom("Prenom" + i);
-            ins.setVALID(false);
+    public void loadListInscritValid() {
+        inscritsValid = inscritService.loadAllValid();
 
-            Bac bac = new Bac();
-            bac.setSerieBac(serieBac);
-            bac.setAcademie(academie);
-            bac.setProvinceBac(prov);
-            ins.setBac(bac);
-            ins.setEtape(etape);
-            ins.setPaysNaiss(pays);
-            ins.setProvinceNaiss(prov);
-
-            inscriptions.add(ins);
-            System.out.println("Inscrit" + i + "Injecté");
-        };
-
-        inscritService.saveAll(inscriptions);
     }
 
     public void createReceipeForUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, DocumentException, URISyntaxException {
 
-        //          Document document =              new Document(PageSize.A4, 50, 50, 50, 50);
         Document document = new Document();
         FacesContext context = FacesContext.getCurrentInstance();
         response = (HttpServletResponse) context.getExternalContext().getResponse();
@@ -469,7 +430,7 @@ public class InscritController implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         response = (HttpServletResponse) context.getExternalContext().getResponse();
         response.setContentType("application/pdf");
-        response.setHeader("Content-disposition", "attachment; filename=\"Reçu_Dépo-Dos_ENCGA_" + inscrit.getCne() + ".pdf\"");
+        response.setHeader("Content-disposition", "attachment; filename=\"" + inscrit.getNom()+" "+inscrit.getPrenom() + "-Reçu_Dépo.pdf\"");
         PdfWriter.getInstance(document, new DataOutputStream(response.getOutputStream()))
                 .setInitialLeading(16);
 
@@ -542,18 +503,20 @@ public class InscritController implements Serializable {
         FacesContext.getCurrentInstance().responseComplete();
 
     }
-    
-    public void loadLoggedUser() throws IOException {
-        LoggedUser loggedUser = UserHelper.getLoggedUser(userService.getAuthentication());
-        Optional<User> optional = userService.getUser(loggedUser.getUsername());
-        if (optional.isPresent()) {
-            connectedUser = optional.get();
-        }else{
-            FacesContext.getCurrentInstance().
-                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Veuillez vous reconnecter!", null));
-             FacesContext.getCurrentInstance().getExternalContext().redirect("login.xhtml");
-        }
 
+   public void loadConnectedUser() throws IOException {
+        LoggedUser loggedUser = UserHelper.getLoggedUser(userService.getAuthentication());
+        if (loggedUser != null) {
+            Optional<User> optional = userService.getUser(loggedUser.getUsername());
+            if (optional.isPresent()) {
+                connectedUser = optional.get();
+            } else {
+                FacesContext.getCurrentInstance().
+                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Veuillez vous reconnecter!", null));
+                FacesContext.getCurrentInstance().getExternalContext().redirect("login.xhtml");
+            }
+
+        }
     }
 
 }

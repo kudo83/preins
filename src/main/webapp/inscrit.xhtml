@@ -10,19 +10,63 @@
         <f:metadata>
             <f:viewAction  action="#{inscritController.initialize()}"/>
             <f:viewParam name="selectedCne" value="#{inscritController.selectedCne}"/>
+            <f:viewAction  action="#{inscritController.loadConnectedUser()}"/>
         </f:metadata>
         <sec:authorize access="!isAuthenticated()">
             <meta http-equiv="refresh" content="0;url=login.xhtml" /> 
         </sec:authorize>
         <h:form id="inscritForm" enctype="multipart/form-data">
-            <p:messages id="messages" showSummary="false" showDetail="true" closable="true">
-                <p:autoUpdate />
-            </p:messages>
-            <p:focus context="inscritForm" />
-            <div id="print" class="layout-portlets-box ui-fluid">
 
+
+            <p:focus context="inscritForm" />
+            <sec:authorize ifAnyGranted="ROLE_ADMIN, ROLE_USER">
+                <div class="layout-portlets-box ui-fluid" >
+                    <!--<div class="Container50 Responsive50 ">-->
+                    <div class="ContainerIndent ui-fluid" dir="rtl" >
+                        <p:panelGrid id="buttonGridHeader" columns="8" layout="grid" style="border:0px !important; background:none;" class="ui-panelgrid-blank">       
+                            <sec:authorize ifAnyGranted="ROLE_ADMIN">
+                                <p:button value="LIST INSCRITS" outcome="listInscrit.xhtml"  icon="fa fa-rotate-left Fs16 white"  />
+                            </sec:authorize>  
+                            <sec:authorize ifAnyGranted="ROLE_ADMIN, ROLE_USER">
+                                <p:commandButton value="ENREGISTER"  action="#{inscritController.save()}" update="@form"  icon="fa fa-save Fs16 white"  />
+                            </sec:authorize>                       
+                            <sec:authorize ifAnyGranted="ROLE_ADMIN, ROLE_OPERATOR">
+                                <ui:fragment  rendered="#{inscritController.inscrit.VALID}"  >
+                                    <p:commandButton value="RECU de DEPOT"  action="#{inscritController.createReceipeForOperator(request, response)}" update="messages, validationButton"  icon="fa fa-file-pdf-o Fs16 white" class="OrangeButton" ajax="false" />
+                                </ui:fragment>
+                            </sec:authorize> 
+                            <sec:authorize ifAnyGranted="ROLE_USER">
+                                <ui:fragment  rendered="#{inscritController.inscrit.id != null}"  >
+                                    <p:commandButton value="RECU de PRE-INSCRITION"  action="#{inscritController.createReceipeForUser(request, response)}" update="messages, validationButton"  icon="fa fa-file-pdf-o Fs16 white" class="OrangeButton" ajax="false" />
+                                </ui:fragment>
+                            </sec:authorize>   
+
+                            <h:panelGroup id="validationButtonHeader">
+                                <sec:authorize ifAnyGranted="ROLE_ADMIN, ROLE_OPERATOR" id="validationButton">
+                                    <ui:fragment  rendered="#{not inscritController.inscrit.VALID}"  >
+                                        <p:commandButton value="VALIDER"  action="#{inscritController.validateInscrition()}" update="messages,  buttonGrid, buttonGridHeader"  icon="fa fa-check Fs16 white"  class="GreenButton"/>
+                                    </ui:fragment>
+                                    <ui:fragment  rendered="#{inscritController.inscrit.VALID}"  >
+                                        <p:commandButton value="INVALIDER"  action="#{inscritController.inValidateInscrition()}" update="messages,  buttonGrid, buttonGridHeader"  icon="fa fa-close Fs16 white" class="RedButton"  />
+
+                                    </ui:fragment>
+                                </sec:authorize>    
+                            </h:panelGroup>  
+
+
+                        </p:panelGrid>
+
+                    </div>
+                    <!--</div>-->
+                </div>
+            </sec:authorize>
+            <div id="print" class="layout-portlets-box ui-fluid">
+                <p:messages id="messages" showSummary="false" showDetail="true" closable="true">
+                    <p:autoUpdate />
+                </p:messages>
                 <div class="Container50 Responsive50">
                     <div class="ContainerIndent ui-fluid">
+
                         <h2 class="BigTopic">
                             INFORMATIONS ETUDIANT
                         </h2>
@@ -41,9 +85,8 @@
                                          disabled="#{not(empty inscritController.inscrit.id)}"
                                          requiredMessage="Le champ CIN est obligatoire"/>
                             <p:inputText placeholder="Nom" value="#{inscritController.inscrit.nom}" required="true" requiredMessage="Le champ Nom est obligatoire"/>
-                            <p:inputText placeholder="النسب"  value="#{inscritController.inscrit.nomAr}" dir="rtl" required="true" requiredMessage="Le champ النسب est obligatoire">
-                            </p:inputText>    
                             <p:inputText placeholder="Prénom" value="#{inscritController.inscrit.prenom}" required="true" requiredMessage="Le champ Prénom est obligatoire"/>
+                            <p:inputText placeholder="النسب"  value="#{inscritController.inscrit.nomAr}" dir="rtl" required="true" requiredMessage="Le champ النسب est obligatoire"/>
                             <p:inputText placeholder="الاسم"  value="#{inscritController.inscrit.prenomAr}"  dir="rtl" required="true" requiredMessage="Le champ الاسم est obligatoire"/>
 
                             <p:selectOneMenu placeholder="SEX" value="#{inscritController.inscrit.sex}" required="true" requiredMessage="Le champ SEX est obligatoire">
@@ -117,7 +160,6 @@
                                 <f:selectItem itemLabel="Mention du Bac" itemValue="" noSelectionOption="true" />
                                 <f:selectItems value="#{inscritController.mentions}" var="mention" itemLabel="#{mention.libMention}" itemValue="#{mention.codMontion}"/>
                             </p:selectOneMenu>
-                            <br/>
                             <p:selectOneRadio id="codeTpe" value="#{inscritController.inscrit.codeTpe}" required="true" requiredMessage="Le champ Type Lycée est obligatoire">>
                                 <f:selectItem itemLabel="Lycée Privé" itemValue="22" />
                                 <f:selectItem itemLabel="Lycée Public" itemValue="23" />
@@ -179,19 +221,19 @@
                         <!--<p:commandButton value="VALIDER" class ="GreenButton" action="#{inscritController.save()}" update="messages"  icon="fa fa-save Fs16 white"  />-->
                         <!--<h:commandButton value="VALIDER" class ="ui-button ui-button-text"  action="#{inscritController.save()}"> </h:commandButton>--> 
                         <sec:authorize ifAnyGranted="ROLE_ADMIN, ROLE_OPERATOR">
-                            <p:button value="RETOUR" outcome="listInscrit.xhtml"  icon="fa fa-rotate-left Fs16 white"  />
+                            <p:button value="LISTE INSCRITS" outcome="listInscrit.xhtml"  icon="fa fa-rotate-left Fs16 white"  />
                         </sec:authorize>  
                         <sec:authorize ifAnyGranted="ROLE_ADMIN, ROLE_USER">
-                               <p:commandButton value="ENREGISTER"  action="#{inscritController.save()}" update="@form"  icon="fa fa-save Fs16 white"  />
+                            <p:commandButton value="ENREGISTER"  action="#{inscritController.save()}" update="@form"  icon="fa fa-save Fs16 white"  />
                         </sec:authorize>                       
                         <sec:authorize ifAnyGranted="ROLE_ADMIN, ROLE_OPERATOR">
                             <ui:fragment  rendered="#{inscritController.inscrit.VALID}"  >
                                 <p:commandButton value="RECU DEPOT"  action="#{inscritController.createReceipeForOperator(request, response)}" update="messages, validationButton"  icon="fa fa-file-pdf-o Fs16 white" class="OrangeButton" ajax="false" />
                             </ui:fragment>
                         </sec:authorize> 
-                        <sec:authorize ifAnyGranted="ROLE_ADMIN, ROLE_USER">
+                        <sec:authorize ifAnyGranted="ROLE_USER">
                             <ui:fragment  rendered="#{inscritController.inscrit.id != null}"  >
-                               <p:commandButton value="RECU DEPOT"  action="#{inscritController.createReceipeForOperator(request, response)}" update="messages, validationButton"  icon="fa fa-file-pdf-o Fs16 white" class="OrangeButton" ajax="false" />
+                                <p:commandButton value="RECU de PRE-INSCRITION"  action="#{inscritController.createReceipeForUser(request, response)}" update="messages, validationButton"  icon="fa fa-file-pdf-o Fs16 white" class="OrangeButton" ajax="false" />
                             </ui:fragment>
                         </sec:authorize>   
 
@@ -202,7 +244,7 @@
                                 </ui:fragment>
                                 <ui:fragment  rendered="#{inscritController.inscrit.VALID}"  >
                                     <p:commandButton value="INVALIDER"  action="#{inscritController.inValidateInscrition()}" update="messages,  buttonGrid"  icon="fa fa-close Fs16 white" class="RedButton"  />
-                                    
+
                                 </ui:fragment>
                             </sec:authorize>    
                         </h:panelGroup>  
