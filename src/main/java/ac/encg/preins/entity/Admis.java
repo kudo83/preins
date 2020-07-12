@@ -30,7 +30,7 @@ public class Admis implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID_ADMIS")
-    private int id;
+    private Long id;
 
     @Column(name = "CNE")
     private String cne;

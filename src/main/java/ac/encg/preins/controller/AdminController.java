@@ -69,6 +69,7 @@ public class AdminController implements Serializable {
     private long nbrAdmis = 0;
     private long nbrInscrits = 0;
     private long nbrUsers = 0;
+    private long nbrInscritValid = 0;
 
     private String cneAdmis;
     private String cinAdmis;
@@ -156,6 +157,7 @@ public class AdminController implements Serializable {
         nbrAdmis = statService.countAdmis();
         nbrInscrits = statService.countInscrits();
         nbrUsers = statService.countUsers();
+        nbrInscritValid = statService.countInscritValid();
     }
 
     public void loadListAdmis() {

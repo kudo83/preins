@@ -99,7 +99,7 @@ public class SendMail {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(from));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-            message.setSubject("Image (No replay)");
+            message.setSubject("Confirmation de pré-inscription");
             // This mail has 2 part, the BODY and the embedded image
             MimeMultipart multipart = new MimeMultipart("related");
 
@@ -164,7 +164,7 @@ public class SendMail {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(from));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-            message.setSubject("ENCG AGADIR (No replay)");
+            message.setSubject("Vérification d'email");
             // This mail has 2 part, the BODY and the embedded image
             MimeMultipart multipart = new MimeMultipart("related");
 

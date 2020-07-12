@@ -217,13 +217,6 @@
             <artifactId>stax-ex</artifactId>
             <version>1.8.1</version>
         </dependency>
-
-       
-        <dependency>
-            <groupId>com.sun.xml.fastinfoset</groupId>
-            <artifactId>FastInfoset</artifactId>
-            <version>1.2.16</version>
-        </dependency>
         
        
         <dependency>
@@ -253,7 +246,11 @@
             <artifactId>jxl</artifactId>
             <version>2.6.12</version>
         </dependency>
-        
+         <dependency>
+            <groupId>com.sun.xml.fastinfoset</groupId>
+            <artifactId>FastInfoset</artifactId>
+            <version>1.2.16</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>

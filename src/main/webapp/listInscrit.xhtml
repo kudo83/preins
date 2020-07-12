@@ -27,7 +27,7 @@
                             <i class="fa fa-users" /> LIST DES INSCRITS
                         </h2>
 
-                        <p:dataTable var="inscrit" value="#{inscritController.inscrits}"  widgetVar="inscritsTable" draggableColumns="true"
+                        <p:dataTable id="tableInscrits" var="inscrit" value="#{inscritController.inscrits}"  widgetVar="inscritsTable" draggableColumns="true"
                                      rows="10" paginator="true"   rowsPerPageTemplate="10,20,30"
                                      paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                      rowKey="#{inscrit.cne}" rowIndexVar="rowIndex"
@@ -38,6 +38,12 @@
                                     <h:outputText value="Recherche Globale : " />
                                     <p:inputText id="globalFilter" onkeyup="PF('inscritsTable').filter()" style="width:150px" placeholder="Mot clef"/>
                                 </p:outputPanel>
+                                 <div id="expor" style="float:right; padding-top: 10px;">
+                                    <h:commandLink>
+                                        <p:graphicImage name="images/xls.png" library="spark-layout" width="40"/>
+                                        <p:dataExporter type="xls" target="tableInscrits" fileName="inscrits" />
+                                    </h:commandLink>
+                                </div>
                             </f:facet>
                             <p:column headerText="Référence" filterBy="#{inscrit.id}">
                                 <h:outputText value="#{inscrit.id}" class="fontNum" />

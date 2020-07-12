@@ -63,36 +63,20 @@
                                     <p:inputText id="globalFilter" onkeyup="PF('admisTable').filter()" style="width:150px" placeholder="Mot clef"/>
                                 </p:outputPanel>
                             </f:facet>
-<!--                            <p:ajax event="rowEdit" immediate="true" listener="#{adminController.modifierAdmis}" update="messages,tableAdmis" />
-                            <p:ajax event="rowEditCancel" immediate="true" listener="#{adminController.modifCancel}" update="messages" />-->
+
                             <p:column headerText="CNE" sortBy="#{admis.cne}" filterBy="#{admis.cne}">
-<!--                                <p:cellEditor>
-                                    <f:facet name="output"><h:outputText value="#{admis.cne}" /></f:facet>
-                                    <f:facet name="input"><p:inputText  value="#{admis.cne}" style="width:100%">
-                                            <p:ajax listener="#{adminController.validCne}" event="keyup" />
-                                        </p:inputText></f:facet>
-                                </p:cellEditor>-->
                                 <h:outputText value="#{admis.cne}" class="fontNum" />
                             </p:column>
 
                             <p:column headerText="CIN" sortBy="#{admis.cin}" filterBy="#{admis.cin}">
-<!--                                <p:cellEditor>
-                                    <f:facet name="output"><h:outputText value="#{admis.cin}" /></f:facet>
-                                    <f:facet name="input"><p:inputText  value="#{admis.cin}" style="width:100%"/></f:facet>
-                                </p:cellEditor>-->
                            <h:outputText value="#{admis.cin}" class="fontNum" />
                             </p:column>
 
                             <p:column headerText="NOM et PRENOM" sortBy="#{admis.nom}" filterBy="#{admis.nom}">
-<!--                                <p:cellEditor>
-                                    <f:facet name="output"><h:outputText value="#{admis.nom}" /></f:facet>
-                                    <f:facet name="input"><p:inputText  value="#{admis.nom}" style="width:100%"/></f:facet>
-                                </p:cellEditor>-->
+
                                <h:outputText value="#{admis.nom}" class="fontNum" />
                             </p:column>
-<!--                            <p:column style="width:35px">
-                                <p:rowEditor />
-                            </p:column>-->
+
                             
                         </p:dataTable>
 

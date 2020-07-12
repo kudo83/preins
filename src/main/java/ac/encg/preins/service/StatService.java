@@ -1,10 +1,9 @@
 package ac.encg.preins.service;
 
-import ac.encg.preins.entity.Admis;
+import ac.encg.preins.entity.QInscrit;
 import ac.encg.preins.repository.AdmisRepository;
 import ac.encg.preins.repository.InscritRepository;
 import ac.encg.preins.repository.UserRepository;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +36,10 @@ public class StatService {
     
     public long countUsers() {
         return userRepo.count();
+    }
+    
+    public long countInscritValid(){
+         return inscritRepo.count(QInscrit.inscrit.isVALID.eq(Boolean.TRUE));
     }
 
 }

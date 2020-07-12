@@ -322,7 +322,7 @@ public class InscritController implements Serializable {
         inscrit.setDateInvalid(new Timestamp(date.getTime()));
         inscrit.setUserInValid(connectedUser.getNom());
         inscritService.save(inscrit);
-        
+
         FacesContext.getCurrentInstance().
                 addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "L'inscription à été invalidée avec succès!", null));
         //  FacesContext.getCurrentInstance().getExternalContext().redirect("inscritList.xhtml");
@@ -346,7 +346,7 @@ public class InscritController implements Serializable {
     }
 
     public void createReceipeForUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, DocumentException, URISyntaxException {
-
+        loadInscrit();
         Document document = new Document();
         FacesContext context = FacesContext.getCurrentInstance();
         response = (HttpServletResponse) context.getExternalContext().getResponse();
@@ -430,7 +430,7 @@ public class InscritController implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         response = (HttpServletResponse) context.getExternalContext().getResponse();
         response.setContentType("application/pdf");
-        response.setHeader("Content-disposition", "attachment; filename=\"" + inscrit.getNom()+" "+inscrit.getPrenom() + "-Reçu_Dépo.pdf\"");
+        response.setHeader("Content-disposition", "attachment; filename=\"" + inscrit.getNom() + " " + inscrit.getPrenom() + "-Reçu_Dépo.pdf\"");
         PdfWriter.getInstance(document, new DataOutputStream(response.getOutputStream()))
                 .setInitialLeading(16);
 
@@ -504,7 +504,7 @@ public class InscritController implements Serializable {
 
     }
 
-   public void loadConnectedUser() throws IOException {
+    public void loadConnectedUser() throws IOException {
         LoggedUser loggedUser = UserHelper.getLoggedUser(userService.getAuthentication());
         if (loggedUser != null) {
             Optional<User> optional = userService.getUser(loggedUser.getUsername());
