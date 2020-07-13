@@ -32,7 +32,7 @@
                         </h2>
                         <div class="EmptyBox20"></div>
                         <p:fileUpload  value="#{adminController.excelUpload}" listener="#{adminController.uploadAdmis}" mode="advanced" dragDropSupport="false"
-                                       allowTypes="/(\.|\/)(xls)$/" update="messages,tableAdmis" />
+                                       allowTypes="/(\.|\/)(xls)$/" update="messages,tableAdmis,nbrAdmis" />
                         <div class="EmptyBox20"></div>
                         <div class="Wid100 DispBlock Fs25" style="font-family: 'ralewaymedium';"> <i class="fa fa-file-excel-o" /> Exemple</div>
                         <h:graphicImage name="images/excel.png" library="spark-layout" styleClass="MarAuto MarTop20 MarBot10" />
@@ -44,12 +44,24 @@
                         <h2 class="BigTopic">
                             <i class="fa fa-list-alt" /> LIST DES ADMIS
                         </h2>
+
                         <p:panelGrid id="ajoutAdmisPanel" columns="3" layout="grid" style="border:0px !important; background:none;" styleClass="ui-panelgrid ui-widget ui-panelgrid-blank"   >
                             <p:inputText id="cne" value="#{adminController.cneAdmis}" placeholder="CNE" styleClass="Container80 Fnone MarAuto Fs18" style="text-transform: uppercase" />
                             <p:inputText id="cin" value="#{adminController.cinAdmis}" placeholder="CIN" styleClass="Container80 Fnone MarAuto Fs18" style="text-transform: uppercase"/>
                             <p:inputText id="nom" value="#{adminController.nomAdmis}" placeholder="NOM ET PRENOM" styleClass="Container80 Fnone MarAuto Fs18" style="text-transform: uppercase"/>
-                            <p:commandButton value="AJOUTER"  action="#{adminController.ajouterAdmis()}" update="messages, tableAdmis, ajoutAdmisPanel"  icon="fa fa-user-plus Fs16 white" class="GreenButton" />
+                            <p:commandButton value="AJOUTER"  action="#{adminController.ajouterAdmis()}" update="messages, tableAdmis, ajoutAdmisPanel,nbrAdmis"  icon="fa fa-user-plus Fs16 white" class="GreenButton" />
                         </p:panelGrid>
+                        <div class="Wid45 BorderedBox Fright TexAlCenter">
+                            <div class="ContainerIndent">
+                                <div class="EmptyBox10"></div>
+                                <div class="Fs14 gray FontRalewayRegular">Admis</div>
+                                <div class="EmptyBox10"></div>
+                                <h:panelGroup layout="block" id="nbrAdmis">
+                                    <div class="Fs30 red FontRalewayLight"> <i class="fa fa-list-ol Fs20"/> #{adminController.nbrAdmis}</div>
+                                </h:panelGroup>
+                                <div class="EmptyBox10"></div>
+                            </div>
+                        </div>
                         <div class="EmptyBox20"></div>
                         <p:dataTable id="tableAdmis" var="admis" value="#{adminController.admisList}"  widgetVar="admisTable" draggableColumns="true" editable="false"
                                      rows="10" paginator="true"   rowsPerPageTemplate="10,20,30" 
@@ -62,12 +74,12 @@
                                     <h:outputText value="Recherche Globale : " />
                                     <p:inputText id="globalFilter" onkeyup="PF('admisTable').filter()" style="width:150px" placeholder="Mot clef"/>
                                 </p:outputPanel>
-                                  <div id="expor" style="float:right; padding-top: 10px;">
-                                        <h:commandLink>
-                                            <p:graphicImage name="images/xls.png" library="spark-layout" width="40"/>
-                                            <p:dataExporter type="xls" target="tableAdmis" fileName="Admis" />
-                                        </h:commandLink>
-                                    </div>
+                                <div id="expor" style="float:right; padding-top: 10px;">
+                                    <h:commandLink>
+                                        <p:graphicImage name="images/xls.png" library="spark-layout" width="40"/>
+                                        <p:dataExporter type="xls" target="tableAdmis" fileName="Admis" />
+                                    </h:commandLink>
+                                </div>
                             </f:facet>
 
                             <p:column headerText="CNE" sortBy="#{admis.cne}" filterBy="#{admis.cne}">
@@ -75,15 +87,15 @@
                             </p:column>
 
                             <p:column headerText="CIN" sortBy="#{admis.cin}" filterBy="#{admis.cin}">
-                           <h:outputText value="#{admis.cin}" class="fontNum" />
+                                <h:outputText value="#{admis.cin}" class="fontNum" />
                             </p:column>
 
                             <p:column headerText="NOM et PRENOM" sortBy="#{admis.nom}" filterBy="#{admis.nom}">
 
-                               <h:outputText value="#{admis.nom}" class="fontNum" />
+                                <h:outputText value="#{admis.nom}" class="fontNum" />
                             </p:column>
 
-                            
+
                         </p:dataTable>
 
 

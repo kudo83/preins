@@ -56,7 +56,7 @@ public class AdminController implements Serializable {
 
     @Autowired
     private UserService userService;
-    
+
     @Autowired
     private InscritService inscritService;
 
@@ -68,7 +68,7 @@ public class AdminController implements Serializable {
     private int nombreDuplique = 0;
     private int nombreInsérer = 0;
 
-    private BarChartModel  barModelNbrInscritValide;
+    private BarChartModel barModelNbrInscritValide;
 
     private UploadedFile excelUpload;
 
@@ -93,6 +93,7 @@ public class AdminController implements Serializable {
     public void uploadAdmis(FileUploadEvent event) {
 
         Workbook workbook = null;
+        List<Admis> admisListNew = new ArrayList<Admis>();
         try {
             //  workbook = Workbook.getWorkbook(new File(EXCEL_FILE_LOCATION));
             workbook = Workbook.getWorkbook(event.getFile().getInputStream());
@@ -109,7 +110,7 @@ public class AdminController implements Serializable {
                 if ((!CommonHelper.isNullOrEmpty(cell1.getContents()) && admisService.existByCne(cell1.getContents()))
                         || (!CommonHelper.isNullOrEmpty(cell2.getContents()) && admisService.existByCin(cell2.getContents()))) {
                     nombreDuplique++;
-                } else {
+                } else if (!CommonHelper.isNullOrEmpty(cell3.getContents())) {
 
                     Admis newAdmis = new Admis();
 
@@ -121,12 +122,12 @@ public class AdminController implements Serializable {
                     newAdmis.setDateCREAT(new Timestamp(date.getTime()));
                     newAdmis.setUserCreat(connectedUser.getNom());
 
-                    admisList.add(newAdmis);
+                    admisListNew.add(newAdmis);
                     nombreInsérer++;
                 }
             }
-            if (!admisList.isEmpty()) {
-                admisService.saveAdmisList(admisList);
+            if (!admisListNew.isEmpty()) {
+                admisService.saveAdmisList(admisListNew);
 
             }
             if (nombreInsérer > 0) {
@@ -146,9 +147,11 @@ public class AdminController implements Serializable {
             e.printStackTrace();
         } catch (Exception e) {
             FacesContext.getCurrentInstance().
-                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Un ou plusieur étudiants existe déjà dans la base!", null));
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erreur!", "Une erreur interne s'est produite.Veuillez contacter l'admin"));
+            e.printStackTrace();
         } finally {
-
+            loadListAdmis();
+            nbrAdmis = admisList.size();
             if (workbook != null) {
                 workbook.close();
             }
@@ -170,33 +173,31 @@ public class AdminController implements Serializable {
 
     public void createBarChartModel() {
         barModelNbrInscritValide = new BarChartModel();
-        
+
         Iterable<User> operateurs = userService.findOperateurs();
 
-         ChartSeries insrits = new ChartSeries();
+        ChartSeries insrits = new ChartSeries();
         insrits.setLabel("Inscrits Validés");
 
-
         for (User u : operateurs) {
-            insrits.set(u.getNom(),  inscritService.countInscritValidByOperator(u.getNom()));
+            insrits.set(u.getNom(), inscritService.countInscritValidByOperator(u.getNom()));
         }
-               
+
         barModelNbrInscritValide.addSeries(insrits);
-        
+
 //        barModelNbrInscritValide.setTitle("Inscrits Validés par Opérateur");
         barModelNbrInscritValide.setLegendPosition("ne");
- 
+
         Axis xAxis = barModelNbrInscritValide.getAxis(AxisType.X);
 //        xAxis.setLabel("Opérateurs");
-        
- 
+
         Axis yAxis = barModelNbrInscritValide.getAxis(AxisType.Y);
 //        yAxis.setLabel("Inscrits");
         yAxis.setMin(0);
         yAxis.setTickCount(1);
-      //  yAxis.setMax(200);
-      barModelNbrInscritValide.setExtender("skinBar");
-       
+        //  yAxis.setMax(200);
+        barModelNbrInscritValide.setExtender("skinBar");
+
     }
 
     public void loadListAdmis() {
@@ -210,7 +211,7 @@ public class AdminController implements Serializable {
             optionalAdmis = admisService.findByCne(event.getObject().getCne());
             if (optionalAdmis.isPresent() && (event.getObject().getId() != optionalAdmis.get().getId())) {
                 FacesContext.getCurrentInstance().
-                        addMessage("Erreur:", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Le CNE saisie existe déjà pour un autre admis!", null));
+                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erreur!", "Le CNE saisie existe déjà pour un autre admis"));
                 return;
             }
         }
@@ -219,7 +220,7 @@ public class AdminController implements Serializable {
             optionalAdmis = admisService.findByCin(event.getObject().getCin());
             if (optionalAdmis.isPresent() && (event.getObject().getId() != optionalAdmis.get().getId())) {
                 FacesContext.getCurrentInstance().
-                        addMessage("Erreur:", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Le CIN saisie existe déjà pour un autre admis!", null));
+                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"Erreur!" , "Le CIN saisie existe déjà pour un autre admis"));
                 return;
             }
         }
@@ -302,6 +303,7 @@ public class AdminController implements Serializable {
             FacesContext.getCurrentInstance().
                     addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "L'admis a été ajouté avec succée!", null));
             admisList = admisService.loadAll();
+            nbrAdmis++;
             cneAdmis = "";
             cinAdmis = "";
             nomAdmis = "";

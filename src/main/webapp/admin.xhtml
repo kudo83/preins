@@ -145,7 +145,7 @@
                 <div class="Container50 Responsive50">
                     <div class="ContainerIndent ui-fluid">
                         <h2 class="BigTopic">
-                            <i class="fa fa-line-chart Fs30 orange"/>   INSCRIT VALIDES PAR OPERATEUR
+                            <i class="fa fa-line-chart Fs30 orange"/>   INSCRIT VALID&#201;S PAR OPERATEUR
                         </h2>
                         <div class="Container100">
                             <div class="EmptyBox20"></div>
@@ -159,7 +159,7 @@
                 <div class="Container100 Responsive100">
                     <div class="ContainerIndent ui-fluid">
                         <h2 class="BigTopic">
-                            <i class="fa fa-users Fs30 green"/> INSCRITS VALIDES
+                            <i class="fa fa-users Fs30 green"/> INSCRITS VALID&#201;S
                         </h2>
 
                         <p:dataTable id="tableInscritValid" var="inscrit" value="#{inscritController.inscritsValid}" widgetVar="inscritsTable" draggableColumns="true"
@@ -214,12 +214,12 @@
                 <div class="Container100 Responsive100">
                     <div class="ContainerIndent ui-fluid">
                         <h2 class="BigTopic">
-                            <i class="fa fa-user-plus Fs30 red"/>  DERNIERS ADMIS AJOUTES
+                            <i class="fa fa-user-plus Fs30 red"/>  ADMIS AJOUT&#201;S
                         </h2>
 
                         <div class="EmptyBox20"></div>
                         <p:dataTable id="tableAdmis" var="admis" value="#{adminController.admisList}"  widgetVar="admisTable" draggableColumns="true" editable="false"
-                                     rows="5" paginator="true"   rowsPerPageTemplate="5,10,15" 
+                                     rows="10" paginator="true"   rowsPerPageTemplate="10,20,30" 
                                      paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                      rowKey="#{admis.cne}" rowIndexVar="rowIndex"
                                      emptyMessage="Pas d'inscrit pour cette recherche" filteredValue="#{adminController.filteredAdmisList}"
