@@ -100,6 +100,12 @@ public class InscritService implements Serializable {
     public Iterable<Inscrit> loadAllValid() {
         return inscritRepo.findAll(QInscrit.inscrit.isVALID.eq(Boolean.TRUE));
     }
+    
+    public long countInscritValidByOperator(String operator){
+        
+        return inscritRepo.count(QInscrit.inscrit.userValid.equalsIgnoreCase(operator));
+        
+    }
 
     public List<Inscrit> saveAll(List<Inscrit> inscrits) {
         return inscritRepo.saveAll(inscrits);

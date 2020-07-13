@@ -6,13 +6,13 @@ import ac.encg.preins.helper.CommonHelper;
 import ac.encg.preins.helper.UserHelper;
 import ac.encg.preins.nonPersistable.LoggedUser;
 import ac.encg.preins.service.AdmisService;
+import ac.encg.preins.service.InscritService;
 import ac.encg.preins.service.StatService;
 import ac.encg.preins.service.UserService;
 import java.io.IOException;
 import java.io.Serializable;
 
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -28,9 +28,12 @@ import jxl.Workbook;
 import jxl.read.biff.BiffException;
 import lombok.Getter;
 import lombok.Setter;
-import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.RowEditEvent;
+import org.primefaces.model.chart.Axis;
+import org.primefaces.model.chart.AxisType;
+import org.primefaces.model.chart.BarChartModel;
+import org.primefaces.model.chart.ChartSeries;
 import org.primefaces.model.file.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -53,6 +56,9 @@ public class AdminController implements Serializable {
 
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private InscritService inscritService;
 
     @Autowired
     private StatService statService;
@@ -61,6 +67,8 @@ public class AdminController implements Serializable {
 
     private int nombreDuplique = 0;
     private int nombreInsérer = 0;
+
+    private BarChartModel  barModelNbrInscritValide;
 
     private UploadedFile excelUpload;
 
@@ -158,6 +166,37 @@ public class AdminController implements Serializable {
         nbrInscrits = statService.countInscrits();
         nbrUsers = statService.countUsers();
         nbrInscritValid = statService.countInscritValid();
+    }
+
+    public void createBarChartModel() {
+        barModelNbrInscritValide = new BarChartModel();
+        
+        Iterable<User> operateurs = userService.findOperateurs();
+
+         ChartSeries insrits = new ChartSeries();
+        insrits.setLabel("Inscrits Validés");
+
+
+        for (User u : operateurs) {
+            insrits.set(u.getNom(),  inscritService.countInscritValidByOperator(u.getNom()));
+        }
+               
+        barModelNbrInscritValide.addSeries(insrits);
+        
+//        barModelNbrInscritValide.setTitle("Inscrits Validés par Opérateur");
+        barModelNbrInscritValide.setLegendPosition("ne");
+ 
+        Axis xAxis = barModelNbrInscritValide.getAxis(AxisType.X);
+//        xAxis.setLabel("Opérateurs");
+        
+ 
+        Axis yAxis = barModelNbrInscritValide.getAxis(AxisType.Y);
+//        yAxis.setLabel("Inscrits");
+        yAxis.setMin(0);
+        yAxis.setTickCount(1);
+      //  yAxis.setMax(200);
+      barModelNbrInscritValide.setExtender("skinBar");
+       
     }
 
     public void loadListAdmis() {

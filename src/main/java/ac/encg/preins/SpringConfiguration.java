@@ -41,6 +41,7 @@ public class SpringConfiguration {
         jpaProperties.put("hibernate.format_sql", "true");
         //  jpaProperties.put("generate-ddl", "true");
         jpaProperties.put("hibernate.use-new-id-generator-mappings", "false");
+        jpaProperties.put("hibernate.enable_lazy_load_no_trans", "true");
         entityManagerFactory.setJpaProperties(jpaProperties);
         entityManagerFactory.setPackagesToScan("ac.encg.preins.entity");
         entityManagerFactory.setPersistenceUnitName("entity");

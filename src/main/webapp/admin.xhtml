@@ -6,12 +6,84 @@
                 xmlns:sec="http://www.springframework.org/security/tags"
                 template="/WEB-INF/template.xhtml">
 
+    <ui:define name="head">
+        <script type="text/javascript">
+            function skinBar() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#71CC8D', '#33AFDE'];
+                this.cfg.seriesDefaults.barWidth = 20;
+                this.cfg.grid = {
+                    background: '#EDF3F6',
+                    borderColor: '#D9E3E8',
+                    gridLineColor: '#D9E3E8',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    rendererOptions: {
+                        textColor: '#778D9B'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    lineWidth: 1,
+                    renderer: $.jqplot.BarRenderer,
+                    markerOptions: {
+                        shadow: false,
+                        size: 7,
+                        style: 'circle'
+                    }
+                }
+            }
+            function skinChart() {
+                this.cfg.shadow = false;
+                this.cfg.seriesColors = ['#71CC8D', '#33AFDE', '#F7941E'];
+                this.cfg.grid = {
+                    background: '#EDF3F6',
+                    borderColor: '#D9E3E8',
+                    gridLineColor: '#D9E3E8',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    rendererOptions: {
+                        textColor: '#778D9B'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    markerOptions: {
+                        shadow: false
+                    }
+                }
+            }
+
+            function skinPie() {
+                this.cfg.seriesColors = ['#dae8ef', '#27aae1', '#33ccff', '#9fadb5'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#eaeaea',
+                    gridLineColor: '#e5ebf0',
+                    shadow: false,
+                    borderWidth: 0
+                };
+                this.cfg.seriesDefaults.shadow = false;
+            }
+        </script>
+        <style type="text/css">
+            .jqplot-target, .jqplot-axis {
+                color: #778D9B;
+            }
+        </style>
+    </ui:define>
+
+
     <ui:define name="content">
 
         <f:metadata>
             <f:viewAction  action="#{adminController.initStatistics()}"/>
             <f:viewAction  action="#{adminController.loadListAdmis()}"/>
             <f:viewAction  action="#{inscritController.loadListInscritValid()}"/>
+            <f:viewAction  action="#{adminController.createBarChartModel}"/>
         </f:metadata>
         <sec:authorize access="!isAuthenticated()">
             <meta http-equiv="refresh" content="0;url=login.xhtml" /> 
@@ -24,7 +96,7 @@
                 <div class="Container50 Responsive50">
                     <div class="ContainerIndent ui-fluid">
                         <h2 class="BigTopic">
-                            <i class="fa fa-line-chart Fs30 orange"/>   STATISTIQUES
+                            <i class="fa fa-tachometer Fs30 blue"/>   STATISTIQUES
                         </h2>
                         <div class="Container100">
                             <div class="EmptyBox20"></div>
@@ -33,7 +105,7 @@
                                     <div class="EmptyBox10"></div>
                                     <div class="Fs14 gray FontRalewayRegular">Utilisateurs</div>
                                     <div class="EmptyBox10"></div>
-                                    <div class="Fs30 blue FontRalewayLight"> #{adminController.nbrUsers}</div>
+                                    <div class="Fs30 orange FontRalewayLight"> <i class="fa fa-user Fs20"/>#{adminController.nbrUsers}</div>
                                     <div class="EmptyBox10"></div>
                                 </div>
                             </div>
@@ -42,7 +114,7 @@
                                     <div class="EmptyBox10"></div>
                                     <div class="Fs14 gray FontRalewayRegular">Admis</div>
                                     <div class="EmptyBox10"></div>
-                                    <div class="Fs30 orange FontRalewayLight"> #{adminController.nbrAdmis}</div>
+                                    <div class="Fs30 red FontRalewayLight"> <i class="fa fa-list-ol Fs20"/> #{adminController.nbrAdmis}</div>
                                     <div class="EmptyBox10"></div>
                                 </div>
                             </div>
@@ -51,7 +123,7 @@
                                     <div class="EmptyBox10"></div>
                                     <div class="Fs14 gray FontRalewayRegular">Inscrits</div>
                                     <div class="EmptyBox10"></div>
-                                    <div class="Fs30 blue FontRalewayLight"> #{adminController.nbrInscrits}</div>
+                                    <div class="Fs30 blue FontRalewayLight"><i class="fa fa-file-text-o Fs20"/>  #{adminController.nbrInscrits}</div>
                                     <div class="EmptyBox10"></div>
                                 </div>
                             </div>    
@@ -60,15 +132,86 @@
                                     <div class="EmptyBox10"></div>
                                     <div class="Fs14 gray FontRalewayRegular">Inscrits Validés</div>
                                     <div class="EmptyBox10"></div>
-                                    <div class="Fs30 green FontRalewayLight"> #{adminController.nbrInscritValid}</div>
+                                    <div class="Fs30 green FontRalewayLight animated pulse infinite boldLabel">  <i class="fa fa-check-square-o Fs20"/> #{adminController.nbrInscritValid}</div>
                                     <div class="EmptyBox10"></div>
                                 </div>
                             </div> 
                         </div>
 
                     </div>
+
                 </div>
+
                 <div class="Container50 Responsive50">
+                    <div class="ContainerIndent ui-fluid">
+                        <h2 class="BigTopic">
+                            <i class="fa fa-line-chart Fs30 orange"/>   INSCRIT VALIDES PAR OPERATEUR
+                        </h2>
+                        <div class="Container100">
+                            <div class="EmptyBox20"></div>
+                            <p:chart type="bar" model="#{adminController.barModelNbrInscritValide}" style="height:300px" />
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="EmptyBox30"></div>
+                <div class="Container100 Responsive100">
+                    <div class="ContainerIndent ui-fluid">
+                        <h2 class="BigTopic">
+                            <i class="fa fa-users Fs30 green"/> INSCRITS VALIDES
+                        </h2>
+
+                        <p:dataTable id="tableInscritValid" var="inscrit" value="#{inscritController.inscritsValid}" widgetVar="inscritsTable" draggableColumns="true"
+                                     rows="10" paginator="true"   rowsPerPageTemplate="10,20,30"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowKey="#{inscrit.cne}" rowIndexVar="rowIndex"
+                                     emptyMessage="Pas d'inscrits validés pour cette recherche" filteredValue="#{inscritController.filteredInscrits}"
+                                     sortBy="#{inscrit.dateValid}"
+                                     sortOrder="DESCENDING"
+                                     >
+
+                            <f:facet name="header">
+                                <p:outputPanel>
+                                    <h:outputText value="Recherche : " />
+                                    <p:inputText id="globalFilter" onkeyup="PF('inscritsTable').filter()" style="width:150px" placeholder="Mot clef"/>
+                                </p:outputPanel>
+
+                                <div id="expor" style="float:right; padding-top: 10px;">
+                                    <h:commandLink>
+                                        <p:graphicImage name="images/xls.png" library="spark-layout" width="40"/>
+                                        <p:dataExporter type="xls" target="tableInscritValid" fileName="Inscrits Valide" />
+                                    </h:commandLink>
+                                </div>
+                            </f:facet>
+
+                            <p:column headerText="NOM" filterBy="#{inscrit.nom}">
+                                <h:outputText value="#{inscrit.nom.toUpperCase()}" class="fontNum" />
+                            </p:column>
+
+                            <p:column headerText="PRENOM" filterBy="#{inscrit.prenom}">
+                                <h:outputText value="#{inscrit.prenom.toUpperCase()}" class="fontNum" />
+                            </p:column>
+                            <p:column headerText="CNE" filterBy="#{inscrit.cne}">
+                                <h:outputText value="#{inscrit.cne.toUpperCase()}" class="fontNum" />
+                            </p:column>
+                            <p:column headerText="CIN" filterBy="#{inscrit.cin}">
+                                <h:outputText value="#{inscrit.cin.toUpperCase()}" class="fontNum" />
+                            </p:column>
+                            <p:column headerText="OPERATEUR" filterBy="#{inscrit.userValid}">
+                                <h:outputText value="#{inscrit.userValid.toUpperCase()}" class="fontNum" />
+                            </p:column>
+                            <p:column headerText="DATE VALIDATION" filterBy="#{inscrit.dateValid}">
+                                <h:outputText value="#{inscrit.dateValid}" class="fontNum" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                </h:outputText>    
+                            </p:column>
+
+                        </p:dataTable>
+                    </div>
+                </div> 
+                <div class="EmptyBox30"></div>
+                <div class="Container100 Responsive100">
                     <div class="ContainerIndent ui-fluid">
                         <h2 class="BigTopic">
                             <i class="fa fa-user-plus Fs30 red"/>  DERNIERS ADMIS AJOUTES
@@ -89,7 +232,12 @@
                                     <p:inputText id="globalFilter" onkeyup="PF('admisTable').filter()" style="width:150px" placeholder="Mot clef"/>
 
                                 </p:outputPanel>
-
+                                <div id="expor" style="float:right; padding-top: 10px;">
+                                    <h:commandLink>
+                                        <p:graphicImage name="images/xls.png" library="spark-layout" width="40"/>
+                                        <p:dataExporter type="xls" target="tableAdmis" fileName="Admis" />
+                                    </h:commandLink>
+                                </div>
                             </f:facet>
 
                             <p:column headerText="NOM et PRENOM" sortBy="#{admis.nom}" filterBy="#{admis.nom}">
@@ -122,64 +270,8 @@
 
                         </p:dataTable>
 
-
                     </div>
                 </div>
-
-                <div class="Container100 Responsive100">
-                    <div class="ContainerIndent ui-fluid">
-                        <h2 class="BigTopic">
-                            <i class="fa fa-users Fs30 green"/> INSCRITS VALIDES
-                        </h2>
-
-                        <p:dataTable id="tableInscritValid" var="inscrit" value="#{inscritController.inscritsValid}" widgetVar="inscritsTable" draggableColumns="true"
-                                     rows="10" paginator="true"   rowsPerPageTemplate="10,20,30"
-                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                     rowKey="#{inscrit.cne}" rowIndexVar="rowIndex"
-                                     emptyMessage="Pas d'inscrits validés pour cette recherche" filteredValue="#{inscritController.filteredInscrits}"
-                                     sortBy="#{inscrit.dateValid}"
-                                     sortOrder="DESCENDING"
-                                     >
-
-                            <f:facet name="header">
-                                <p:outputPanel>
-                                    <h:outputText value="Recherche : " />
-                                    <p:inputText id="globalFilter" onkeyup="PF('inscritsTable').filter()" style="width:150px" placeholder="Mot clef"/>
-                                </p:outputPanel>
-
-                                <div id="expor" style="float:right; padding-top: 10px;">
-                                    <h:commandLink>
-                                        <p:graphicImage name="images/xls.png" library="spark-layout" width="40"/>
-                                        <p:dataExporter type="xls" target="tableInscritValid" fileName="inscrit" />
-                                    </h:commandLink>
-                                </div>
-                            </f:facet>
-
-                            <p:column headerText="NOM" filterBy="#{inscrit.nom}">
-                                <h:outputText value="#{inscrit.nom.toUpperCase()}" class="fontNum" />
-                            </p:column>
-
-                            <p:column headerText="PRENOM" filterBy="#{inscrit.prenom}">
-                                <h:outputText value="#{inscrit.prenom.toUpperCase()}" class="fontNum" />
-                            </p:column>
-                            <p:column headerText="CNE" filterBy="#{inscrit.cne}">
-                                <h:outputText value="#{inscrit.cne.toUpperCase()}" class="fontNum" />
-                            </p:column>
-                            <p:column headerText="CIN" filterBy="#{inscrit.cin}">
-                                <h:outputText value="#{inscrit.cin.toUpperCase()}" class="fontNum" />
-                            </p:column>
-                            <p:column headerText="OPERATEUR" filterBy="#{inscrit.userValid}">
-                                <h:outputText value="#{inscrit.userValid.toUpperCase()}" class="fontNum" />
-                            </p:column>
-                            <p:column headerText="DATE VALIDATION" filterBy="#{inscrit.dateValid}">
-                                <h:outputText value="#{inscrit.dateValid}" class="fontNum" >
-                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
-                                </h:outputText>    
-                            </p:column>
-
-                        </p:dataTable>
-                    </div>
-                </div> 
             </h:form>
         </div>
 

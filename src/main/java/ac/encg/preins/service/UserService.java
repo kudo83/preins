@@ -1,6 +1,7 @@
 package ac.encg.preins.service;
 
 import ac.encg.preins.entity.PasswordResetToken;
+import ac.encg.preins.entity.QUser;
 import ac.encg.preins.entity.Role;
 import ac.encg.preins.entity.User;
 import ac.encg.preins.entity.VerificationToken;
@@ -84,6 +85,11 @@ public class UserService {
     
     public void savePasswordResetToken(PasswordResetToken token){
         passwordTokenRepo.save(token);
+    }
+    
+    public Iterable<User> findOperateurs(){
+        Role roleOperateur = roleRepo.getOne(Long.valueOf(2));
+        return userRepo.findAll(QUser.user.roles.contains(roleOperateur));
     }
 
 }

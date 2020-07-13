@@ -62,6 +62,12 @@
                                     <h:outputText value="Recherche Globale : " />
                                     <p:inputText id="globalFilter" onkeyup="PF('admisTable').filter()" style="width:150px" placeholder="Mot clef"/>
                                 </p:outputPanel>
+                                  <div id="expor" style="float:right; padding-top: 10px;">
+                                        <h:commandLink>
+                                            <p:graphicImage name="images/xls.png" library="spark-layout" width="40"/>
+                                            <p:dataExporter type="xls" target="tableAdmis" fileName="Admis" />
+                                        </h:commandLink>
+                                    </div>
                             </f:facet>
 
                             <p:column headerText="CNE" sortBy="#{admis.cne}" filterBy="#{admis.cne}">

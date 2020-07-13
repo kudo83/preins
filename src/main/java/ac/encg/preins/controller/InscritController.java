@@ -150,13 +150,6 @@ public class InscritController implements Serializable {
 
         }
 
-        List<Inscrit> inscritList = inscritService.findByCneOrCin(inscrit.getCne(), inscrit.getCin());
-
-        if (inscrit.getId() == null && !inscritList.isEmpty()) {
-            FacesContext.getCurrentInstance().
-                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Un condidat est déjà inscrit avec ce Code Massar ou CIN! Veuillez contacter l'administration!", null));
-            return;
-        }
 
         User user;
         LoggedUser loggedUser = UserHelper.getLoggedUser(userService.getAuthentication());
@@ -185,6 +178,15 @@ public class InscritController implements Serializable {
             }
 
         }
+        
+        List<Inscrit> inscritList = inscritService.findByCneOrCin(inscrit.getCne(), inscrit.getCin());
+
+        if (inscrit.getId() == null && !inscritList.isEmpty()) {
+            FacesContext.getCurrentInstance().
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Un condidat est déjà inscrit avec ce Code Massar ou CIN! Veuillez contacter l'administration!", null));
+            return;
+        }
+        
         Date date = new java.util.Date();
         if (inscrit.getId() == null) {
             inscrit.setDateCreat(new Timestamp(date.getTime()));
