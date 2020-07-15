@@ -21,7 +21,6 @@ import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -30,6 +29,7 @@ import javax.servlet.ServletResponse;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 
@@ -40,7 +40,7 @@ import org.springframework.stereotype.Controller;
 @Controller
 @Getter
 @Setter
-@ViewScoped
+@Scope("session")
 @Named("accountController")
 public class AccountController implements Serializable {
 
@@ -169,6 +169,9 @@ public class AccountController implements Serializable {
 
         FacesContext.getCurrentInstance().responseComplete();
 
+    }
+    public void init(){
+        registeredUser = new User();
     }
 
 }

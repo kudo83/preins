@@ -2,7 +2,6 @@ package ac.encg.preins.controller;
 
 import ac.encg.preins.entity.Academie;
 import ac.encg.preins.entity.Admis;
-import ac.encg.preins.entity.Bac;
 import ac.encg.preins.entity.Etape;
 import ac.encg.preins.entity.SerieBac;
 import ac.encg.preins.entity.Inscrit;
@@ -30,7 +29,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.inject.Named;
-import javax.faces.view.ViewScoped;
 import javax.faces.context.FacesContext;
 
 import javax.servlet.http.Part;
@@ -57,7 +55,6 @@ import com.itextpdf.text.pdf.draw.VerticalPositionMark;
 import java.io.DataOutputStream;
 import java.net.URISyntaxException;
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Date;
 import javax.servlet.ServletContext;
@@ -68,6 +65,7 @@ import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.file.UploadedFile;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 /**
@@ -77,7 +75,7 @@ import org.springframework.stereotype.Controller;
 @Controller
 @Getter
 @Setter
-@ViewScoped
+@Scope("session")
 @Named("inscritController")
 public class InscritController implements Serializable {
 
@@ -91,6 +89,7 @@ public class InscritController implements Serializable {
 
     @Autowired
     private UserService userService;
+    
 
     //Local
     private String uploadFolder = "D:\\PreinsUploads\\";
@@ -167,7 +166,7 @@ public class InscritController implements Serializable {
             if (admis.getUser() == null) {
                 user.setAdmis(admis);
             } else {
-                if (user.getId() != admis.getUser().getId()) {
+                if (!user.getId().equals(admis.getUser().getId())) {
                     FacesContext.getCurrentInstance().
                             addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Un condidat est déjà inscrit avec ce Code Massar ou CIN! Veuillez contacter l'administration!", null));
                     return;

@@ -11,11 +11,11 @@ import java.io.Serializable;
 import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 /**
@@ -25,7 +25,7 @@ import org.springframework.stereotype.Controller;
 @Controller
 @Getter
 @Setter
-@ViewScoped
+@Scope("session")
 @Named("contactController")
 public class ContactController implements Serializable {
 

@@ -20,7 +20,6 @@ import java.util.Optional;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
-import javax.faces.view.ViewScoped;
 import jxl.Cell;
 import jxl.Sheet;
 import jxl.Workbook;
@@ -36,6 +35,7 @@ import org.primefaces.model.chart.BarChartModel;
 import org.primefaces.model.chart.ChartSeries;
 import org.primefaces.model.file.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 /**
@@ -45,7 +45,7 @@ import org.springframework.stereotype.Controller;
 @Controller
 @Getter
 @Setter
-@ViewScoped
+@Scope("session")
 @Named("adminController")
 public class AdminController implements Serializable {
 
