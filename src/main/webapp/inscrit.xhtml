@@ -28,7 +28,9 @@
                                 <p:button value="LIST INSCRITS" outcome="listInscrit.xhtml"  icon="fa fa-rotate-left Fs16 white"  />
                             </sec:authorize>  
                             <sec:authorize ifAnyGranted="ROLE_ADMIN, ROLE_USER">
-                                <p:commandButton value="ENREGISTER"  action="#{inscritController.save()}" update="@form"  icon="fa fa-save Fs16 white"  />
+                                <p:commandButton value="ENREGISTER"  action="#{inscritController.save()}" update="@form"  icon="fa fa-save Fs16 white" >
+                                    <p:confirm header="Confirmation" message="Veuillez vérifier que vous n'avez pas permuter le nom et le prénom! Voulez vous continuer?" icon="pi pi-exclamation-triangle" />
+                                </p:commandButton>  
                             </sec:authorize>                       
                             <sec:authorize ifAnyGranted="ROLE_ADMIN, ROLE_OPERATOR">
                                 <ui:fragment  rendered="#{inscritController.inscrit.VALID}"  >
@@ -78,7 +80,7 @@
                         </ui:fragment> 
 
                         <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;">
-                            <p:inputText placeholder="Code Massar" value="#{inscritController.inscrit.cne}" required="true" 
+                            <p:inputMask mask="a999999999" placeholder="Code Massar" value="#{inscritController.inscrit.cne}" required="true" 
                                          disabled="#{not(empty inscritController.inscrit.id)}"
                                          requiredMessage="Le champ Code Massar est obligatoire"/>
                             <p:inputText placeholder="CIN" value="#{inscritController.inscrit.cin}" required="true"
@@ -224,7 +226,9 @@
                             <p:button value="LISTE INSCRITS" outcome="listInscrit.xhtml"  icon="fa fa-rotate-left Fs16 white"  />
                         </sec:authorize>  
                         <sec:authorize ifAnyGranted="ROLE_ADMIN, ROLE_USER">
-                            <p:commandButton value="ENREGISTER"  action="#{inscritController.save()}" update="@form"  icon="fa fa-save Fs16 white"  />
+                            <p:commandButton value="ENREGISTER"  action="#{inscritController.save()}" update="@form"  icon="fa fa-save Fs16 white">
+                                <p:confirm header="Confirmation" message="Veuillez vérifier que vous n'avez pas permuter le nom et le prénom! Voulez vous continuer?" icon="pi pi-exclamation-triangle" />
+                            </p:commandButton>   
                         </sec:authorize>                       
                         <sec:authorize ifAnyGranted="ROLE_ADMIN, ROLE_OPERATOR">
                             <ui:fragment  rendered="#{inscritController.inscrit.VALID}"  >
@@ -251,7 +255,10 @@
 
 
                     </p:panelGrid>
-
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="Oui" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+                        <p:commandButton value="Non" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+                    </p:confirmDialog>  
                 </div>
                 <!--</div>-->
             </div>

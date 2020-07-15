@@ -183,7 +183,7 @@ public class SendMail {
                     + "Sinon, prière de confirmer votre adresse email en cliquant sur le lien ci-dessous:"
                     + "<br/>"
     //TODO Modifier l'adresse locale
-                    + "<a href='http://localhost:8080/preins/validation.xhtml?token="+ token
+                    + "<a href='http://myencg.uiz.ac.ma/preins/validation.xhtml?token="+ token
                     + "'>"
                     + "Lien de Confirmation</a>"
                     ;
@@ -255,7 +255,7 @@ public class SendMail {
                     + "Sinon, cliquez ici pour réinitialiser votre mot de passe:"
                     + "<br/>"
     //TODO Modifier l'adresse locale
-                    + "<a href='http://localhost:8080/preins/update-password.xhtml?token="+ token
+                    + "<a href='http://myencg.uiz.ac.ma/preins/update-password.xhtml?token="+ token
                     + "'>"
                     + "Mise à jours du mot de passe</a>"
                     ;

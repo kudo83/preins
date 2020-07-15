@@ -66,16 +66,17 @@ public class SpringConfiguration {
         HikariDataSource dataSource = new HikariDataSource();
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
 
-        //local
+      //  local
         dataSource.setJdbcUrl("jdbc:mysql://localhost:3310/preinsdb_prod?serverTimezone=UTC");
         dataSource.setUsername("root");
         dataSource.setPassword("tabit");
         dataSource.setConnectionTestQuery("show tables");
 
         //Server test
-//        dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/preinstest?serverTimezone=UTC&useUnicode=yes&characterEncoding=UTF-8");
+//        dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/preinsdb_prod?serverTimezone=UTC&useUnicode=yes&characterEncoding=UTF-8");
 //        dataSource.setUsername("root");
 //        dataSource.setPassword("ENCGdbuser@2019");
+       
         return dataSource;
 
     }

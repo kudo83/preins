@@ -94,11 +94,9 @@ public class InscritController implements Serializable {
 
     //Local
     private String uploadFolder = "D:\\PreinsUploads\\";
-
-    private String ReceipePdf = "D:\\ReceipePdf";
-
+//    private String ReceipePdf = "D:\\ReceipePdf";
     //Server
-    //  private String uploadFolder = "/opt/apache-tomcat-9.0.20/webapps/PreinsUploads/";
+ //   private String uploadFolder = "/opt/apache-tomcat-9.0.20/webapps/PreinsUploads/";
     private UploadedFile uploadedPhoto;
     //  private UploadedFile uploadedCin;
     private InputStream inputStreamPhoto;
@@ -150,7 +148,6 @@ public class InscritController implements Serializable {
 
         }
 
-
         User user;
         LoggedUser loggedUser = UserHelper.getLoggedUser(userService.getAuthentication());
         Optional<User> optional = userService.getUser(loggedUser.getUsername());
@@ -178,7 +175,7 @@ public class InscritController implements Serializable {
             }
 
         }
-        
+
         List<Inscrit> inscritList = inscritService.findByCneOrCin(inscrit.getCne(), inscrit.getCin());
 
         if (inscrit.getId() == null && !inscritList.isEmpty()) {
@@ -186,7 +183,7 @@ public class InscritController implements Serializable {
                     addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Un condidat est déjà inscrit avec ce Code Massar ou CIN! Veuillez contacter l'administration!", null));
             return;
         }
-        
+
         Date date = new java.util.Date();
         if (inscrit.getId() == null) {
             inscrit.setDateCreat(new Timestamp(date.getTime()));
