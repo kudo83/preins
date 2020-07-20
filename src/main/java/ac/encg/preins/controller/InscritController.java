@@ -143,7 +143,7 @@ public class InscritController implements Serializable {
             }
         } else {
             FacesContext.getCurrentInstance().
-                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Le champ Photo Personnelle est obligatoire", null));
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erreur!" , "Le champ Photo Personnelle est obligatoire"));
             return;
 
         }
@@ -294,6 +294,7 @@ public class InscritController implements Serializable {
                         inscrit = optionalIns.get();
                         byte[] contents = Files.readAllBytes(Paths.get(uploadFolder + inscrit.getPhotoFileName()));
                         photoContentsAsBase64 = Base64.getEncoder().encodeToString(contents);
+                         disabledField = true;
 
                     } catch (IOException ex) {
                         Logger.getLogger(InscritController.class

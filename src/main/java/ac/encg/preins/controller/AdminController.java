@@ -133,12 +133,12 @@ public class AdminController implements Serializable {
             if (nombreInsérer > 0) {
                 FacesContext.getCurrentInstance().
                         addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
-                                String.valueOf(nombreInsérer) + " admis insérés", null));
+                                "Info!", String.valueOf(nombreInsérer) + " admis insérés"));
             }
             if (nombreDuplique > 0) {
                 FacesContext.getCurrentInstance().
                         addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                                String.valueOf(nombreDuplique) + " dupliquations rejetés", null));
+                               "Erreur!",  String.valueOf(nombreDuplique) + " dupliquations rejetés"));
             }
 
             nombreInsérer = 0;

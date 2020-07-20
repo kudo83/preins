@@ -16,9 +16,8 @@
             <meta http-equiv="refresh" content="0;url=login.xhtml" /> 
         </sec:authorize>
         <h:form id="inscritForm" enctype="multipart/form-data">
+            <p:focus context="panelGridIns" />
 
-
-            <p:focus context="inscritForm" />
             <sec:authorize ifAnyGranted="ROLE_ADMIN, ROLE_USER">
                 <div class="layout-portlets-box ui-fluid" >
                     <!--<div class="Container50 Responsive50 ">-->
@@ -79,16 +78,16 @@
                             </div>
                         </ui:fragment> 
 
-                        <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;">
+                        <p:panelGrid id = "panelGridIns" columns="2" layout="grid" style="border:0px !important; background:none;">
                             <p:inputMask  mask="a999999999" placeholder="Code Massar" value="#{inscritController.inscrit.cne}" required="true" 
-                                         disabled="#{inscritController.disabledField}"
-                                         requiredMessage="Le champ Code Massar est obligatoire"/>
+                                          disabled="#{inscritController.disabledField}"
+                                          requiredMessage="Le champ Code Massar est obligatoire"/>
                             <p:inputText placeholder="CIN" value="#{inscritController.inscrit.cin}" required="true"
                                          disabled="#{inscritController.disabledField}"
                                          requiredMessage="Le champ CIN est obligatoire"/>
                             <p:inputText placeholder="Nom" value="#{inscritController.inscrit.nom}" required="true" requiredMessage="Le champ Nom est obligatoire"/>
                             <p:inputText placeholder="Prénom" value="#{inscritController.inscrit.prenom}" required="true" requiredMessage="Le champ Prénom est obligatoire"/>
-                            <p:inputText placeholder="النسب"  value="#{inscritController.inscrit.nomAr}" dir="rtl" required="true" requiredMessage="Le champ النسب est obligatoire"/>
+                            <p:inputText placeholder="النسب"  value="#{inscritController.inscrit.nomAr}" dir="rtl" required="true" requiredMessage="Le champ النسب est obligatoire" />
                             <p:inputText placeholder="الاسم"  value="#{inscritController.inscrit.prenomAr}"  dir="rtl" required="true" requiredMessage="Le champ الاسم est obligatoire"/>
 
                             <p:selectOneMenu placeholder="SEX" value="#{inscritController.inscrit.sex}" required="true" requiredMessage="Le champ SEX est obligatoire">
@@ -214,7 +213,7 @@
                             </p:selectOneMenu>
                             <p:selectBooleanCheckbox value="#{inscritController.inscrit.declaration}" itemLabel="J’atteste sur mon honneur que les informations fournies sont complètes, 
                                                      authentiques et exactes et que je suis conscient que toute fausse déclaration peut entraîner le rejet de mon inscription."
-                                                     
+
                                                      requiredMessage="Le champ déclaration sur honneur est obligatoir!">
                                 <f:validator validatorId="requiredCheckboxValidator"  />
                             </p:selectBooleanCheckbox>    
@@ -270,7 +269,6 @@
                 </div>
                 <!--</div>-->
             </div>
-
         </h:form> 
 
     </ui:define>

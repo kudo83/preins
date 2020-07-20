@@ -48,7 +48,7 @@ public class ContactController implements Serializable {
         cne = "";
         text = "";
         FacesContext.getCurrentInstance().
-                addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Votre réclamation à été envoyé avec succes!", null));
+                addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info!", "Votre réclamation à été envoyé avec succes!"));
     }
 
 }

@@ -61,7 +61,7 @@ public class AccountController implements Serializable {
         Optional<User> optional = userService.getUser(registeredUser.getUsername());
         if (optional.isPresent()) {
             FacesContext.getCurrentInstance().
-                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Un compte avec le même email existe déjà!", null));
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erreur!", "Un compte avec le même email existe déjà!"));
             logger.info("Un compte avec le même email existe déjà: " + registeredUser.getUsername());
             return;
         } else {
@@ -79,7 +79,7 @@ public class AccountController implements Serializable {
             System.out.println("Success");
             registeredUser = new User();
             FacesContext.getCurrentInstance().
-                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Un email de vérification a été envoyé à votre adresse email!", null));
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info!", "Un email de vérification a été envoyé à votre adresse email!"));
 
         }
 
@@ -89,17 +89,17 @@ public class AccountController implements Serializable {
         VerificationToken verificationToken = userService.getVerificationToken(submittedToken);
         if (verificationToken == null) {
             FacesContext.getCurrentInstance().
-                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Le code d'activation est invalide!", null));
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erreur!", "Le code d'activation est invalide!"));
         } else {
             User user = verificationToken.getUser();
             if (user.isEnabled()) {
                 FacesContext.getCurrentInstance().
-                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Vous avez déjà activé votre compte !", null));
+                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Avertissement!", "Vous avez déjà activé votre compte !"));
             } else {
                 user.setEnabled(true);
                 userService.save(user);
                 FacesContext.getCurrentInstance().
-                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Votre compte est activé avec Succès", null));
+                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"Info!" , "Votre compte est activé avec Succès"));
             }
         }
     }
@@ -109,7 +109,7 @@ public class AccountController implements Serializable {
         Optional<User> optional = userService.getUser(registeredUser.getUsername());
         if (!optional.isPresent()) {
             FacesContext.getCurrentInstance().
-                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cet Email ne coresspond à aucun utilisateur inscrit!", null));
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"Erreur!" , "Cet Email ne coresspond à aucun utilisateur inscrit!"));
             return;
         } else {
             User user = optional.get();
@@ -117,7 +117,7 @@ public class AccountController implements Serializable {
             userService.createPasswordResetTokenForUser(user, token);
             SendMail.sendPasswordUpdateMail(user, token);
             FacesContext.getCurrentInstance().
-                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Veuillez consulter votre boite email!", null));
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info!", "Veuillez consulter votre boite email!"));
 
         }
 
@@ -128,7 +128,7 @@ public class AccountController implements Serializable {
         PasswordResetToken passwordToken = userService.getPasswordResetToken(submittedToken);
         if (passwordToken == null) {
             FacesContext.getCurrentInstance().
-                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Un erreur interne s'est produit. Veuillez réessayer!", null));
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Avertissement!", "Un erreur interne s'est produit. Veuillez réessayer!"));
             return;
         } else {
 //            User user = optional.get();
@@ -139,7 +139,7 @@ public class AccountController implements Serializable {
             userService.savePasswordResetToken(passwordToken);
             userService.save(passwordToken.getUser());
             FacesContext.getCurrentInstance().
-                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Votre mot de passe a été mis à jours. Veuillez vous connecter!", null));
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info!", "Votre mot de passe a été mis à jours. Veuillez vous connecter!"));
             FacesContext.getCurrentInstance().getExternalContext().redirect("login.xhtml");
         }
     }
@@ -149,7 +149,7 @@ public class AccountController implements Serializable {
         PasswordResetToken passwordToken = userService.getPasswordResetToken(submittedToken);
         if (passwordToken == null || passwordToken.isUsed()) {
             FacesContext.getCurrentInstance().
-                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Token invalide!", null));
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erreur!", "Token invalide!"));
 
             FacesContext.getCurrentInstance().getExternalContext().redirect("login.xhtml");
         } else {
