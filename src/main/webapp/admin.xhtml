@@ -68,6 +68,15 @@
                 };
                 this.cfg.seriesDefaults.shadow = false;
             }
+
+            function chartExtender() {
+                this.cfg.axes.xaxis.tickOptions.showGridline = true;
+                this.cfg.axes.yaxis.tickOptions.showGridline = true;
+            }
+            function tooltipContentEditor(str, seriesIndex, pointIndex, plot) {
+               // return plot.axes.xaxis.ticks[pointIndex] + ", " + plot.data[seriesIndex][pointIndex];
+                return plot.data[seriesIndex][pointIndex];
+            }
         </script>
         <style type="text/css">
             .jqplot-target, .jqplot-axis {

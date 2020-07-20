@@ -138,7 +138,7 @@ public class AdminController implements Serializable {
             if (nombreDuplique > 0) {
                 FacesContext.getCurrentInstance().
                         addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                               "Erreur!",  String.valueOf(nombreDuplique) + " dupliquations rejetés"));
+                                "Erreur!", String.valueOf(nombreDuplique) + " dupliquations rejetés"));
             }
 
             nombreInsérer = 0;
@@ -175,7 +175,8 @@ public class AdminController implements Serializable {
         barModelNbrInscritValide = new BarChartModel();
 
         Iterable<User> operateurs = userService.findOperateurs();
-
+        barModelNbrInscritValide.setExtender("chartExtender");
+        barModelNbrInscritValide.setDatatipEditor("tooltipContentEditor");
         ChartSeries insrits = new ChartSeries();
         insrits.setLabel("Inscrits Validés");
 
@@ -194,7 +195,7 @@ public class AdminController implements Serializable {
         Axis yAxis = barModelNbrInscritValide.getAxis(AxisType.Y);
 //        yAxis.setLabel("Inscrits");
         yAxis.setMin(0);
-        yAxis.setTickCount(1);
+        yAxis.setTickCount(5);
         //  yAxis.setMax(200);
         barModelNbrInscritValide.setExtender("skinBar");
 
@@ -220,7 +221,7 @@ public class AdminController implements Serializable {
             optionalAdmis = admisService.findByCin(event.getObject().getCin());
             if (optionalAdmis.isPresent() && (event.getObject().getId() != optionalAdmis.get().getId())) {
                 FacesContext.getCurrentInstance().
-                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"Erreur!" , "Le CIN saisie existe déjà pour un autre admis"));
+                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erreur!", "Le CIN saisie existe déjà pour un autre admis"));
                 return;
             }
         }
