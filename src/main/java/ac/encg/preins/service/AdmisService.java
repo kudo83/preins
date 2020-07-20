@@ -3,6 +3,7 @@ package ac.encg.preins.service;
 import ac.encg.preins.entity.Admis;
 import ac.encg.preins.repository.AdmisRepository;
 import ac.encg.preins.predicate.AdmisPredicate;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ import org.springframework.stereotype.Service;
  * @author kudo
  */
 @Service
-public class AdmisService {
+public class AdmisService implements Serializable {
 
     @Autowired
     private AdmisRepository admisRepo;
@@ -39,9 +40,9 @@ public class AdmisService {
     }
     
 
-    public Optional<Admis> findByCneOrCin(String cne, String cin) {
+    public Iterable<Admis> findByCneOrCin(String cne, String cin) {
 
-        return  admisRepo.findOne(AdmisPredicate.existCneOrCin(cne, cin));
+        return  admisRepo.findAll(AdmisPredicate.existCneOrCin(cne, cin));
     }
     
     public Optional<Admis> findByCne(String cne) {

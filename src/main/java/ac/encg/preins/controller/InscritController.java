@@ -89,17 +89,18 @@ public class InscritController implements Serializable {
 
     @Autowired
     private UserService userService;
-    
 
     //Local
     private String uploadFolder = "D:\\PreinsUploads\\";
 //    private String ReceipePdf = "D:\\ReceipePdf";
     //Server
- //   private String uploadFolder = "/opt/apache-tomcat-9.0.20/webapps/PreinsUploads/";
+//    private String uploadFolder = "/opt/apache-tomcat-9.0.20/webapps/PreinsUploads/";
     private UploadedFile uploadedPhoto;
     //  private UploadedFile uploadedCin;
     private InputStream inputStreamPhoto;
     private String photoContentsAsBase64;
+
+    private boolean disabledField;
 
     private Inscrit inscrit = new Inscrit();
     private List<Inscrit> inscrits = new ArrayList<>();
@@ -146,29 +147,28 @@ public class InscritController implements Serializable {
             return;
 
         }
-
-        User user;
-        LoggedUser loggedUser = UserHelper.getLoggedUser(userService.getAuthentication());
-        Optional<User> optional = userService.getUser(loggedUser.getUsername());
-        if (!optional.isPresent()) {
-            FacesContext.getCurrentInstance().
-                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "L'opération a rencontré un problème interne. Si le problème persiste veuillez contacter l'admin!", null));
-            return;
+        Iterable<Admis> admisIt = admisService.findByCneOrCin(inscrit.getCne(), inscrit.getCin());
+        int counter = 0;
+        for (Admis i : admisIt) {
+            counter++;
         }
-        user = optional.get();
-        Optional<Admis> optionalAdmis = admisService.findByCneOrCin(inscrit.getCne(), inscrit.getCin());
-        if (!optionalAdmis.isPresent()) {
+        if (counter > 1) {
             FacesContext.getCurrentInstance().
-                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Vous ne figurez pas sur la liste des Admis! Veuillez contacter l'administration!", null));
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erreur", "Le code massa saisie et le CIN correspendent à différent admis. Veuillez bien vérifier votre saisie et contacter l'administration SI vos donnée sont correctes!"));
             return;
-        } else {
-            Admis admis = optionalAdmis.get();
+        } else if (counter == 0) {
+            FacesContext.getCurrentInstance().
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erreur!", "Vous ne figurez pas sur la liste des Admis! Veuillez contacter l'administration!"));
+            return;
+        } else if (counter == 1) {
+
+            Admis admis = admisIt.iterator().next();
             if (admis.getUser() == null) {
-                user.setAdmis(admis);
+                connectedUser.setAdmis(admis);
             } else {
-                if (!user.getId().equals(admis.getUser().getId())) {
+                if (!connectedUser.getId().equals(admis.getUser().getId())) {
                     FacesContext.getCurrentInstance().
-                            addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Un condidat est déjà inscrit avec ce Code Massar ou CIN! Veuillez contacter l'administration!", null));
+                            addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erreur!", "Un condidat est déjà inscrit avec ce Code Massar ou CIN! Veuillez contacter l'administration!"));
                     return;
                 }
             }
@@ -179,26 +179,30 @@ public class InscritController implements Serializable {
 
         if (inscrit.getId() == null && !inscritList.isEmpty()) {
             FacesContext.getCurrentInstance().
-                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Un condidat est déjà inscrit avec ce Code Massar ou CIN! Veuillez contacter l'administration!", null));
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erreur!", "Un condidat est déjà inscrit avec ce Code Massar ou CIN! Veuillez contacter l'administration!"));
             return;
         }
 
         Date date = new java.util.Date();
         if (inscrit.getId() == null) {
             inscrit.setDateCreat(new Timestamp(date.getTime()));
-            inscritService.save(inscrit);
-            user.setInscrit(inscrit);
-            user.setNom(inscrit.getNom() + " " + inscrit.getPrenom());
-            userService.save(user);
-            SendMail.sendInscriptionConfirmationMail(user.getUsername(), inscrit.getId());
+            //    inscritService.save(inscrit);
+            connectedUser.setInscrit(inscrit);
+            connectedUser.setNom(inscrit.getNom() + " " + inscrit.getPrenom());
+            userService.save(connectedUser);
+            SendMail.sendInscriptionConfirmationMail(connectedUser.getUsername(), inscrit.getId());
+            disabledField = true;
+            loadInscrit();
         } else {
             inscrit.setDateModif(new Timestamp(date.getTime()));
             inscrit.setUserModif(connectedUser.getNom());
-            inscritService.save(inscrit);
+            //       inscritService.save(inscrit);
+            connectedUser.setInscrit(inscrit);
+            userService.save(connectedUser);
         }
-
         FacesContext.getCurrentInstance().
-                addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Votre Inscription a été enregistré avec succès!", null));
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info!", "Votre Inscription a été enregistré avec succès!"));
+
     }
 
     public void loadLists() {
@@ -269,6 +273,7 @@ public class InscritController implements Serializable {
 
                         byte[] contents = Files.readAllBytes(Paths.get(uploadFolder + inscrit.getPhotoFileName()));
                         photoContentsAsBase64 = Base64.getEncoder().encodeToString(contents);
+                        disabledField = true;
 
                     } catch (IOException ex) {
                         Logger.getLogger(InscritController.class
@@ -278,6 +283,7 @@ public class InscritController implements Serializable {
                 } else {
                     inscrit = new Inscrit();
                     photoContentsAsBase64 = null;
+                    disabledField = false;
                 }
             }
         } else {
@@ -309,7 +315,7 @@ public class InscritController implements Serializable {
 
         inscritService.save(inscrit);
         FacesContext.getCurrentInstance().
-                addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "L'inscription à été Validée avec succès!", null));
+                addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info!", "L'inscription à été Validée avec succès!"));
         //   FacesContext.getCurrentInstance().getExternalContext().redirect("inscritList.xhtml");
 
     }
@@ -322,7 +328,7 @@ public class InscritController implements Serializable {
         inscritService.save(inscrit);
 
         FacesContext.getCurrentInstance().
-                addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "L'inscription à été invalidée avec succès!", null));
+                addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "L'inscription à été invalidée avec succès!"));
         //  FacesContext.getCurrentInstance().getExternalContext().redirect("inscritList.xhtml");
 
     }
@@ -510,7 +516,7 @@ public class InscritController implements Serializable {
                 connectedUser = optional.get();
             } else {
                 FacesContext.getCurrentInstance().
-                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Veuillez vous reconnecter!", null));
+                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erreur!", "Veuillez vous reconnecter!"));
                 FacesContext.getCurrentInstance().getExternalContext().redirect("login.xhtml");
             }
 

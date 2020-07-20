@@ -301,7 +301,7 @@ public class AdminController implements Serializable {
             newAdmis.setUserCreat(connectedUser.getNom());
             admisService.save(newAdmis);
             FacesContext.getCurrentInstance().
-                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "L'admis a été ajouté avec succée!", null));
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info!", "L'admis a été ajouté avec succée!"));
             admisList = admisService.loadAll();
             nbrAdmis++;
             cneAdmis = "";
@@ -319,7 +319,7 @@ public class AdminController implements Serializable {
                 connectedUser = optional.get();
             } else {
                 FacesContext.getCurrentInstance().
-                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Veuillez vous reconnecter!", null));
+                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erreur!", "Veuillez vous reconnecter!"));
                 FacesContext.getCurrentInstance().getExternalContext().redirect("login.xhtml");
             }
 

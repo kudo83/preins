@@ -27,9 +27,9 @@
                             <sec:authorize ifAnyGranted="ROLE_ADMIN">
                                 <p:button value="LIST INSCRITS" outcome="listInscrit.xhtml"  icon="fa fa-rotate-left Fs16 white"  />
                             </sec:authorize>  
-                            <sec:authorize ifAnyGranted="ROLE_ADMIN, ROLE_USER">
-                                <p:commandButton value="ENREGISTER"  action="#{inscritController.save()}" update="@form"  icon="fa fa-save Fs16 white" >
-                                    <p:confirm header="Confirmation" message="Veuillez vérifier que vous n'avez pas permuter le nom et le prénom! Voulez vous continuer?" icon="pi pi-exclamation-triangle" />
+                            <sec:authorize ifAnyGranted="ROLE_USER">
+                                <p:commandButton value="ENREGISTER"  action="#{inscritController.save()}" update="@form"  icon="fa fa-save Fs16 white">
+                                    <p:confirm header="Confirmation" message="Veuillez vérifier que vous n'avez pas permuter le nom et le prénom! Voulez vous continuer?" icon="pi pi-exclamation-triangle"/>
                                 </p:commandButton>  
                             </sec:authorize>                       
                             <sec:authorize ifAnyGranted="ROLE_ADMIN, ROLE_OPERATOR">
@@ -38,7 +38,7 @@
                                 </ui:fragment>
                             </sec:authorize> 
                             <sec:authorize ifAnyGranted="ROLE_USER">
-                                <ui:fragment  rendered="#{inscritController.inscrit.id != null}"  >
+                                <ui:fragment  rendered="#{inscritController.disabledField}"  >
                                     <p:commandButton value="RECU de PRE-INSCRITION"  action="#{inscritController.createReceipeForUser(request, response)}" update="messages, validationButton"  icon="fa fa-file-pdf-o Fs16 white" class="OrangeButton" ajax="false" />
                                 </ui:fragment>
                             </sec:authorize>   
@@ -72,7 +72,7 @@
                         <h2 class="BigTopic">
                             INFORMATIONS ETUDIANT
                         </h2>
-                        <ui:fragment  rendered="#{inscritController.inscrit.id == null}"  >
+                        <ui:fragment  rendered="#{!inscritController.disabledField}"  >
 
                             <div class="ui-g-12 ui-md-3" style="width: 100%;">
                                 <p:staticMessage severity="warn" summary="Attention!" detail="Le code massar et le CIN ne peuvent plus être modifier après enregistrement!" />
@@ -80,11 +80,11 @@
                         </ui:fragment> 
 
                         <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;">
-                            <p:inputMask mask="a999999999" placeholder="Code Massar" value="#{inscritController.inscrit.cne}" required="true" 
-                                         disabled="#{not(empty inscritController.inscrit.id)}"
+                            <p:inputMask  mask="a999999999" placeholder="Code Massar" value="#{inscritController.inscrit.cne}" required="true" 
+                                         disabled="#{inscritController.disabledField}"
                                          requiredMessage="Le champ Code Massar est obligatoire"/>
                             <p:inputText placeholder="CIN" value="#{inscritController.inscrit.cin}" required="true"
-                                         disabled="#{not(empty inscritController.inscrit.id)}"
+                                         disabled="#{inscritController.disabledField}"
                                          requiredMessage="Le champ CIN est obligatoire"/>
                             <p:inputText placeholder="Nom" value="#{inscritController.inscrit.nom}" required="true" requiredMessage="Le champ Nom est obligatoire"/>
                             <p:inputText placeholder="Prénom" value="#{inscritController.inscrit.prenom}" required="true" requiredMessage="Le champ Prénom est obligatoire"/>
@@ -207,10 +207,18 @@
                         <h2 class="BigTopic">
                             NIVEAU D'INSCRIPTION
                         </h2>
-                        <p:selectOneMenu placeholder="NIVEAU" value="#{inscritController.inscrit.etape.cod}" required="true" requiredMessage="Le champ Niveau d'inscription est obligatoire">
-                            <f:selectItem itemLabel="Selectionner Niveau ..." itemValue="" noSelectionOption="true" />
-                            <f:selectItems value="#{inscritController.etapes}" var="etape" itemLabel="#{etape.lib}" itemValue="#{etape.cod}"/>
-                        </p:selectOneMenu>
+                        <p:panelGrid columns="1" layout="grid" style="border:0px !important; background:none;" styleClass="ui-panelgrid ui-widget ui-panelgrid-blank"   >
+                            <p:selectOneMenu placeholder="NIVEAU" value="#{inscritController.inscrit.etape.cod}" required="true" requiredMessage="Le champ Niveau d'inscription est obligatoire">
+                                <f:selectItem itemLabel="Selectionner Niveau ..." itemValue="" noSelectionOption="true" />
+                                <f:selectItems value="#{inscritController.etapes}" var="etape" itemLabel="#{etape.lib}" itemValue="#{etape.cod}"/>
+                            </p:selectOneMenu>
+                            <p:selectBooleanCheckbox value="#{inscritController.inscrit.declaration}" itemLabel="J’atteste sur mon honneur que les informations fournies sont complètes, 
+                                                     authentiques et exactes et que je suis conscient que toute fausse déclaration peut entraîner le rejet de mon inscription."
+                                                     
+                                                     requiredMessage="Le champ déclaration sur honneur est obligatoir!">
+                                <f:validator validatorId="requiredCheckboxValidator"  />
+                            </p:selectBooleanCheckbox>    
+                        </p:panelGrid>
 
 
                     </div>
@@ -225,7 +233,7 @@
                         <sec:authorize ifAnyGranted="ROLE_ADMIN, ROLE_OPERATOR">
                             <p:button value="LISTE INSCRITS" outcome="listInscrit.xhtml"  icon="fa fa-rotate-left Fs16 white"  />
                         </sec:authorize>  
-                        <sec:authorize ifAnyGranted="ROLE_ADMIN, ROLE_USER">
+                        <sec:authorize ifAnyGranted="ROLE_USER">
                             <p:commandButton value="ENREGISTER"  action="#{inscritController.save()}" update="@form"  icon="fa fa-save Fs16 white">
                                 <p:confirm header="Confirmation" message="Veuillez vérifier que vous n'avez pas permuter le nom et le prénom! Voulez vous continuer?" icon="pi pi-exclamation-triangle" />
                             </p:commandButton>   

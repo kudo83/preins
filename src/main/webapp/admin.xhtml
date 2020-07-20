@@ -84,6 +84,7 @@
             <f:viewAction  action="#{adminController.loadListAdmis()}"/>
             <f:viewAction  action="#{inscritController.loadListInscritValid()}"/>
             <f:viewAction  action="#{adminController.createBarChartModel}"/>
+            <f:viewAction  action="#{adminController.loadConnectedUser()}"/>
         </f:metadata>
         <sec:authorize access="!isAuthenticated()">
             <meta http-equiv="refresh" content="0;url=login.xhtml" /> 

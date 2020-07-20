@@ -15,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ac.encg.preins.repository.VerificationTokenRepository;
+import java.io.Serializable;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -26,7 +27,7 @@ import ac.encg.preins.repository.VerificationTokenRepository;
  * @author kudo
  */
 @Service
-public class UserService {
+public class UserService implements Serializable{
 
     @Autowired
     private UserRepository userRepo;

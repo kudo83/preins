@@ -103,6 +103,9 @@ public class Inscrit implements Serializable {
 
     @Column(name = "COD_TPE")
     private byte codeTpe;
+    
+    @Column(name = "DECLARATION")
+    private boolean declaration;
 
     @OneToOne(mappedBy = "inscrit")
     private User user;

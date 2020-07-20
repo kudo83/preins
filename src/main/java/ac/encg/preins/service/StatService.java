@@ -4,6 +4,7 @@ import ac.encg.preins.entity.QInscrit;
 import ac.encg.preins.repository.AdmisRepository;
 import ac.encg.preins.repository.InscritRepository;
 import ac.encg.preins.repository.UserRepository;
+import java.io.Serializable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Service;
  * @author Aissam
  */
 @Service
-public class StatService {
+public class StatService implements Serializable{
 
     @Autowired
     private AdmisRepository admisRepo;

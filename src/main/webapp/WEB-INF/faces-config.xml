@@ -44,5 +44,9 @@
             ac.encg.preins.MultiPageMessagesSupport
         </phase-listener>	
     </lifecycle>
+    <validator>
+        <validator-id>requiredCheckboxValidator</validator-id>
+        <validator-class>ac.encg.preins.utility.RequiredCheckboxValidator</validator-class>
+    </validator>
     
 </faces-config>
