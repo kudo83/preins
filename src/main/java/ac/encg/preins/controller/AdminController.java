@@ -186,17 +186,13 @@ public class AdminController implements Serializable {
 
         barModelNbrInscritValide.addSeries(insrits);
 
-//        barModelNbrInscritValide.setTitle("Inscrits Validés par Opérateur");
         barModelNbrInscritValide.setLegendPosition("ne");
 
         Axis xAxis = barModelNbrInscritValide.getAxis(AxisType.X);
-//        xAxis.setLabel("Opérateurs");
 
         Axis yAxis = barModelNbrInscritValide.getAxis(AxisType.Y);
-//        yAxis.setLabel("Inscrits");
         yAxis.setMin(0);
-        yAxis.setTickCount(5);
-        //  yAxis.setMax(200);
+
         barModelNbrInscritValide.setExtender("skinBar");
 
     }
@@ -225,50 +221,12 @@ public class AdminController implements Serializable {
                 return;
             }
         }
-
-//        Admis admis = event.getObject();
-//        admis.setCne(event.getObject().getCne());
-//        admis.setCin(event.getObject().getCin());
-//        admis.setNom(event.getObject().getNom());
-//        admis.setDateModif(new Date(System.currentTimeMillis()));
-//        admis.setUserModif(connectedUser);
-//        admisService.save(admis);
-//        FacesContext.getCurrentInstance().
-//                addMessage("Info:", new FacesMessage(FacesMessage.SEVERITY_INFO, "L'admis a été ajouté avec succée!", null));
-//        admisList = admisService.loadAll();
-//        cneAdmis = "";
-//        cinAdmis = "";
-//        nomAdmis = "";
         admisService.saveAdmisList(admisList);
         FacesMessage msg = new FacesMessage("Admis modifié", event.getObject().getNom());
         FacesContext.getCurrentInstance().addMessage(null, msg);
 
     }
 
-//    public void validCne(RowEditEvent<Admis> event) {
-//       if (!CommonHelper.isNullOrEmpty(event.getObject().getCne())) {
-//           Optional<Admis> optionalAdmis = admisService.findByCne(event.getObject().getCne());
-//            if (optionalAdmis.isPresent() && (event.getObject().getId() != optionalAdmis.get().getId())) {
-//                FacesContext.getCurrentInstance().
-//                        addMessage("Erreur:", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Le CNE saisie existe déjà pour un autre admis!", null));
-//            }
-//        }
-//    }
-//    
-//     public void onCellEdit(CellEditEvent event) {
-//        Object oldValue = event.getOldValue();
-//        Object newValue = event.getNewValue();
-//         
-//        if(newValue != null && !newValue.equals(oldValue)) {
-//            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cell Changed", "Old: " + oldValue + ", New:" + newValue);
-//            FacesContext.getCurrentInstance().addMessage(null, msg);
-//        }
-//    }
-//
-//    public void modifCancel(RowEditEvent<Admis> event) {
-//        FacesMessage msg = new FacesMessage("Modification annulée", event.getObject().getNom());
-//        FacesContext.getCurrentInstance().addMessage(null, msg);
-//    }
     public void ajouterAdmis() throws IOException {
         boolean noteValid = false;
         if (CommonHelper.isNullOrEmpty(nomAdmis)) {

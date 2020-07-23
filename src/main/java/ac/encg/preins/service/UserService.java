@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ac.encg.preins.repository.VerificationTokenRepository;
 import java.io.Serializable;
+import org.springframework.transaction.annotation.Transactional;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -58,8 +59,8 @@ public class UserService implements Serializable{
         return userRepo.findByUsername(email);
     }
 
-    public void save(User user) {
-        userRepo.save(user);
+    public User save(User user) {
+        return userRepo.save(user);
     }
 
     public void createVerificationToken(User user, String token) {
@@ -88,6 +89,7 @@ public class UserService implements Serializable{
         passwordTokenRepo.save(token);
     }
     
+    @Transactional
     public Iterable<User> findOperateurs(){
         Role roleOperateur = roleRepo.getOne(Long.valueOf(2));
         return userRepo.findAll(QUser.user.roles.contains(roleOperateur));

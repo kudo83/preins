@@ -57,6 +57,7 @@ import java.net.URISyntaxException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.Date;
+import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -91,10 +92,13 @@ public class InscritController implements Serializable {
     private UserService userService;
 
     //Local
-    private String uploadFolder = "D:\\PreinsUploads\\";
-//    private String ReceipePdf = "D:\\ReceipePdf";
+//    private String uploadFolder = "D:\\PreinsUploads\\";
+
+
     //Server
-//    private String uploadFolder = "/opt/apache-tomcat-9.0.20/webapps/PreinsUploads/";
+    private String uploadFolder = "/opt/apache-tomcat-9.0.20/webapps/PreinsUploads/";
+
+
     private UploadedFile uploadedPhoto;
     //  private UploadedFile uploadedCin;
     private InputStream inputStreamPhoto;
@@ -136,17 +140,6 @@ public class InscritController implements Serializable {
 
     public void save() throws IOException {
 
-        if (photoContentsAsBase64 != null) {
-            if (uploadedPhoto != null) {
-                FilesHelper.savePhoto(photoContentsAsBase64, uploadFolder + inscrit.getCin() + FilesHelper.getFileExtension(uploadedPhoto.getFileName()));
-                inscrit.setPhotoFileName(inscrit.getCin() + FilesHelper.getFileExtension(uploadedPhoto.getFileName()));
-            }
-        } else {
-            FacesContext.getCurrentInstance().
-                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erreur!" , "Le champ Photo Personnelle est obligatoire"));
-            return;
-
-        }
         Iterable<Admis> admisIt = admisService.findByCneOrCin(inscrit.getCne(), inscrit.getCin());
         int counter = 0;
         for (Admis i : admisIt) {
@@ -183,16 +176,35 @@ public class InscritController implements Serializable {
             return;
         }
 
+        if (photoContentsAsBase64 != null) {
+            if (uploadedPhoto != null) {
+                // String extension = FilesHelper.getFileExtension(uploadedPhoto.getFileName());
+                FilesHelper.savePhoto(photoContentsAsBase64, uploadFolder + inscrit.getCin().toUpperCase() + ".jpg");
+//                FilesHelper.saveInputStreamPhoto(uploadedPhoto.getInputStream(), uploadFolder + inscrit.getCin() + extension, extension);
+
+//                inscrit.setPhotoFileName(inscrit.getCin() + FilesHelper.getFileExtension(uploadedPhoto.getFileName()));
+                 inscrit.setPhotoFileName(inscrit.getCin().toUpperCase() + ".jpg");
+            }
+        } else {
+            FacesContext.getCurrentInstance().
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erreur!", "Le champ Photo Personnelle est obligatoire"));
+            return;
+
+        }
+
+       
+        inscrit = InscritHelper.toUpperCaseInscrit(inscrit);
         Date date = new java.util.Date();
         if (inscrit.getId() == null) {
             inscrit.setDateCreat(new Timestamp(date.getTime()));
             //    inscritService.save(inscrit);
             connectedUser.setInscrit(inscrit);
             connectedUser.setNom(inscrit.getNom() + " " + inscrit.getPrenom());
-            userService.save(connectedUser);
+            connectedUser = userService.save(connectedUser);
+            inscrit = connectedUser.getInscrit();
             SendMail.sendInscriptionConfirmationMail(connectedUser.getUsername(), inscrit.getId());
             disabledField = true;
-            loadInscrit();
+
         } else {
             inscrit.setDateModif(new Timestamp(date.getTime()));
             inscrit.setUserModif(connectedUser.getNom());
@@ -201,7 +213,7 @@ public class InscritController implements Serializable {
             userService.save(connectedUser);
         }
         FacesContext.getCurrentInstance().
-                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info!", "Votre Inscription a été enregistré avec succès!"));
+                addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info!", "Votre Inscription a été enregistré avec succès!"));
 
     }
 
@@ -261,31 +273,26 @@ public class InscritController implements Serializable {
 
         if (UserHelper.isRoleUser(userService.getAuthentication())) {
 
-            LoggedUser loggedUser = UserHelper.getLoggedUser(userService.getAuthentication());
-            Optional<User> optional = userService.getUser(loggedUser.getUsername());
-            if (optional.isPresent()) {
-                User user = optional.get();
+            inscrit = connectedUser.getInscrit();
 
-                inscrit = user.getInscrit();
+            if (inscrit != null) {
+                try {
 
-                if (inscrit != null) {
-                    try {
+                    byte[] contents = Files.readAllBytes(Paths.get(uploadFolder + inscrit.getPhotoFileName()));
+                    photoContentsAsBase64 = Base64.getEncoder().encodeToString(contents);
+                    disabledField = true;
 
-                        byte[] contents = Files.readAllBytes(Paths.get(uploadFolder + inscrit.getPhotoFileName()));
-                        photoContentsAsBase64 = Base64.getEncoder().encodeToString(contents);
-                        disabledField = true;
-
-                    } catch (IOException ex) {
-                        Logger.getLogger(InscritController.class
-                                .getName()).log(Level.SEVERE, null, ex);
-                    }
-
-                } else {
-                    inscrit = new Inscrit();
-                    photoContentsAsBase64 = null;
-                    disabledField = false;
+                } catch (IOException ex) {
+                    Logger.getLogger(InscritController.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
+
+            } else {
+                inscrit = new Inscrit();
+                photoContentsAsBase64 = null;
+                disabledField = false;
             }
+
         } else {
             if (selectedCne != null) {
                 Optional<Inscrit> optionalIns = inscritService.getInscritByCne(selectedCne);
@@ -294,7 +301,7 @@ public class InscritController implements Serializable {
                         inscrit = optionalIns.get();
                         byte[] contents = Files.readAllBytes(Paths.get(uploadFolder + inscrit.getPhotoFileName()));
                         photoContentsAsBase64 = Base64.getEncoder().encodeToString(contents);
-                         disabledField = true;
+                        disabledField = true;
 
                     } catch (IOException ex) {
                         Logger.getLogger(InscritController.class
@@ -509,6 +516,7 @@ public class InscritController implements Serializable {
 
     }
 
+    @PostConstruct
     public void loadConnectedUser() throws IOException {
         LoggedUser loggedUser = UserHelper.getLoggedUser(userService.getAuthentication());
         if (loggedUser != null) {

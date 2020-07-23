@@ -16,7 +16,7 @@
             <meta http-equiv="refresh" content="0;url=login.xhtml" /> 
         </sec:authorize>
         <h:form id="inscritForm" enctype="multipart/form-data">
-            <p:focus context="panelGridIns" />
+            <p:focus context="messages" />
 
             <sec:authorize ifAnyGranted="ROLE_ADMIN, ROLE_USER">
                 <div class="layout-portlets-box ui-fluid" >
@@ -62,9 +62,10 @@
                 </div>
             </sec:authorize>
             <div id="print" class="layout-portlets-box ui-fluid">
-                <p:messages id="messages" showSummary="false" showDetail="true" closable="true">
-                    <p:autoUpdate />
-                </p:messages>
+                <!--                <p:messages id="messages" showSummary="false" showDetail="true" closable="true">
+                                    <p:autoUpdate />
+                                </p:messages>-->
+                <p:growl id="messages" showDetail="true" showSummary="false"/>
                 <div class="Container50 Responsive50">
                     <div class="ContainerIndent ui-fluid">
 
@@ -187,15 +188,20 @@
                         <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="ui-panelgrid ui-widget ui-panelgrid-blank"   >
                             <h:panelGroup id="photo">
                                 <ui:fragment  rendered="#{not empty inscritController.photoContentsAsBase64}"  >
-                                    <img src="data:image/png;base64,#{inscritController.photoContentsAsBase64}" style="height:161px; width:161px;" onclick="document.querySelector('.photoUpload input').click()" />
+                                    <img src="data:image/png;base64,#{inscritController.photoContentsAsBase64}" style="height:200px; width:171px;" onclick="document.querySelector('.photoUpload input').click()" />
                                 </ui:fragment>
                                 <ui:fragment  rendered="#{empty inscritController.photoContentsAsBase64}"  >
                                     <img src="resources/spark-layout/images/default-male.gif" style="height:161px; width:161px;" onclick="document.querySelector('.photoUpload input').click()"/>
                                 </ui:fragment>
                             </h:panelGroup>
 
+
                             <p:fileUpload styleClass="photoUpload" value="#{inscritController.uploadedPhoto}" listener="#{inscritController.handleUploadPhoto}" mode="advanced" dragDropSupport="false"
-                                          update="photo" auto="true" sizeLimit="1000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"  />
+                                          update="photo" auto="true" sizeLimit="2097152" allowTypes="/(\.|\/)(jpe?g|png)$/"  />
+                            <p:panel>
+                                <p:outputLabel value="Photo format CIN obligatoire avec taille inférieur à 2Mo. Les photos non conformes seront refusées lors du dépot de dossier!" 
+                                               class="Fs15 red"/>
+                            </p:panel>
                         </p:panelGrid>
 
 
@@ -234,7 +240,7 @@
                         </sec:authorize>  
                         <sec:authorize ifAnyGranted="ROLE_USER">
                             <p:commandButton value="ENREGISTER"  action="#{inscritController.save()}" update="@form"  icon="fa fa-save Fs16 white">
-                                <p:confirm header="Confirmation" message="Veuillez vérifier que vous n'avez pas permuter le nom et le prénom! Voulez vous continuer?" icon="pi pi-exclamation-triangle" />
+                                <p:confirm header="Confirmation" message="Veuillez vérifier que vous n'avez pas permuter le nom et le prénom! Voulez vous continuer?" icon="pi pi-exclamation-triangle"/>
                             </p:commandButton>   
                         </sec:authorize>                       
                         <sec:authorize ifAnyGranted="ROLE_ADMIN, ROLE_OPERATOR">

@@ -36,12 +36,12 @@ public class SpringConfiguration {
         jpaProperties.put("hibernate.dialect", "org.hibernate.dialect.MySQL5InnoDBDialect");
 //		jpaProperties.put("hibernate.hbm2ddl.auto", "create-drop");
 //              jpaProperties.put("hibernate.hbm2ddl.auto", "create");
-        jpaProperties.put("hibernate.hbm2ddl.auto", "update");
-        jpaProperties.put("hibernate.show_sql", "true");
-        jpaProperties.put("hibernate.format_sql", "true");
+//        jpaProperties.put("hibernate.hbm2ddl.auto", "update");
+//        jpaProperties.put("hibernate.show_sql", "true");
+//        jpaProperties.put("hibernate.format_sql", "true");
         //  jpaProperties.put("generate-ddl", "true");
         jpaProperties.put("hibernate.use-new-id-generator-mappings", "false");
-        jpaProperties.put("hibernate.enable_lazy_load_no_trans", "true");
+    //    jpaProperties.put("hibernate.enable_lazy_load_no_trans", "true");
         entityManagerFactory.setJpaProperties(jpaProperties);
         entityManagerFactory.setPackagesToScan("ac.encg.preins.entity");
         entityManagerFactory.setPersistenceUnitName("entity");
@@ -66,21 +66,19 @@ public class SpringConfiguration {
         HikariDataSource dataSource = new HikariDataSource();
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
 
-      //  local
-        dataSource.setJdbcUrl("jdbc:mysql://localhost:3310/preinsdb_prod?serverTimezone=UTC");
-        dataSource.setUsername("root");
-        dataSource.setPassword("tabit");
-        dataSource.setConnectionTestQuery("show tables");
+        //  local
+      //  dataSource.setJdbcUrl("jdbc:mysql://localhost:3310/preinsdb_prod?serverTimezone=UTC");
+//        dataSource.setJdbcUrl("jdbc:mysql://localhost:3310/preinsdb?serverTimezone=UTC");
+//        dataSource.setUsername("root");
+//        dataSource.setPassword("tabit");
+//        dataSource.setConnectionTestQuery("show tables");
 
         //Server test
-//        dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/preinsdb_prod?serverTimezone=UTC&useUnicode=yes&characterEncoding=UTF-8");
-//        dataSource.setUsername("root");
-//        dataSource.setPassword("ENCGdbuser@2019");
-       
-        return dataSource;
+        dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/preinsdb_prod?serverTimezone=UTC&useUnicode=yes&characterEncoding=UTF-8");
+        dataSource.setUsername("root");
+        dataSource.setPassword("ENCGdbuser@2019");
+       return dataSource;
 
     }
-
-   
 
 }

@@ -72,5 +72,19 @@ public class InscritHelper {
        
         return formatter.format(date);
     }
+    
+    public static Inscrit toUpperCaseInscrit(Inscrit inscrit){
+        inscrit.setCin(inscrit.getCin().toUpperCase());
+        inscrit.setCne(inscrit.getCne().toUpperCase());
+        inscrit.setNom(inscrit.getNom().toUpperCase());
+        inscrit.setPrenom(inscrit.getPrenom().toUpperCase());
+        inscrit.setPrenomMere(inscrit.getPrenomMere().toUpperCase());
+        inscrit.setPrenomPere(inscrit.getPrenomPere().toUpperCase());
+        inscrit.setLieuNaiss(inscrit.getLieuNaiss().toUpperCase());
+        inscrit.setPrenomPere(inscrit.getPrenomPere().toUpperCase());
+        inscrit.setCinTuteur(inscrit.getCinTuteur().toUpperCase());
+        return inscrit;
+        
+    }
 
 }

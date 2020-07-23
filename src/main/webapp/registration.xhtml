@@ -40,7 +40,7 @@
                         <div class="EmptyBox50"></div>
                         <h:graphicImage name="images/logo.png" library="spark-layout" styleClass="MarAuto MarTop20 MarBot10" style="height:80px; width:3#0px;"/>
                         <div class="EmptyBox20"></div>
-                         <p:messages id="messages" showSummary="true" showDetail="true" closable="true">
+                         <p:messages id="messages" showSummary="false" showDetail="true" closable="true">
                             <p:autoUpdate />
                         </p:messages>
                         <div class="EmptyBox20"></div>
@@ -48,7 +48,7 @@
                                      styleClass="Container80 Fnone MarAuto Fs18"
                                      required="true"
                                      requiredMessage="Le champ Email est obligatoire"
-                                     validatorMessage="Le format de l'email est invalid">
+                                     validatorMessage="Le format de l'email est invalid. N'oublier pas d'éliminer les espaces!">
                             <f:validateRegex
                                 pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                         </p:inputText>
@@ -56,12 +56,14 @@
                         <p:password id="password" value="#{accountController.registeredUser.password}" placeholder="Mot de passe" 
                                     match="passwordConfirmation"
                                     required="true"
+									requiredMessage="Le champ Mot de passe est obligatoire"
                                     validatorMessage="Le mot de passe de confirmation n'est pas conforme!"
                                     styleClass="Container80 Fnone MarAuto Fs18" feedback="false"/>
                         <div class="EmptyBox10"></div>
                         <p:password id="passwordConfirmation" value="#{accountController.registeredUser.password}" 
                                     placeholder="Confirmer Mot de passe" styleClass="Container80 Fnone MarAuto Fs18" feedback="false"
                                     required="true"
+									requiredMessage="Le champ Confirmer Mot de passe est obligatoire"
                                     />
 
                         <!--                        <div class="EmptyBox20"></div>

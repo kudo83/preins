@@ -54,7 +54,7 @@ public class AccountController implements Serializable {
 
     private String submittedToken;
 
-    private Logger logger = Logger.getLogger(getClass().getName());
+//    private Logger logger = Logger.getLogger(getClass().getName());
 
     public void registerNewUser() {
 
@@ -62,8 +62,7 @@ public class AccountController implements Serializable {
         if (optional.isPresent()) {
             FacesContext.getCurrentInstance().
                     addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erreur!", "Un compte avec le même email existe déjà!"));
-            logger.info("Un compte avec le même email existe déjà: " + registeredUser.getUsername());
-            return;
+//            logger.info("Un compte avec le même email existe déjà: " + registeredUser.getUsername());
         } else {
             Set<Role> roles = new HashSet<>();
             Role userRole = userService.getRole("USER");
