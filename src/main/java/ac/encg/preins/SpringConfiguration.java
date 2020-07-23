@@ -67,14 +67,15 @@ public class SpringConfiguration {
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
 
         //  local
-      //  dataSource.setJdbcUrl("jdbc:mysql://localhost:3310/preinsdb_prod?serverTimezone=UTC");
-//        dataSource.setJdbcUrl("jdbc:mysql://localhost:3310/preinsdb?serverTimezone=UTC");
+      
+//        dataSource.setJdbcUrl("jdbc:mysql://localhost:3310/preinsdb?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Africa/Casablanca");
 //        dataSource.setUsername("root");
 //        dataSource.setPassword("tabit");
 //        dataSource.setConnectionTestQuery("show tables");
 
         //Server test
-        dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/preinsdb_prod?serverTimezone=UTC&useUnicode=yes&characterEncoding=UTF-8");
+//        dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/preinsdb_prod?serverTimezone=UTC&useUnicode=yes&characterEncoding=UTF-8");
+        dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/preinsdb_prod?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&characterEncoding=UTF-8&serverTimezone=Africa/Casablanca");
         dataSource.setUsername("root");
         dataSource.setPassword("ENCGdbuser@2019");
        return dataSource;

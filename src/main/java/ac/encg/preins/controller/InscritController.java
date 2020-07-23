@@ -17,7 +17,6 @@ import ac.encg.preins.service.InscritService;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -56,6 +55,8 @@ import java.io.DataOutputStream;
 import java.net.URISyntaxException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
@@ -78,7 +79,7 @@ import org.springframework.stereotype.Controller;
 @Setter
 @Scope("session")
 @Named("inscritController")
-public class InscritController implements Serializable {
+public class InscritController {
 
     private static final long serialVersionUID = 1L;
 
@@ -194,9 +195,10 @@ public class InscritController implements Serializable {
 
        
         inscrit = InscritHelper.toUpperCaseInscrit(inscrit);
-        Date date = new java.util.Date();
+       // Date date = new java.util.Date();
+        ZonedDateTime date = ZonedDateTime.now(ZoneId.of("Africa/Casablanca"));
         if (inscrit.getId() == null) {
-            inscrit.setDateCreat(new Timestamp(date.getTime()));
+            inscrit.setDateCreat(Timestamp.valueOf(date.toLocalDateTime()));
             //    inscritService.save(inscrit);
             connectedUser.setInscrit(inscrit);
             connectedUser.setNom(inscrit.getNom() + " " + inscrit.getPrenom());
@@ -206,7 +208,7 @@ public class InscritController implements Serializable {
             disabledField = true;
 
         } else {
-            inscrit.setDateModif(new Timestamp(date.getTime()));
+            inscrit.setDateModif(Timestamp.valueOf(date.toLocalDateTime()));
             inscrit.setUserModif(connectedUser.getNom());
             //       inscritService.save(inscrit);
             connectedUser.setInscrit(inscrit);
@@ -317,8 +319,8 @@ public class InscritController implements Serializable {
 
         inscrit.setVALID(true);
 
-        Date date = new Date();
-        inscrit.setDateValid(new Timestamp(date.getTime()));
+        ZonedDateTime date = ZonedDateTime.now(ZoneId.of("Africa/Casablanca"));
+        inscrit.setDateValid(Timestamp.valueOf(date.toLocalDateTime()));
         inscrit.setUserValid(connectedUser.getNom());
 
         inscritService.save(inscrit);
@@ -330,8 +332,8 @@ public class InscritController implements Serializable {
 
     public void inValidateInscrition() throws IOException {
         inscrit.setVALID(false);
-        Date date = new Date();
-        inscrit.setDateInvalid(new Timestamp(date.getTime()));
+        ZonedDateTime date = ZonedDateTime.now(ZoneId.of("Africa/Casablanca"));
+        inscrit.setDateInvalid(Timestamp.valueOf(date.toLocalDateTime()));
         inscrit.setUserInValid(connectedUser.getNom());
         inscritService.save(inscrit);
 

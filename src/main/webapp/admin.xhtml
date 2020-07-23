@@ -213,7 +213,7 @@
                             </p:column>
                             <p:column headerText="DATE VALIDATION" filterBy="#{inscrit.dateValid}">
                                 <h:outputText value="#{inscrit.dateValid}" class="fontNum" >
-                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="Africa/Casablanca" />
                                 </h:outputText>    
                             </p:column>
 
@@ -274,7 +274,7 @@
                             <p:column headerText="DATE AJOUT" sortBy="#{admis.dateCREAT}" filterBy="#{admis.dateCREAT}">
 
                                 <h:outputText value="#{admis.dateCREAT}" class="fontNum" >
-                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="Africa/Casablanca"/>
                                 </h:outputText>     
                             </p:column>
 

@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import java.sql.Timestamp;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -118,8 +120,8 @@ public class AdminController implements Serializable {
                     newAdmis.setCin(cell2.getContents().toUpperCase());
                     newAdmis.setNom(cell3.getContents().toUpperCase());
 
-                    Date date = new Date();
-                    newAdmis.setDateCREAT(new Timestamp(date.getTime()));
+                    ZonedDateTime date = ZonedDateTime.now(ZoneId.of("Africa/Casablanca"));
+                    newAdmis.setDateCREAT(Timestamp.valueOf(date.toLocalDateTime()));
                     newAdmis.setUserCreat(connectedUser.getNom());
 
                     admisListNew.add(newAdmis);
@@ -255,8 +257,8 @@ public class AdminController implements Serializable {
             newAdmis.setCin(cinAdmis.toUpperCase());
             newAdmis.setNom(nomAdmis.toUpperCase());
 
-            Date date = new Date();
-            newAdmis.setDateCREAT(new Timestamp(date.getTime()));
+            ZonedDateTime date = ZonedDateTime.now(ZoneId.of("Africa/Casablanca"));
+            newAdmis.setDateCREAT(Timestamp.valueOf(date.toLocalDateTime()));
             newAdmis.setUserCreat(connectedUser.getNom());
             admisService.save(newAdmis);
             FacesContext.getCurrentInstance().

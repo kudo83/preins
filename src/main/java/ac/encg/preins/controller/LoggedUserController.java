@@ -2,7 +2,6 @@ package ac.encg.preins.controller;
 
 import ac.encg.preins.helper.UserHelper;
 import ac.encg.preins.nonPersistable.LoggedUser;
-import java.io.Serializable;
 import lombok.Getter;
 import lombok.Setter;
 import ac.encg.preins.service.UserService;
@@ -21,7 +20,7 @@ import org.springframework.stereotype.Controller;
 @Setter
 @Scope("session")
 @Named("loggedUserController")
-public class LoggedUserController implements Serializable {
+public class LoggedUserController{
 
     @Autowired
     private UserService userService;
