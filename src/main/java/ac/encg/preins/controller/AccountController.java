@@ -80,6 +80,8 @@ public class AccountController implements Serializable {
             FacesContext.getCurrentInstance().
                     addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info!", "Un email de vérification a été envoyé à votre adresse email!"));
 
+            FacesContext.getCurrentInstance().
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Merci aussi de vérifier le dossier du spam si vous ne trouver pas l'email!", ""));
         }
 
     }

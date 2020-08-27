@@ -7,7 +7,12 @@ package ac.encg.preins.utility;
 
 import ac.encg.preins.entity.User;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
@@ -36,15 +41,17 @@ public class SendMail {
     private static void defineProperties(){
         prop.put("mail.smtp.host", "smtp.gmail.com");
         prop.put("mail.smtp.ssl.trust", "smtp.gmail.com");
-        prop.put("mail.smtp.port", "587");
         prop.put("mail.smtp.auth", "true");
-        prop.put("mail.smtp.starttls.enable", "true"); //TLS
+        prop.put("mail.smtp.ssl.enable", "true");
+        prop.put("mail.smtp.port", "465");
+//        prop.put("mail.smtp.starttls.enable", "true"); //TLS
+//        prop.put("mail.smtp.port", "587");
     }
 
     public static void sendRecalamation(String cne, String email, String text) {
         String to = "preins.encg@uiz.ac.ma";//change accordingly  
         String from = "preins.encg@uiz.ac.ma";//change accordingly  
-        String host = "smtp.gmail.com";//or IP address  
+//        String host = "smtp.gmail.com";//or IP address  
 
         //Get the session object  
         Properties prop = System.getProperties();
@@ -82,7 +89,7 @@ public class SendMail {
     public static void sendInscriptionConfirmationMail(String email, Long id) {
         String to = email;
         String from = "preins.encg@uiz.ac.ma";
-        String host = "smtp.gmail.com";//or IP address  
+//        String host = "smtp.gmail.com";//or IP address  
 
         //Get the session object  
         defineProperties();
@@ -147,7 +154,7 @@ public class SendMail {
     public static void sendEmailConfirmationMail(User user, String token) {
         String to = user.getUsername();
         String from = "preins.encg@uiz.ac.ma";
-        String host = "smtp.gmail.com";//or IP address  
+//        String host = "smtp.gmail.com";//or IP address  
      
         //Get the session object  
         defineProperties();
@@ -217,12 +224,17 @@ public class SendMail {
     }
     
     public static void sendPasswordUpdateMail(User user, String token) {
+        try {
         String to = user.getUsername();
         String from = "preins.encg@uiz.ac.ma";
-        String host = "smtp.gmail.com";//or IP address  
+//        String host = "smtp.gmail.com";//or IP address  
      
         //Get the session object  
-        defineProperties();
+    //    defineProperties();
+        ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+        String relativePropertiesPath = "resources/prop/configmail.properties";
+        String absolutePropDiskPath = servletContext.getRealPath(relativePropertiesPath);
+        Properties prop = readPropertiesFile(absolutePropDiskPath);
         Session session = Session.getInstance(prop, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
@@ -231,7 +243,7 @@ public class SendMail {
         });
         
         //compose the message  
-        try {
+        
             // Create a  default MimeMessage object.
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(from));
@@ -267,7 +279,6 @@ public class SendMail {
             messageBodyPart = new MimeBodyPart();
 
             String relativeWebPath = "resources/spark-layout/images/";
-            ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
             String absoluteDiskPath = servletContext.getRealPath(relativeWebPath);
             File file = new File(absoluteDiskPath, "logo.png");
 
@@ -285,7 +296,26 @@ public class SendMail {
             System.out.println("Sent message successfully....");
         } catch (MessagingException mex) {
             mex.printStackTrace();
+        } catch (IOException ex) {
+            Logger.getLogger(SendMail.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public static Properties readPropertiesFile(String fileName) throws IOException {
+      FileInputStream fis = null;
+      Properties prop = null;
+      try {
+         fis = new FileInputStream(fileName);
+         prop = new Properties();
+         prop.load(fis);
+      } catch(FileNotFoundException fnfe) {
+         fnfe.printStackTrace();
+      } catch(IOException ioe) {
+         ioe.printStackTrace();
+      } finally {
+         fis.close();
+      }
+      return prop;
+   }
 
 }
