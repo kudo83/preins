@@ -74,7 +74,7 @@ public class SpringConfiguration {
 //        dataSource.setConnectionTestQuery("show tables");
 
         //Server test
-        dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/preinsdb_prod?serverTimezone=UTC&useUnicode=yes&characterEncoding=UTF-8");
+    //    dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/preinsdb_prod?serverTimezone=UTC&useUnicode=yes&characterEncoding=UTF-8");
         dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/preinsdb_prod?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&characterEncoding=UTF-8&serverTimezone=Africa/Casablanca");
         dataSource.setUsername("root");
         dataSource.setPassword("ENCGdbuser@2019");

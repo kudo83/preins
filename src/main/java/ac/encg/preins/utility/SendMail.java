@@ -63,7 +63,7 @@ public class SendMail {
         Session session = Session.getInstance(prop, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("preins.encg@uiz.ac.ma", "ENCG@2019/");
+                return new PasswordAuthentication("preins.encg@uiz.ac.ma", "xjbcxnvikhvqhnxh");
             }
         });
 
@@ -96,7 +96,7 @@ public class SendMail {
         Session session = Session.getInstance(prop, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("preins.encg@uiz.ac.ma", "ENCG@2019/");
+                return new PasswordAuthentication("preins.encg@uiz.ac.ma", "xjbcxnvikhvqhnxh");
             }
         });
 
@@ -161,7 +161,7 @@ public class SendMail {
         Session session = Session.getInstance(prop, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("preins.encg@uiz.ac.ma", "ENCG@2019/");
+                return new PasswordAuthentication("preins.encg@uiz.ac.ma", "xjbcxnvikhvqhnxh");
             }
         });
         
@@ -238,7 +238,7 @@ public class SendMail {
         Session session = Session.getInstance(prop, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("preins.encg@uiz.ac.ma", "ENCG@2019/");
+                return new PasswordAuthentication("preins.encg@uiz.ac.ma", "xjbcxnvikhvqhnxh");
             }
         });
         

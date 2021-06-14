@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import ac.encg.preins.nonPersistable.Civility;
+import ac.encg.preins.nonPersistable.Handicape;
 import ac.encg.preins.nonPersistable.Mention;
 import ac.encg.preins.nonPersistable.Sex;
 import java.nio.file.StandardCopyOption;
@@ -54,6 +55,19 @@ public class InscritHelper {
         sexes.add(new Sex('F', "Féminin"));
 
         return sexes;
+    }
+    public static List<Handicape> loadListHandicapes() {
+        List<Handicape> handicapes = new ArrayList<>();
+        handicapes.add(new Handicape("A", "Auditif"));
+        handicapes.add(new Handicape("AM", "Auditif Moteur"));
+        handicapes.add(new Handicape("T", "Auditif Moteur Visuel"));
+        handicapes.add(new Handicape("AV", "Auditif Visuel"));
+        handicapes.add(new Handicape("XX", "Autre"));
+        handicapes.add(new Handicape("M", "Moteur"));
+        handicapes.add(new Handicape("MV", "Moteur Visuel"));
+        handicapes.add(new Handicape("V", "Visuel"));
+
+        return handicapes;
     }
 
     public static List<Mention> loadListMentions() {

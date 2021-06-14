@@ -24,7 +24,7 @@ import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageOutputStream;
-import javaxt.io.Image;
+
 import org.apache.commons.codec.binary.Base64;
 
 /**
@@ -201,11 +201,12 @@ public class FilesHelper {
 //    }
     public static BufferedImage rotateResizeImage(BufferedImage img) {
 
-        Image image = new Image(img);
-        image.rotate(90);
-        image.rotateCounterClockwise();
-        image.resize(342, 400);
-        return image.getBufferedImage();
+//        Image image = new Image(img);
+//        image.rotate(90);
+//        image.rotateCounterClockwise();
+//        image.resize(342, 400);
+        return img;
+//        return image.getBufferedImage();
     }
 
 }

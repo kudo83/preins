@@ -159,5 +159,8 @@ public class Inscrit implements Serializable {
     @Column(name = "USER_INVALID")
     private String userInValid;
 
+    @Column(name = "HANDICAPE")
+    private String handicape;
+
 
 }

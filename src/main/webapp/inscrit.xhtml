@@ -99,8 +99,10 @@
                                 <f:selectItem itemLabel="Situation Familiale" itemValue="" noSelectionOption="true" />
                                 <f:selectItems value="#{inscritController.civilities}" var="civilite" itemLabel="#{civilite.libCiv}" itemValue="#{civilite.codCiv}"/>
                             </p:selectOneMenu>
-
-
+                            <p:selectOneMenu placeholder="Handicape" value="#{inscritController.inscrit.handicape}" required="false">
+                                <f:selectItem itemLabel="Handicape?" itemValue="" noSelectionOption="true" />
+                                <f:selectItems value="#{inscritController.handicaps}" var="handicape" itemLabel="#{handicape.lib}" itemValue="#{handicape.code}"/>
+                            </p:selectOneMenu>
                             <p:inputMask mask="99/99/9999" placeholder="Date de Naissance" value="#{inscritController.inscrit.dateNaiss}" required="true" requiredMessage="Le champ Date de Naissance est obligatoire">
                                 <f:convertDateTime pattern="dd/MM/yyyy" />
                             </p:inputMask>    
@@ -115,8 +117,7 @@
                                 <f:selectItems value="#{inscritController.pays}" var="pays" itemLabel="#{pays.lib}" itemValue="#{pays.id}"/>
                             </p:selectOneMenu>
                             <p:inputMask mask="9999999999" placeholder="Téléphone" value="#{inscritController.inscrit.tel}" required="true" requiredMessage="Le champ Téléphone est obligatoire"/>
-
-                            <p:inputTextarea placeholder="Adresse Personelle Actuelle" value="#{inscritController.inscrit.adresse}" required="true" requiredMessage="Le champ 'Adresse Personelle Actuelle est obligatoire"/>   
+                            <p:inputTextarea placeholder="Adresse Personelle Actuelle" value="#{inscritController.inscrit.adresse}" required="true" requiredMessage="Le champ 'Adresse Personelle Actuelle est obligatoire"/>
                         </p:panelGrid>
                     </div>
                 </div> 
@@ -241,8 +242,8 @@
                         <sec:authorize ifAnyGranted="ROLE_USER">
                             <p:commandButton value="ENREGISTER"  action="#{inscritController.save()}" update="@form"  icon="fa fa-save Fs16 white">
                                 <p:confirm header="Confirmation" message="Veuillez vérifier que vous n'avez pas permuter le nom et le prénom! Voulez vous continuer?" icon="pi pi-exclamation-triangle"/>
-                            </p:commandButton>   
-                        </sec:authorize>                       
+                            </p:commandButton>
+                        </sec:authorize>
                         <sec:authorize ifAnyGranted="ROLE_ADMIN, ROLE_OPERATOR">
                             <ui:fragment  rendered="#{inscritController.inscrit.VALID}"  >
                                 <p:commandButton value="RECU DEPOT"  action="#{inscritController.createReceipeForOperator(request, response)}" update="messages, validationButton"  icon="fa fa-file-pdf-o Fs16 white" class="OrangeButton" ajax="false" />

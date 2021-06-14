@@ -16,7 +16,7 @@
         <springsecurity.version>5.1.5.RELEASE</springsecurity.version>
         <querydsl.version>4.2.1</querydsl.version>
     </properties>
-    
+
     <dependencies>
         <dependency>
             <groupId>com.itextpdf</groupId>
@@ -28,12 +28,7 @@
             <artifactId>cdi-api</artifactId>
             <version>2.0.SP1</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/javaxt/javaxt-core -->
-        <dependency>
-            <groupId>javaxt</groupId>
-            <artifactId>javaxt-core</artifactId>
-            <version>1.10.1</version>
-        </dependency>
+
         <!-- https://mvnrepository.com/artifact/com.drewnoakes/metadata-extractor -->
         <dependency>
             <groupId>com.drewnoakes</groupId>
@@ -41,39 +36,39 @@
             <version>2.14.0</version>
         </dependency>
 
- 
+
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
             <version>8.0</version>
             <scope>provided</scope>
         </dependency>
-        
+
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-releasetrain</artifactId>
             <version>1.4.6.RELEASE</version>
             <type>pom</type>
         </dependency>
-       
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-framework-bom</artifactId>
             <version>${springframework.version}</version>
             <type>pom</type>
         </dependency>
-        
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
             <version>${springframework.version}</version>
-        </dependency> 
+        </dependency>
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-jpa</artifactId>
             <version>2.1.9.RELEASE</version>
-        </dependency> 
-        
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.springframework/spring-aspects -->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -87,7 +82,7 @@
             <artifactId>spring-context</artifactId>
             <version>${springframework.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
@@ -98,7 +93,7 @@
             <artifactId>spring-security-config</artifactId>
             <version>${springsecurity.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>org.springframework.webflow</groupId>
             <artifactId>spring-faces</artifactId>
@@ -132,7 +127,7 @@
             <artifactId>HikariCP</artifactId>
             <version>3.3.0</version>
         </dependency>
-        
+
         <dependency>
             <groupId>org.glassfish</groupId>
             <artifactId>javax.faces</artifactId>
@@ -143,15 +138,15 @@
             <artifactId>primefaces</artifactId>
             <version>8.0</version>
         </dependency>
-        
-        <!--https://mvnrepository.com/artifact/javax.el/javax.el-api--> 
+
+        <!--https://mvnrepository.com/artifact/javax.el/javax.el-api-->
         <dependency>
             <groupId>javax.el</groupId>
             <artifactId>javax.el-api</artifactId>
             <version>3.0.0</version>
         </dependency>
 
-        
+
 
         <!-- https://mvnrepository.com/artifact/javax.faces/javax.faces-api -->
         <dependency>
@@ -162,7 +157,7 @@
         </dependency>
 
 
-        
+
         <!--  Servlet API -->
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -170,16 +165,16 @@
             <version>4.0.1</version>
         </dependency>
 
-        <dependency> 
-            <groupId>org.projectlombok</groupId> 
-            <artifactId>lombok</artifactId> 
-            <version>1.18.4</version> 
-            <scope>provided</scope> 
-        </dependency>  
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.4</version>
+            <scope>provided</scope>
+        </dependency>
         <!--QuesryDsl Integration-->
-        <dependency> 
-            <groupId>com.querydsl</groupId> 
-            <artifactId>querydsl-core</artifactId> 
+        <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-core</artifactId>
             <version>${querydsl.version}</version>
         </dependency>
         <dependency>
@@ -199,40 +194,38 @@
             <version>1.7.26</version>
         </dependency>
         <!--QuesryDsl Integration-->
-        
-        <dependency>
-            <groupId>org.primefaces.themes</groupId>
-            <artifactId>spark</artifactId>
-            <version>2.3.1</version>
-        </dependency>
-        
+
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
             <version>4.0.1</version>
         </dependency>
-        
+        <dependency>
+            <artifactId>sparktheme</artifactId>
+            <groupId>spark</groupId>
+            <version>2.1.3</version>
+        </dependency>
 
         <dependency>
             <groupId>net.bytebuddy</groupId>
             <artifactId>byte-buddy</artifactId>
             <version>1.9.8</version>
         </dependency>
-       
+
         <dependency>
             <groupId>org.glassfish.jaxb</groupId>
             <artifactId>txw2</artifactId>
             <version>2.3.1</version>
         </dependency>
-        
-       
+
+
         <dependency>
             <groupId>org.jvnet.staxex</groupId>
             <artifactId>stax-ex</artifactId>
             <version>1.8.1</version>
         </dependency>
-        
-       
+
+
         <dependency>
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
@@ -243,7 +236,7 @@
             <artifactId>commons-io</artifactId>
             <version>2.6</version>
         </dependency>
- 
+
         <dependency>
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
@@ -271,8 +264,8 @@
             <version>4.1.0</version>
         </dependency>
     </dependencies>
-    
-  
+
+
 
     <build>
         <plugins>
@@ -321,7 +314,7 @@
                     </execution>
                 </executions>
             </plugin>
-            
+
             <plugin>
                 <groupId>com.mysema.maven</groupId>
                 <artifactId>apt-maven-plugin</artifactId>
@@ -338,15 +331,13 @@
                     </execution>
                 </executions>
             </plugin>
-           
+
         </plugins>
     </build>
-    
-    <repositories>
-        <repository>
-            <id>javaxt.com</id>
-            <url>http://www.javaxt.com/maven</url>
-        </repository>
-    </repositories>
+
+<distributionManagement>
+
+</distributionManagement>
+
 
 </project>

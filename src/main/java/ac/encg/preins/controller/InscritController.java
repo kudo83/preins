@@ -13,17 +13,16 @@ import ac.encg.preins.helper.CommonHelper;
 import ac.encg.preins.helper.FilesHelper;
 import ac.encg.preins.helper.InscritHelper;
 import ac.encg.preins.helper.UserHelper;
+import ac.encg.preins.nonPersistable.*;
 import ac.encg.preins.service.InscritService;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
@@ -31,12 +30,9 @@ import javax.inject.Named;
 import javax.faces.context.FacesContext;
 
 import javax.servlet.http.Part;
+
 import lombok.Getter;
 import lombok.Setter;
-import ac.encg.preins.nonPersistable.Civility;
-import ac.encg.preins.nonPersistable.LoggedUser;
-import ac.encg.preins.nonPersistable.Mention;
-import ac.encg.preins.nonPersistable.Sex;
 import ac.encg.preins.service.AdmisService;
 import ac.encg.preins.service.UserService;
 import ac.encg.preins.utility.SendMail;
@@ -57,12 +53,12 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.file.UploadedFile;
 
@@ -71,7 +67,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 /**
- *
  * @author Aissam
  */
 @Controller
@@ -121,6 +116,7 @@ public class InscritController {
     private List<Pcs> pcsList = new ArrayList<>();
     private List<Sex> sexes = new ArrayList<>();
     private List<Mention> mentions = new ArrayList<>();
+    private List<Handicape> handicaps = new ArrayList<>();
 
     private String selectedCne;
 
@@ -184,7 +180,7 @@ public class InscritController {
 //                FilesHelper.saveInputStreamPhoto(uploadedPhoto.getInputStream(), uploadFolder + inscrit.getCin() + extension, extension);
 
 //                inscrit.setPhotoFileName(inscrit.getCin() + FilesHelper.getFileExtension(uploadedPhoto.getFileName()));
-                 inscrit.setPhotoFileName(inscrit.getCin().toUpperCase() + ".jpg");
+                inscrit.setPhotoFileName(inscrit.getCin().toUpperCase() + ".jpg");
             }
         } else {
             FacesContext.getCurrentInstance().
@@ -193,9 +189,9 @@ public class InscritController {
 
         }
 
-       
+
         inscrit = InscritHelper.toUpperCaseInscrit(inscrit);
-       // Date date = new java.util.Date();
+        // Date date = new java.util.Date();
         ZonedDateTime date = ZonedDateTime.now(ZoneId.of("Africa/Casablanca"));
         if (inscrit.getId() == null) {
             inscrit.setDateCreat(Timestamp.valueOf(date.toLocalDateTime()));
@@ -229,6 +225,7 @@ public class InscritController {
         civilities = InscritHelper.loadListCivilities();
         sexes = InscritHelper.loadListSexes();
         mentions = InscritHelper.loadListMentions();
+        handicaps = InscritHelper.loadListHandicapes();
 
 //       loggedUsername = UserHelper.getLoggedUsername();
 //        System.out.println(loggedUsername);
@@ -397,7 +394,7 @@ public class InscritController {
 
         document.add(new Chunk(tab));
         document.add(new Chunk("Référence   :    ", COURRIER_BOLD_14));
-        document.add(new Chunk("Pré-2020-" + inscrit.getId().toString(), COURRIER_NORMAL_14));
+        document.add(new Chunk("Pré-" + getAnneeCourante() + "-" + inscrit.getId().toString(), COURRIER_NORMAL_14));
         document.add(Chunk.NEWLINE);
 
         document.add(new Chunk(tab));
@@ -444,7 +441,7 @@ public class InscritController {
         FacesContext context = FacesContext.getCurrentInstance();
         response = (HttpServletResponse) context.getExternalContext().getResponse();
         response.setContentType("application/pdf");
-        response.setHeader("Content-disposition", "attachment; filename=\"" + inscrit.getNom() + " " + inscrit.getPrenom() + "-Reçu_Dépo.pdf\"");
+        response.setHeader("Content-disposition", "attachment; filename=\"" + inscrit.getNom() + " " + inscrit.getPrenom() + "-Reçu_ins.pdf\"");
         PdfWriter.getInstance(document, new DataOutputStream(response.getOutputStream()))
                 .setInitialLeading(16);
 
@@ -469,26 +466,26 @@ public class InscritController {
         document.add(Chunk.NEWLINE);
         document.add(Chunk.NEWLINE);
 
-        Paragraph titre = new Paragraph("CERTIFICAT DE DEPOT DE DOSSIER \n \n", COURRIER_BOLD_18);
+        Paragraph titre = new Paragraph("ATTESTATION DE D'INSCRIPTION \n \n", COURRIER_BOLD_18);
         titre.setAlignment(Element.ALIGN_CENTER);
         document.add(titre);
 
         document.add(Chunk.NEWLINE);
         document.add(Chunk.NEWLINE);
-        document.add(new Chunk("L'adminstration de l'Ecole Nationale de Commerce et de Gestion d'Agadir, certifie que l'étudiant(e) ", COURRIER_NORMAL_14));
+        document.add(new Chunk("Le directeur de l'Ecole Nationale de Commerce et de Gestion d'Agadir, certifie que l'étudiant(e) ", COURRIER_NORMAL_14));
         document.add(new Chunk(inscrit.getNom() + " " + inscrit.getPrenom(), COURRIER_BOLD_14));
 
         document.add(Chunk.NEWLINE);
-        document.add(new Chunk("a déposé un dossier pour l'inscription en ", COURRIER_NORMAL_14));
+        document.add(new Chunk("est régulièrement inscrit(e) en ", COURRIER_NORMAL_14));
         document.add(new Chunk(inscrit.getEtape().getLib(), COURRIER_BOLD_14));
 
         //   document.add(Chunk.NEWLINE);
         document.add(new Chunk(" sous le numéro :", COURRIER_NORMAL_14));
-        document.add(new Chunk("Pré-2020-" + inscrit.getId().toString(), COURRIER_BOLD_14));
+        document.add(new Chunk("Ins-" + getAnneeCourante() + "-" + inscrit.getId().toString(), COURRIER_BOLD_14));
 
         document.add(Chunk.NEWLINE);
         document.add(new Chunk("au titre de l'année universitaire : ", COURRIER_NORMAL_14));
-        document.add(new Chunk("2020 / 2021", COURRIER_BOLD_14));
+        document.add(new Chunk(getAnneeCourante() + "/" + (getAnneeCourante() + 1), COURRIER_BOLD_14));
 
         document.add(Chunk.NEWLINE);
         document.add(Chunk.NEWLINE);
@@ -506,8 +503,7 @@ public class InscritController {
         document.add(Chunk.NEWLINE);
         document.add(Chunk.NEWLINE);
 
-        document.add(new Chunk("NB: L'étudiant(e) ne sera considéré(e) définitivement inscrit(e) que lorsqu'il lui sera délivré"
-                + " l'Attestation d'inscription.", COURRIER_NORMAL_12));
+        document.add(new Chunk("Adresse : Rue Hachtouka Hay Salam, BP: 37/S - Agadir - Maroc      Tél: +212 5 28 22 57 48 / 39     email: encg-agadir@uiz.ac.ma", COURRIER_NORMAL_12));
 
         document.setMargins(100, 100, 0, 0);
         document.close();
@@ -516,6 +512,17 @@ public class InscritController {
 //        servletOutputStream.close();
         FacesContext.getCurrentInstance().responseComplete();
 
+    }
+
+    /**
+     * fonction qui retourne l'annee courante
+     *
+     * @return l'annee courante
+     */
+    public int getAnneeCourante() {
+        Calendar c = Calendar.getInstance();
+        int res = c.get(Calendar.YEAR);
+        return res;
     }
 
     @PostConstruct
