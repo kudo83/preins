@@ -43,6 +43,9 @@ public class Inscrit implements Serializable {
     @Column(name = "NOM")
     private String nom;
 
+    @Column(name = "TYPE_ADMIS")
+    private String typeAdmis;
+
     @Column(name = "PRENOM")
     private String prenom;
 
@@ -138,7 +141,7 @@ public class Inscrit implements Serializable {
     private Etape etape = new Etape();
 
   
-     @Column(name = "DATE_CREAT")
+    @Column(name = "DATE_CREAT")
     private Timestamp dateCreat;
 
     @Column(name = "DATE_MODIF")

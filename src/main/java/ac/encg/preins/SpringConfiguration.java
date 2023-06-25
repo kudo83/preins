@@ -1,9 +1,11 @@
 package ac.encg.preins;
 
 import com.zaxxer.hikari.HikariDataSource;
+
 import java.util.Properties;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
+
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -15,7 +17,6 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
- *
  * @author Aissam
  */
 @Configuration
@@ -36,12 +37,12 @@ public class SpringConfiguration {
         jpaProperties.put("hibernate.dialect", "org.hibernate.dialect.MySQL5InnoDBDialect");
 //		jpaProperties.put("hibernate.hbm2ddl.auto", "create-drop");
 //              jpaProperties.put("hibernate.hbm2ddl.auto", "create");
-//        jpaProperties.put("hibernate.hbm2ddl.auto", "update");
+        jpaProperties.put("hibernate.hbm2ddl.auto", "update");
 //        jpaProperties.put("hibernate.show_sql", "true");
 //        jpaProperties.put("hibernate.format_sql", "true");
         //  jpaProperties.put("generate-ddl", "true");
         jpaProperties.put("hibernate.use-new-id-generator-mappings", "false");
-    //    jpaProperties.put("hibernate.enable_lazy_load_no_trans", "true");
+        //    jpaProperties.put("hibernate.enable_lazy_load_no_trans", "true");
         entityManagerFactory.setJpaProperties(jpaProperties);
         entityManagerFactory.setPackagesToScan("ac.encg.preins.entity");
         entityManagerFactory.setPersistenceUnitName("entity");
@@ -53,7 +54,7 @@ public class SpringConfiguration {
 
     @Bean
     public JpaTransactionManager transactionManager(DataSource dataSource,
-            EntityManagerFactory entityManagerFactory) {
+                                                    EntityManagerFactory entityManagerFactory) {
         JpaTransactionManager transactionManager = new JpaTransactionManager(
                 entityManagerFactory);
         transactionManager.setDataSource(dataSource);
@@ -67,18 +68,17 @@ public class SpringConfiguration {
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
 
         //  local
-      
-//        dataSource.setJdbcUrl("jdbc:mysql://localhost:3310/preinsdb_prod?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Africa/Casablanca");
+//        dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/preinsdb_prod?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Africa/Casablanca");
 //        dataSource.setUsername("root");
 //        dataSource.setPassword("tabit");
 //        dataSource.setConnectionTestQuery("show tables");
 
         //Server test
-    //    dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/preinsdb_prod?serverTimezone=UTC&useUnicode=yes&characterEncoding=UTF-8");
+     //   dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/preinsdb_prod?serverTimezone=UTC&useUnicode=yes&characterEncoding=UTF-8");
         dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/preinsdb_prod?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&characterEncoding=UTF-8&serverTimezone=Africa/Casablanca");
         dataSource.setUsername("root");
         dataSource.setPassword("ENCGdbuser@2019");
-       return dataSource;
+        return dataSource;
 
     }
 

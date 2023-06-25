@@ -34,6 +34,8 @@ public class QAdmis extends EntityPathBase<Admis> {
 
     public final StringPath nom = createString("nom");
 
+    public final StringPath type = createString("type");
+
     public final QUser user;
 
     public final StringPath userCreat = createString("userCreat");

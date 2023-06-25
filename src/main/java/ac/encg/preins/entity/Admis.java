@@ -57,6 +57,9 @@ public class Admis implements Serializable {
     @Column(name = "USER_MODIF")
     private String userModif;
 
+    @Column(name = "TYPE")
+    private String type;
+
  
     public Admis() {
     }

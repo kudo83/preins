@@ -155,6 +155,7 @@ public class InscritController {
             Admis admis = admisIt.iterator().next();
             if (admis.getUser() == null) {
                 connectedUser.setAdmis(admis);
+                inscrit.setTypeAdmis(admis.getType());
             } else {
                 if (!connectedUser.getId().equals(admis.getUser().getId())) {
                     FacesContext.getCurrentInstance().
@@ -176,11 +177,11 @@ public class InscritController {
         if (photoContentsAsBase64 != null) {
             if (uploadedPhoto != null) {
                 // String extension = FilesHelper.getFileExtension(uploadedPhoto.getFileName());
-                FilesHelper.savePhoto(photoContentsAsBase64, uploadFolder + inscrit.getCin().toUpperCase() + ".jpg");
+                FilesHelper.savePhoto(photoContentsAsBase64, uploadFolder + inscrit.getCne().toUpperCase() + ".jpg");
 //                FilesHelper.saveInputStreamPhoto(uploadedPhoto.getInputStream(), uploadFolder + inscrit.getCin() + extension, extension);
 
 //                inscrit.setPhotoFileName(inscrit.getCin() + FilesHelper.getFileExtension(uploadedPhoto.getFileName()));
-                inscrit.setPhotoFileName(inscrit.getCin().toUpperCase() + ".jpg");
+                inscrit.setPhotoFileName(inscrit.getCne().toUpperCase() + ".jpg");
             }
         } else {
             FacesContext.getCurrentInstance().
@@ -362,7 +363,7 @@ public class InscritController {
         FacesContext context = FacesContext.getCurrentInstance();
         response = (HttpServletResponse) context.getExternalContext().getResponse();
         response.setContentType("application/pdf");
-        response.setHeader("Content-disposition", "attachment; filename=\"Reçu_Pré-ins_ENCGA_" + inscrit.getCne() + ".pdf\"");
+        response.setHeader("Content-disposition", "attachment; filename=\"_Pré-ins_ENCGA_" + inscrit.getCne() + ".pdf\"");
         PdfWriter.getInstance(document, new DataOutputStream(response.getOutputStream()))
                 .setInitialLeading(16);
 
@@ -385,7 +386,7 @@ public class InscritController {
         document.add(Chunk.NEWLINE);
         document.add(Chunk.NEWLINE);
 
-        Paragraph titre = new Paragraph("Reçu de pré-inscription \n \n", COURRIER_BOLD_16);
+        Paragraph titre = new Paragraph(" de pré-inscription \n \n", COURRIER_BOLD_16);
         titre.setAlignment(Element.ALIGN_CENTER);
         document.add(titre);
 
@@ -466,7 +467,7 @@ public class InscritController {
         document.add(Chunk.NEWLINE);
         document.add(Chunk.NEWLINE);
 
-        Paragraph titre = new Paragraph("ATTESTATION DE D'INSCRIPTION \n \n", COURRIER_BOLD_18);
+        Paragraph titre = new Paragraph("ATTESTATION D'INSCRIPTION \n \n", COURRIER_BOLD_18);
         titre.setAlignment(Element.ALIGN_CENTER);
         document.add(titre);
 
@@ -474,12 +475,16 @@ public class InscritController {
         document.add(Chunk.NEWLINE);
         document.add(new Chunk("Le directeur de l'Ecole Nationale de Commerce et de Gestion d'Agadir, certifie que l'étudiant(e) ", COURRIER_NORMAL_14));
         document.add(new Chunk(inscrit.getNom() + " " + inscrit.getPrenom(), COURRIER_BOLD_14));
-
+        document.add(Chunk.NEWLINE);
+        document.add(new Chunk("Code massar: ",COURRIER_NORMAL_14));
+        document.add(new Chunk(inscrit.getCne(),COURRIER_BOLD_14));
+        document.add(new Chunk("    CIN: ",COURRIER_NORMAL_14));
+        document.add(new Chunk(inscrit.getCin(),COURRIER_BOLD_14));
         document.add(Chunk.NEWLINE);
         document.add(new Chunk("est régulièrement inscrit(e) en ", COURRIER_NORMAL_14));
         document.add(new Chunk(inscrit.getEtape().getLib(), COURRIER_BOLD_14));
 
-        //   document.add(Chunk.NEWLINE);
+        document.add(Chunk.NEWLINE);
         document.add(new Chunk(" sous le numéro :", COURRIER_NORMAL_14));
         document.add(new Chunk("Ins-" + getAnneeCourante() + "-" + inscrit.getId().toString(), COURRIER_BOLD_14));
 

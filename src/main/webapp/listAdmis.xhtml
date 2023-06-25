@@ -32,7 +32,7 @@
                         <p:fileUpload  value="#{adminController.excelUpload}" listener="#{adminController.uploadAdmis}" mode="advanced" dragDropSupport="false"
                                        allowTypes="/(\.|\/)(xls)$/" update="messages,tableAdmis,nbrAdmis" />
                         <div class="EmptyBox20"></div>
-                        <div class="Wid100 DispBlock Fs25" style="font-family: 'ralewaymedium';"> <i class="fa fa-file-excel-o" /> Exemple</div>
+                        <div class="Wid100 DispBlock Fs25" style="font-family: 'ralewaymedium';"> <a href=""> <i class="fa fa-file-excel-o" /> Télécharger Exemple</a></div>
                         <h:graphicImage name="images/excel.png" library="spark-layout" styleClass="MarAuto MarTop20 MarBot10" />
 
                     </div>
@@ -44,9 +44,21 @@
                         </h2>
 
                         <p:panelGrid id="ajoutAdmisPanel" columns="3" layout="grid" style="border:0px !important; background:none;" styleClass="ui-panelgrid ui-widget ui-panelgrid-blank"   >
-                            <p:inputMask id="cne" mask="a999999999" value="#{adminController.cneAdmis}" placeholder="Code Massar" styleClass="Container80 Fnone MarAuto Fs18" style="text-transform: uppercase" />
+                            <p:inputText id="cne" value="#{adminController.cneAdmis}" placeholder="Code Massar" styleClass="Container80 Fnone MarAuto Fs18" style="text-transform: uppercase" />
                             <p:inputText id="cin" value="#{adminController.cinAdmis}" placeholder="CIN" styleClass="Container80 Fnone MarAuto Fs18" style="text-transform: uppercase"/>
                             <p:inputText id="nom" value="#{adminController.nomAdmis}" placeholder="NOM ET PRENOM" styleClass="Container80 Fnone MarAuto Fs18" style="text-transform: uppercase"/>
+                            <p:selectOneMenu placeholder="Type Condidat" value="#{adminController.typeAdmis}"
+                                             required="true"
+                                             requiredMessage="Le champ type est obligatoire">
+<!--                                <f:selectItem itemLabel="Situation Familiale" itemValue="" noSelectionOption="true"/>-->
+<!--                                <f:selectItems value="#{inscritController.civilities}" var="civilite"-->
+<!--                                               itemLabel="#{civilite.libCiv}" itemValue="#{civilite.codCiv}"/>-->
+                                <f:selectItem itemLabel="Type Admis" itemValue="" noSelectionOption="true"/>
+                                <f:selectItem itemLabel="CNAEM" itemValue="CNAEM"/>
+                                <f:selectItem itemLabel="TAFEM" itemValue="TAFEM"/>
+                                <f:selectItem itemLabel="PASSERELLE" itemValue="PASSERELLE"/>
+                                <f:selectItem itemLabel="TRANSFERT" itemValue="TRANSFERT"/>
+                            </p:selectOneMenu>
                             <p:commandButton value="AJOUTER"  action="#{adminController.ajouterAdmis()}" update="messages, tableAdmis, ajoutAdmisPanel,nbrAdmis"  icon="fa fa-user-plus Fs16 white" class="GreenButton" />
                         </p:panelGrid>
                         <div class="Wid45 BorderedBox Fright TexAlCenter">
@@ -90,8 +102,11 @@
                             </p:column>
 
                             <p:column headerText="NOM et PRENOM" sortBy="#{admis.nom}" filterBy="#{admis.nom}">
-
                                 <h:outputText value="#{admis.nom}" class="fontNum" />
+                            </p:column>
+
+                            <p:column headerText="TYPE" sortBy="#{admis.type}" filterBy="#{admis.type}">
+                                <h:outputText value="#{admis.type}" class="fontNum" />
                             </p:column>
 
 

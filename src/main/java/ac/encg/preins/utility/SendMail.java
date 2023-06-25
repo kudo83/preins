@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -51,19 +52,12 @@ public class SendMail {
     public static void sendRecalamation(String cne, String email, String text) {
         String to = "preins.encg@uiz.ac.ma";//change accordingly  
         String from = "preins.encg@uiz.ac.ma";//change accordingly  
-//        String host = "smtp.gmail.com";//or IP address  
 
         //Get the session object  
-        Properties prop = System.getProperties();
-        prop.put("mail.smtp.host", "smtp.gmail.com");
-        prop.put("mail.smtp.ssl.trust", "smtp.gmail.com");
-        prop.put("mail.smtp.port", "587");
-        prop.put("mail.smtp.auth", "true");
-        prop.put("mail.smtp.starttls.enable", "true"); //TLS
         Session session = Session.getInstance(prop, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("preins.encg@uiz.ac.ma", "xjbcxnvikhvqhnxh");
+                return new PasswordAuthentication("preins.encg@uiz.ac.ma", "jsxnrnyrvjyjxhwa");
             }
         });
 
@@ -96,7 +90,7 @@ public class SendMail {
         Session session = Session.getInstance(prop, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("preins.encg@uiz.ac.ma", "xjbcxnvikhvqhnxh");
+                return new PasswordAuthentication("preins.encg@uiz.ac.ma", "jsxnrnyrvjyjxhwa");
             }
         });
 
@@ -113,15 +107,16 @@ public class SendMail {
             // first part(the html)
             BodyPart messageBodyPart = new MimeBodyPart();
             //  String htmlText = "<H1>Hello</H1><img src=\"cid:image\">";
-
+            Calendar c = Calendar.getInstance();
+            int annee = c.get(Calendar.YEAR);
             String htmlText = "<img src=\"cid:image\" height=\"68\" width=\"250\">"
                     + "<br/>"
                     + "Votre pré-inscrition à l'ENCG Agadir à bien été effectuer sous la référence :"
-                    + "PRE2019-" + id 
+                    + "PRE"+annee+"-" + id
                     + "<br/>"
                     + "<br/>"
-                    + "Si vous n'avez pas encore imprimé votre reçu, veuillez vous connecter sur "
-                    + "<a href='http://myencg.uiz.ac.ma/preins'>la plateforme de pré-inscription</a>, puis visualisez l'inscription, et cliquez sur le bouton \"Imprimer Reçu\"";
+                    + "Si vous n'avez pas encore imprimé votre , veuillez vous connecter sur "
+                    + "<a href='http://myencg.uiz.ac.ma/preins'>la plateforme de pré-inscription</a>, puis visualisez l'inscription, et cliquez sur le bouton \"Imprimer \"";
             messageBodyPart.setContent(htmlText, "text/html");
             // add it
             multipart.addBodyPart(messageBodyPart);
@@ -161,7 +156,7 @@ public class SendMail {
         Session session = Session.getInstance(prop, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("preins.encg@uiz.ac.ma", "xjbcxnvikhvqhnxh");
+                return new PasswordAuthentication("preins.encg@uiz.ac.ma", "jsxnrnyrvjyjxhwa");
             }
         });
         
@@ -238,7 +233,7 @@ public class SendMail {
         Session session = Session.getInstance(prop, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("preins.encg@uiz.ac.ma", "xjbcxnvikhvqhnxh");
+                return new PasswordAuthentication("preins.encg@uiz.ac.ma", "jsxnrnyrvjyjxhwa");
             }
         });
         

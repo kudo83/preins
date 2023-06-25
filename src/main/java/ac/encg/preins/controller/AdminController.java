@@ -84,6 +84,7 @@ public class AdminController implements Serializable {
     private String cneAdmis;
     private String cinAdmis;
     private String nomAdmis;
+    private String typeAdmis;
 
     private List<Admis> filteredAdmisList;
 
@@ -108,6 +109,7 @@ public class AdminController implements Serializable {
                 Cell cell1 = sheet.getCell(0, i);
                 Cell cell2 = sheet.getCell(1, i);
                 Cell cell3 = sheet.getCell(2, i);
+                Cell cell4 = sheet.getCell(3, i);
 
                 if ((!CommonHelper.isNullOrEmpty(cell1.getContents()) && admisService.existByCne(cell1.getContents()))
                         || (!CommonHelper.isNullOrEmpty(cell2.getContents()) && admisService.existByCin(cell2.getContents()))) {
@@ -119,6 +121,7 @@ public class AdminController implements Serializable {
                     newAdmis.setCne(cell1.getContents().toUpperCase());
                     newAdmis.setCin(cell2.getContents().toUpperCase());
                     newAdmis.setNom(cell3.getContents().toUpperCase());
+                    newAdmis.setType(cell4.getContents().toUpperCase());
 
                     ZonedDateTime date = ZonedDateTime.now(ZoneId.of("Africa/Casablanca"));
                     newAdmis.setDateCREAT(Timestamp.valueOf(date.toLocalDateTime()));
@@ -241,6 +244,11 @@ public class AdminController implements Serializable {
             FacesContext.getCurrentInstance().
                     addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erreur!", "Veuillez renseigner le CNE ou le CIN du condidat"));
         }
+        if (CommonHelper.isNullOrEmpty(typeAdmis) ) {
+            noteValid = true;
+            FacesContext.getCurrentInstance().
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erreur!", "Veuillez renseigner le type du condidat"));
+        }
         if (noteValid) {
             return;
         }
@@ -256,6 +264,7 @@ public class AdminController implements Serializable {
             newAdmis.setCne(cneAdmis.toUpperCase());
             newAdmis.setCin(cinAdmis.toUpperCase());
             newAdmis.setNom(nomAdmis.toUpperCase());
+            newAdmis.setType(typeAdmis.toUpperCase());
 
             ZonedDateTime date = ZonedDateTime.now(ZoneId.of("Africa/Casablanca"));
             newAdmis.setDateCREAT(Timestamp.valueOf(date.toLocalDateTime()));
@@ -268,6 +277,7 @@ public class AdminController implements Serializable {
             cneAdmis = "";
             cinAdmis = "";
             nomAdmis = "";
+            typeAdmis = "";
 
         }
     }

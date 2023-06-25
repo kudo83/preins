@@ -94,6 +94,8 @@ public class QInscrit extends EntityPathBase<Inscrit> {
 
     public final StringPath telTuteur = createString("telTuteur");
 
+    public final StringPath typeAdmis = createString("typeAdmis");
+
     public final QUser user;
 
     public final StringPath userInValid = createString("userInValid");

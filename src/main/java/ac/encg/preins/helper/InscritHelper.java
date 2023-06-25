@@ -90,6 +90,7 @@ public class InscritHelper {
     public static Inscrit toUpperCaseInscrit(Inscrit inscrit){
         inscrit.setCin(inscrit.getCin().toUpperCase());
         inscrit.setCne(inscrit.getCne().toUpperCase());
+        inscrit.setTypeAdmis(inscrit.getTypeAdmis().toUpperCase());
         inscrit.setNom(inscrit.getNom().toUpperCase());
         inscrit.setPrenom(inscrit.getPrenom().toUpperCase());
         inscrit.setPrenomMere(inscrit.getPrenomMere().toUpperCase());

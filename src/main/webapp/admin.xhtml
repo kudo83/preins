@@ -35,6 +35,7 @@
                     }
                 }
             }
+
             function skinChart() {
                 this.cfg.shadow = false;
                 this.cfg.seriesColors = ['#71CC8D', '#33AFDE', '#F7941E'];
@@ -73,8 +74,9 @@
                 this.cfg.axes.xaxis.tickOptions.showGridline = true;
                 this.cfg.axes.yaxis.tickOptions.showGridline = true;
             }
+
             function tooltipContentEditor(str, seriesIndex, pointIndex, plot) {
-               // return plot.axes.xaxis.ticks[pointIndex] + ", " + plot.data[seriesIndex][pointIndex];
+                // return plot.axes.xaxis.ticks[pointIndex] + ", " + plot.data[seriesIndex][pointIndex];
                 return plot.data[seriesIndex][pointIndex];
             }
         </script>
@@ -89,24 +91,24 @@
     <ui:define name="content">
 
         <f:metadata>
-            <f:viewAction  action="#{adminController.initStatistics()}"/>
-            <f:viewAction  action="#{adminController.loadListAdmis()}"/>
-            <f:viewAction  action="#{inscritController.loadListInscritValid()}"/>
-            <f:viewAction  action="#{adminController.createBarChartModel}"/>
-            <f:viewAction  action="#{adminController.loadConnectedUser()}"/>
+            <f:viewAction action="#{adminController.initStatistics()}"/>
+            <f:viewAction action="#{adminController.loadListAdmis()}"/>
+            <f:viewAction action="#{inscritController.loadListInscritValid()}"/>
+            <f:viewAction action="#{adminController.createBarChartModel}"/>
+            <f:viewAction action="#{adminController.loadConnectedUser()}"/>
         </f:metadata>
         <sec:authorize access="!isAuthenticated()">
-            <meta http-equiv="refresh" content="0;url=login.xhtml" /> 
+            <meta http-equiv="refresh" content="0;url=login.xhtml"/>
         </sec:authorize>
         <div id="print" class="layout-portlets-box ui-fluid">
             <h:form id="form" enctype="multipart/form-data">
                 <p:messages id="messages" showSummary="true" showDetail="true" closable="true">
-                    <p:autoUpdate />
+                    <p:autoUpdate/>
                 </p:messages>
                 <div class="Container50 Responsive50">
                     <div class="ContainerIndent ui-fluid">
                         <h2 class="BigTopic">
-                            <i class="fa fa-tachometer Fs30 blue"/>   STATISTIQUES
+                            <i class="fa fa-tachometer Fs30 blue"/> STATISTIQUES
                         </h2>
                         <div class="Container100">
                             <div class="EmptyBox20"></div>
@@ -115,7 +117,8 @@
                                     <div class="EmptyBox10"></div>
                                     <div class="Fs14 gray FontRalewayRegular">Utilisateurs</div>
                                     <div class="EmptyBox10"></div>
-                                    <div class="Fs30 orange FontRalewayLight"> <i class="fa fa-user Fs20"/>#{adminController.nbrUsers}</div>
+                                    <div class="Fs30 orange FontRalewayLight"><i
+                                            class="fa fa-user Fs20"/>#{adminController.nbrUsers}</div>
                                     <div class="EmptyBox10"></div>
                                 </div>
                             </div>
@@ -124,7 +127,8 @@
                                     <div class="EmptyBox10"></div>
                                     <div class="Fs14 gray FontRalewayRegular">Admis</div>
                                     <div class="EmptyBox10"></div>
-                                    <div class="Fs30 red FontRalewayLight"> <i class="fa fa-list-ol Fs20"/> #{adminController.nbrAdmis}</div>
+                                    <div class="Fs30 red FontRalewayLight"><i
+                                            class="fa fa-list-ol Fs20"/> #{adminController.nbrAdmis}</div>
                                     <div class="EmptyBox10"></div>
                                 </div>
                             </div>
@@ -133,19 +137,21 @@
                                     <div class="EmptyBox10"></div>
                                     <div class="Fs14 gray FontRalewayRegular">Inscrits</div>
                                     <div class="EmptyBox10"></div>
-                                    <div class="Fs30 blue FontRalewayLight"><i class="fa fa-file-text-o Fs20"/>  #{adminController.nbrInscrits}</div>
+                                    <div class="Fs30 blue FontRalewayLight"><i
+                                            class="fa fa-file-text-o Fs20"/>  #{adminController.nbrInscrits}</div>
                                     <div class="EmptyBox10"></div>
                                 </div>
-                            </div>    
+                            </div>
                             <div class="Wid45 BorderedBox Fright TexAlCenter">
                                 <div class="ContainerIndent">
                                     <div class="EmptyBox10"></div>
                                     <div class="Fs14 gray FontRalewayRegular">Inscrits Validés</div>
                                     <div class="EmptyBox10"></div>
-                                    <div class="Fs30 green FontRalewayLight animated pulse infinite boldLabel">  <i class="fa fa-check-square-o Fs20"/> #{adminController.nbrInscritValid}</div>
+                                    <div class="Fs30 green FontRalewayLight animated pulse infinite boldLabel"><i
+                                            class="fa fa-check-square-o Fs20"/> #{adminController.nbrInscritValid}</div>
                                     <div class="EmptyBox10"></div>
                                 </div>
-                            </div> 
+                            </div>
                         </div>
 
                     </div>
@@ -155,11 +161,12 @@
                 <div class="Container50 Responsive50">
                     <div class="ContainerIndent ui-fluid">
                         <h2 class="BigTopic">
-                            <i class="fa fa-line-chart Fs30 orange"/>   INSCRIT VALID&#201;S PAR OPERATEUR
+                            <i class="fa fa-line-chart Fs30 orange"/> INSCRIT VALID&#201;S PAR OPERATEUR
                         </h2>
                         <div class="Container100">
                             <div class="EmptyBox20"></div>
-                            <p:chart type="bar" model="#{adminController.barModelNbrInscritValide}" style="height:300px" />
+                            <p:chart type="bar" model="#{adminController.barModelNbrInscritValide}"
+                                     style="height:300px"/>
                         </div>
                     </div>
 
@@ -172,110 +179,122 @@
                             <i class="fa fa-users Fs30 green"/> INSCRITS VALID&#201;S
                         </h2>
 
-                        <p:dataTable id="tableInscritValid" var="inscrit" value="#{inscritController.inscritsValid}" widgetVar="inscritsTable" draggableColumns="true"
-                                     rows="10" paginator="true"   rowsPerPageTemplate="10,20,30"
+                        <p:dataTable id="tableInscritValid" var="inscrit" value="#{inscritController.inscritsValid}"
+                                     widgetVar="inscritsTable" draggableColumns="true"
+                                     rows="10" paginator="true" rowsPerPageTemplate="10,20,30"
                                      paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                      rowKey="#{inscrit.cne}" rowIndexVar="rowIndex"
-                                     emptyMessage="Pas d'inscrits validés pour cette recherche" filteredValue="#{inscritController.filteredInscrits}"
+                                     emptyMessage="Pas d'inscrits validés pour cette recherche"
+                                     filteredValue="#{inscritController.filteredInscrits}"
                                      sortBy="#{inscrit.dateValid}"
                                      sortOrder="DESCENDING"
-                                     >
+                        >
 
                             <f:facet name="header">
                                 <p:outputPanel>
-                                    <h:outputText value="Recherche : " />
-                                    <p:inputText id="globalFilter" onkeyup="PF('inscritsTable').filter()" style="width:150px" placeholder="Mot clef"/>
+                                    <h:outputText value="Recherche : "/>
+                                    <p:inputText id="globalFilter" onkeyup="PF('inscritsTable').filter()"
+                                                 style="width:150px" placeholder="Mot clef"/>
                                 </p:outputPanel>
 
-                                <div id="expor" style="float:right; padding-top: 10px;">
+                                <div id="export1" style="float:right; padding-top: 10px;">
                                     <h:commandLink>
                                         <p:graphicImage name="images/xls.png" library="spark-layout" width="40"/>
-                                        <p:dataExporter type="xls" target="tableInscritValid" fileName="Inscrits Valide" />
+                                        <p:dataExporter type="xls" target="tableInscritValid"
+                                                        fileName="Inscrits Valide"/>
                                     </h:commandLink>
                                 </div>
                             </f:facet>
 
                             <p:column headerText="NOM" filterBy="#{inscrit.nom}">
-                                <h:outputText value="#{inscrit.nom.toUpperCase()}" class="fontNum" />
+                                <h:outputText value="#{inscrit.nom.toUpperCase()}" class="fontNum"/>
                             </p:column>
 
                             <p:column headerText="PRENOM" filterBy="#{inscrit.prenom}">
-                                <h:outputText value="#{inscrit.prenom.toUpperCase()}" class="fontNum" />
+                                <h:outputText value="#{inscrit.prenom.toUpperCase()}" class="fontNum"/>
                             </p:column>
                             <p:column headerText="CNE" filterBy="#{inscrit.cne}">
-                                <h:outputText value="#{inscrit.cne.toUpperCase()}" class="fontNum" />
+                                <h:outputText value="#{inscrit.cne.toUpperCase()}" class="fontNum"/>
                             </p:column>
                             <p:column headerText="CIN" filterBy="#{inscrit.cin}">
-                                <h:outputText value="#{inscrit.cin.toUpperCase()}" class="fontNum" />
+                                <h:outputText value="#{inscrit.cin.toUpperCase()}" class="fontNum"/>
+                            </p:column>
+                            <p:column headerText="CONCOURS" filterBy="#{inscrit.cin}">
+                                <h:outputText value="#{inscrit.typeAdmis.toUpperCase()}" class="fontNum"/>
                             </p:column>
                             <p:column headerText="OPERATEUR" filterBy="#{inscrit.userValid}">
-                                <h:outputText value="#{inscrit.userValid.toUpperCase()}" class="fontNum" />
+                                <h:outputText value="#{inscrit.userValid.toUpperCase()}" class="fontNum"/>
                             </p:column>
                             <p:column headerText="DATE VALIDATION" filterBy="#{inscrit.dateValid}">
-                                <h:outputText value="#{inscrit.dateValid}" class="fontNum" >
-                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="Africa/Casablanca" />
-                                </h:outputText>    
+                                <h:outputText value="#{inscrit.dateValid}" class="fontNum">
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="Africa/Casablanca"/>
+                                </h:outputText>
                             </p:column>
 
                         </p:dataTable>
                     </div>
-                </div> 
+                </div>
                 <div class="EmptyBox30"></div>
                 <div class="Container100 Responsive100">
                     <div class="ContainerIndent ui-fluid">
                         <h2 class="BigTopic">
-                            <i class="fa fa-user-plus Fs30 red"/>  ADMIS AJOUT&#201;S
+                            <i class="fa fa-user-plus Fs30 red"/> ADMIS AJOUT&#201;S
                         </h2>
 
                         <div class="EmptyBox20"></div>
-                        <p:dataTable id="tableAdmis" var="admis" value="#{adminController.admisList}"  widgetVar="admisTable" draggableColumns="true" editable="false"
-                                     rows="10" paginator="true"   rowsPerPageTemplate="10,20,30" 
+                        <p:dataTable id="tableAdmis" var="admis" value="#{adminController.admisList}"
+                                     widgetVar="admisTable" draggableColumns="true" editable="false"
+                                     rows="10" paginator="true" rowsPerPageTemplate="10,20,30"
                                      paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                      rowKey="#{admis.cne}" rowIndexVar="rowIndex"
-                                     emptyMessage="Pas d'inscrit pour cette recherche" filteredValue="#{adminController.filteredAdmisList}"
+                                     emptyMessage="Pas d'inscrit pour cette recherche"
+                                     filteredValue="#{adminController.filteredAdmisList}"
                                      sortBy="#{admis.dateCREAT}"
                                      sortOrder="DESCENDING">
 
                             <f:facet name="header">
                                 <p:outputPanel>
-                                    <h:outputText value="Recherche Globale : " />
-                                    <p:inputText id="globalFilter" onkeyup="PF('admisTable').filter()" style="width:150px" placeholder="Mot clef"/>
+                                    <h:outputText value="Recherche Globale : "/>
+                                    <p:inputText id="globalFilter" onkeyup="PF('admisTable').filter()"
+                                                 style="width:150px" placeholder="Mot clef"/>
 
                                 </p:outputPanel>
-                                <div id="expor" style="float:right; padding-top: 10px;">
+                                <div id="export2" style="float:right; padding-top: 10px;">
                                     <h:commandLink>
                                         <p:graphicImage name="images/xls.png" library="spark-layout" width="40"/>
-                                        <p:dataExporter type="xls" target="tableAdmis" fileName="Admis" />
+                                        <p:dataExporter type="xls" target="tableAdmis" fileName="Admis"/>
                                     </h:commandLink>
                                 </div>
                             </f:facet>
 
                             <p:column headerText="NOM et PRENOM" sortBy="#{admis.nom}" filterBy="#{admis.nom}">
 
-                                <h:outputText value="#{admis.nom}" class="fontNum" />
+                                <h:outputText value="#{admis.nom.toUpperCase()}" class="fontNum"/>
                             </p:column>
 
                             <p:column headerText="CNE" sortBy="#{admis.cne}" filterBy="#{admis.cne}">
-                                <h:outputText value="#{admis.cne}" class="fontNum" />
+                                <h:outputText value="#{admis.cne.toUpperCase()}" class="fontNum"/>
                             </p:column>
 
                             <p:column headerText="CIN" sortBy="#{admis.cin}" filterBy="#{admis.cin}">
 
-                                <h:outputText value="#{admis.cin}" class="fontNum" />
+                                <h:outputText value="#{admis.cin.toUpperCase()}" class="fontNum"/>
                             </p:column>
-
+                            <p:column headerText="CIN" sortBy="#{inscrit.typeAdmis}" filterBy="#{inscrit.typeAdmis}">
+                                <h:outputText value="#{inscrit.typeAdmis.toUpperCase()}" class="fontNum"/>
+                            </p:column>
 
 
                             <p:column headerText="AJOUTE PAR" sortBy="#{admis.userCreat}" filterBy="#{admis.userCreat}">
 
-                                <h:outputText value="#{admis.userCreat}" class="fontNum" />
+                                <h:outputText value="#{admis.userCreat}" class="fontNum"/>
                             </p:column>
 
                             <p:column headerText="DATE AJOUT" sortBy="#{admis.dateCREAT}" filterBy="#{admis.dateCREAT}">
 
-                                <h:outputText value="#{admis.dateCREAT}" class="fontNum" >
+                                <h:outputText value="#{admis.dateCREAT}" class="fontNum">
                                     <f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="Africa/Casablanca"/>
-                                </h:outputText>     
+                                </h:outputText>
                             </p:column>
 
                         </p:dataTable>
@@ -285,5 +304,5 @@
             </h:form>
         </div>
 
-    </ui:define>      
+    </ui:define>
 </ui:composition>

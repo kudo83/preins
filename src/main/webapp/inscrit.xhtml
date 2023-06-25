@@ -8,51 +8,70 @@
 
     <ui:define name="content">
         <f:metadata>
-            <f:viewAction  action="#{inscritController.initialize()}"/>
+            <f:viewAction action="#{inscritController.initialize()}"/>
             <f:viewParam name="selectedCne" value="#{inscritController.selectedCne}"/>
-            <f:viewAction  action="#{inscritController.loadConnectedUser()}"/>
+            <f:viewAction action="#{inscritController.loadConnectedUser()}"/>
         </f:metadata>
         <sec:authorize access="!isAuthenticated()">
-            <meta http-equiv="refresh" content="0;url=login.xhtml" /> 
+            <meta http-equiv="refresh" content="0;url=login.xhtml"/>
         </sec:authorize>
         <h:form id="inscritForm" enctype="multipart/form-data">
-            <p:focus context="messages" />
+            <p:focus context="messages"/>
 
             <sec:authorize ifAnyGranted="ROLE_ADMIN, ROLE_USER">
-                <div class="layout-portlets-box ui-fluid" >
+                <div class="layout-portlets-box ui-fluid">
                     <!--<div class="Container50 Responsive50 ">-->
-                    <div class="ContainerIndent ui-fluid" dir="rtl" >
-                        <p:panelGrid id="buttonGridHeader" columns="8" layout="grid" style="border:0px !important; background:none;" class="ui-panelgrid-blank">       
+                    <div class="ContainerIndent ui-fluid" dir="rtl">
+                        <p:panelGrid id="buttonGridHeader" columns="8" layout="grid"
+                                     style="border:0px !important; background:none;" class="ui-panelgrid-blank">
                             <sec:authorize ifAnyGranted="ROLE_ADMIN">
-                                <p:button value="LIST INSCRITS" outcome="listInscrit.xhtml"  icon="fa fa-rotate-left Fs16 white"  />
-                            </sec:authorize>  
+                                <p:button value="LIST INSCRITS" outcome="listInscrit.xhtml"
+                                          icon="fa fa-rotate-left Fs16 white"/>
+                            </sec:authorize>
                             <sec:authorize ifAnyGranted="ROLE_USER">
-                                <p:commandButton value="ENREGISTER"  action="#{inscritController.save()}" update="@form"  icon="fa fa-save Fs16 white">
-                                    <p:confirm header="Confirmation" message="Veuillez vérifier que vous n'avez pas permuter le nom et le prénom! Voulez vous continuer?" icon="pi pi-exclamation-triangle"/>
-                                </p:commandButton>  
-                            </sec:authorize>                       
+                                <p:commandButton value="ENREGISTER" action="#{inscritController.save()}" update="@form"
+                                                 icon="fa fa-save Fs16 white">
+                                    <p:confirm header="Confirmation"
+                                               message="Veuillez vérifier que vous n'avez pas permuter le nom et le prénom! Voulez vous continuer?"
+                                               icon="pi pi-exclamation-triangle"/>
+                                </p:commandButton>
+                            </sec:authorize>
                             <sec:authorize ifAnyGranted="ROLE_ADMIN, ROLE_OPERATOR">
-                                <ui:fragment  rendered="#{inscritController.inscrit.VALID}"  >
-                                    <p:commandButton value="RECU de DEPOT"  action="#{inscritController.createReceipeForOperator(request, response)}" update="messages, validationButton"  icon="fa fa-file-pdf-o Fs16 white" class="OrangeButton" ajax="false" />
+                                <ui:fragment rendered="#{inscritController.inscrit.VALID}">
+                                    <p:commandButton value="RECU de DEPOT"
+                                                     action="#{inscritController.createReceipeForOperator(request, response)}"
+                                                     update="messages, validationButton"
+                                                     icon="fa fa-file-pdf-o Fs16 white" class="OrangeButton"
+                                                     ajax="false"/>
                                 </ui:fragment>
-                            </sec:authorize> 
+                            </sec:authorize>
                             <sec:authorize ifAnyGranted="ROLE_USER">
-                                <ui:fragment  rendered="#{inscritController.disabledField}"  >
-                                    <p:commandButton value="RECU de PRE-INSCRITION"  action="#{inscritController.createReceipeForUser(request, response)}" update="messages, validationButton"  icon="fa fa-file-pdf-o Fs16 white" class="OrangeButton" ajax="false" />
+                                <ui:fragment rendered="#{inscritController.disabledField}">
+                                    <p:commandButton value="RECU de PRE-INSCRITION"
+                                                     action="#{inscritController.createReceipeForUser(request, response)}"
+                                                     update="messages, validationButton"
+                                                     icon="fa fa-file-pdf-o Fs16 white" class="OrangeButton"
+                                                     ajax="false"/>
                                 </ui:fragment>
-                            </sec:authorize>   
+                            </sec:authorize>
 
                             <h:panelGroup id="validationButtonHeader">
                                 <sec:authorize ifAnyGranted="ROLE_ADMIN, ROLE_OPERATOR" id="validationButton">
-                                    <ui:fragment  rendered="#{not inscritController.inscrit.VALID}"  >
-                                        <p:commandButton value="VALIDER"  action="#{inscritController.validateInscrition()}" update="messages,  buttonGrid, buttonGridHeader"  icon="fa fa-check Fs16 white"  class="GreenButton"/>
+                                    <ui:fragment rendered="#{not inscritController.inscrit.VALID}">
+                                        <p:commandButton value="VALIDER"
+                                                         action="#{inscritController.validateInscrition()}"
+                                                         update="messages,  buttonGrid, buttonGridHeader"
+                                                         icon="fa fa-check Fs16 white" class="GreenButton"/>
                                     </ui:fragment>
-                                    <ui:fragment  rendered="#{inscritController.inscrit.VALID}"  >
-                                        <p:commandButton value="INVALIDER"  action="#{inscritController.inValidateInscrition()}" update="messages,  buttonGrid, buttonGridHeader"  icon="fa fa-close Fs16 white" class="RedButton"  />
+                                    <ui:fragment rendered="#{inscritController.inscrit.VALID}">
+                                        <p:commandButton value="INVALIDER"
+                                                         action="#{inscritController.inValidateInscrition()}"
+                                                         update="messages,  buttonGrid, buttonGridHeader"
+                                                         icon="fa fa-close Fs16 white" class="RedButton"/>
 
                                     </ui:fragment>
-                                </sec:authorize>    
-                            </h:panelGroup>  
+                                </sec:authorize>
+                            </h:panelGroup>
 
 
                         </p:panelGrid>
@@ -72,76 +91,115 @@
                         <h2 class="BigTopic">
                             INFORMATIONS ETUDIANT
                         </h2>
-                        <ui:fragment  rendered="#{!inscritController.disabledField}"  >
+                        <ui:fragment rendered="#{!inscritController.disabledField}">
 
                             <div class="ui-g-12 ui-md-3" style="width: 100%;">
-                                <p:staticMessage severity="warn" summary="Attention!" detail="Le code massar et le CIN ne peuvent plus être modifier après enregistrement!" />
+                                <p:staticMessage severity="warn" summary="Attention!"
+                                                 detail="Le code massar et le CIN ne peuvent plus être modifier après enregistrement!"/>
                             </div>
-                        </ui:fragment> 
+                        </ui:fragment>
 
-                        <p:panelGrid id = "panelGridIns" columns="2" layout="grid" style="border:0px !important; background:none;">
-                            <p:inputMask  mask="a999999999" placeholder="Code Massar" value="#{inscritController.inscrit.cne}" required="true" 
-                                          disabled="#{inscritController.disabledField}"
-                                          requiredMessage="Le champ Code Massar est obligatoire"/>
+                        <p:panelGrid id="panelGridIns" columns="2" layout="grid"
+                                     style="border:0px !important; background:none;">
+                            <p:inputText placeholder="Code Massar"
+                                         value="#{inscritController.inscrit.cne}" required="true"
+                                         disabled="#{inscritController.disabledField}"
+                                         requiredMessage="Le champ Code Massar est obligatoire"/>
                             <p:inputText placeholder="CIN" value="#{inscritController.inscrit.cin}" required="true"
                                          disabled="#{inscritController.disabledField}"
                                          requiredMessage="Le champ CIN est obligatoire"/>
-                            <p:inputText placeholder="Nom" value="#{inscritController.inscrit.nom}" required="true" requiredMessage="Le champ Nom est obligatoire"/>
-                            <p:inputText placeholder="Prénom" value="#{inscritController.inscrit.prenom}" required="true" requiredMessage="Le champ Prénom est obligatoire"/>
-                            <p:inputText placeholder="النسب"  value="#{inscritController.inscrit.nomAr}" dir="rtl" required="true" requiredMessage="Le champ النسب est obligatoire" />
-                            <p:inputText placeholder="الاسم"  value="#{inscritController.inscrit.prenomAr}"  dir="rtl" required="true" requiredMessage="Le champ الاسم est obligatoire"/>
+                            <p:inputText placeholder="Nom" value="#{inscritController.inscrit.nom}" required="true"
+                                         requiredMessage="Le champ Nom est obligatoire"/>
+                            <p:inputText placeholder="Prénom" value="#{inscritController.inscrit.prenom}"
+                                         required="true" requiredMessage="Le champ Prénom est obligatoire"/>
+                            <p:inputText placeholder="النسب" value="#{inscritController.inscrit.nomAr}" dir="rtl"
+                                         required="true" requiredMessage="Le champ النسب est obligatoire"/>
+                            <p:inputText placeholder="الاسم" value="#{inscritController.inscrit.prenomAr}" dir="rtl"
+                                         required="true" requiredMessage="Le champ الاسم est obligatoire"/>
 
-                            <p:selectOneMenu placeholder="SEX" value="#{inscritController.inscrit.sex}" required="true" requiredMessage="Le champ SEX est obligatoire">
-                                <f:selectItem itemLabel="SEX" itemValue="" noSelectionOption="true" />
-                                <f:selectItems value="#{inscritController.sexes}" var="sex" itemLabel="#{sex.libSex}" itemValue="#{sex.codSex}"/>
+                            <p:selectOneMenu placeholder="SEX" value="#{inscritController.inscrit.sex}" required="true"
+                                             requiredMessage="Le champ SEX est obligatoire">
+                                <f:selectItem itemLabel="SEX" itemValue="" noSelectionOption="true"/>
+                                <f:selectItems value="#{inscritController.sexes}" var="sex" itemLabel="#{sex.libSex}"
+                                               itemValue="#{sex.codSex}"/>
                             </p:selectOneMenu>
-                            <p:selectOneMenu placeholder="Situation Familiale" value="#{inscritController.inscrit.civ}" required="true" requiredMessage="Le champ Situation Familiale est obligatoire">
-                                <f:selectItem itemLabel="Situation Familiale" itemValue="" noSelectionOption="true" />
-                                <f:selectItems value="#{inscritController.civilities}" var="civilite" itemLabel="#{civilite.libCiv}" itemValue="#{civilite.codCiv}"/>
+                            <p:selectOneMenu placeholder="Situation Familiale" value="#{inscritController.inscrit.civ}"
+                                             required="true"
+                                             requiredMessage="Le champ Situation Familiale est obligatoire">
+                                <f:selectItem itemLabel="Situation Familiale" itemValue="" noSelectionOption="true"/>
+                                <f:selectItems value="#{inscritController.civilities}" var="civilite"
+                                               itemLabel="#{civilite.libCiv}" itemValue="#{civilite.codCiv}"/>
                             </p:selectOneMenu>
-                            <p:selectOneMenu placeholder="Handicape" value="#{inscritController.inscrit.handicape}" required="false">
-                                <f:selectItem itemLabel="Handicape?" itemValue="" noSelectionOption="true" />
-                                <f:selectItems value="#{inscritController.handicaps}" var="handicape" itemLabel="#{handicape.lib}" itemValue="#{handicape.code}"/>
+                            <p:selectOneMenu placeholder="Handicape" value="#{inscritController.inscrit.handicape}"
+                                             required="false">
+                                <f:selectItem itemLabel="Handicape?" itemValue="" noSelectionOption="true"/>
+                                <f:selectItems value="#{inscritController.handicaps}" var="handicape"
+                                               itemLabel="#{handicape.lib}" itemValue="#{handicape.code}"/>
                             </p:selectOneMenu>
-                            <p:inputMask mask="99/99/9999" placeholder="Date de Naissance" value="#{inscritController.inscrit.dateNaiss}" required="true" requiredMessage="Le champ Date de Naissance est obligatoire">
-                                <f:convertDateTime pattern="dd/MM/yyyy" />
-                            </p:inputMask>    
-                            <p:inputText placeholder="Lieu de Naissance" value="#{inscritController.inscrit.lieuNaiss}" required="true" requiredMessage="Le champ Lieu de Naissance est obligatoire"/>
-                            <p:selectOneMenu placeholder="Province de Naissance" value="#{inscritController.inscrit.provinceNaiss.id}" required="true" requiredMessage="Le champ Province de Naissance est obligatoire">
-                                <f:selectItem itemLabel="Province de Naissance" itemValue="" noSelectionOption="true" />
-                                <f:selectItems value="#{inscritController.provinces}" var="province" itemLabel="#{province.lib}" itemValue="#{province.id}"/>
+                            <p:inputMask mask="99/99/9999" placeholder="Date de Naissance"
+                                         value="#{inscritController.inscrit.dateNaiss}" required="true"
+                                         requiredMessage="Le champ Date de Naissance est obligatoire">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </p:inputMask>
+                            <p:inputText placeholder="Lieu de Naissance" value="#{inscritController.inscrit.lieuNaiss}"
+                                         required="true" requiredMessage="Le champ Lieu de Naissance est obligatoire"/>
+                            <p:selectOneMenu placeholder="Province de Naissance"
+                                             value="#{inscritController.inscrit.provinceNaiss.id}" required="true"
+                                             requiredMessage="Le champ Province de Naissance est obligatoire">
+                                <f:selectItem itemLabel="Province de Naissance" itemValue="" noSelectionOption="true"/>
+                                <f:selectItems value="#{inscritController.provinces}" var="province"
+                                               itemLabel="#{province.lib}" itemValue="#{province.id}"/>
                             </p:selectOneMenu>
 
-                            <p:selectOneMenu placeholder="Pays de Naissance" value="#{inscritController.inscrit.paysNaiss.id}" required="true" requiredMessage="Le champ Pays de Naissance est obligatoire">
-                                <f:selectItem itemLabel="Pays de Naissance" itemValue="" noSelectionOption="true" />
-                                <f:selectItems value="#{inscritController.pays}" var="pays" itemLabel="#{pays.lib}" itemValue="#{pays.id}"/>
+                            <p:selectOneMenu placeholder="Pays de Naissance"
+                                             value="#{inscritController.inscrit.paysNaiss.id}" required="true"
+                                             requiredMessage="Le champ Pays de Naissance est obligatoire">
+                                <f:selectItem itemLabel="Pays de Naissance" itemValue="" noSelectionOption="true"/>
+                                <f:selectItems value="#{inscritController.pays}" var="pays" itemLabel="#{pays.lib}"
+                                               itemValue="#{pays.id}"/>
                             </p:selectOneMenu>
-                            <p:inputMask mask="9999999999" placeholder="Téléphone" value="#{inscritController.inscrit.tel}" required="true" requiredMessage="Le champ Téléphone est obligatoire"/>
-                            <p:inputTextarea placeholder="Adresse Personelle Actuelle" value="#{inscritController.inscrit.adresse}" required="true" requiredMessage="Le champ 'Adresse Personelle Actuelle est obligatoire"/>
+                            <p:inputMask mask="9999999999" placeholder="Téléphone"
+                                         value="#{inscritController.inscrit.tel}" required="true"
+                                         requiredMessage="Le champ Téléphone est obligatoire"/>
+                            <p:inputTextarea placeholder="Adresse Personelle Actuelle"
+                                             value="#{inscritController.inscrit.adresse}" required="true"
+                                             requiredMessage="Le champ 'Adresse Personelle Actuelle est obligatoire"/>
                         </p:panelGrid>
                     </div>
-                </div> 
+                </div>
                 <div class="Container50 Responsive50">
                     <div class="ContainerIndent ui-fluid">
                         <h2 class="BigTopic">
                             INFORMATIONS PARENTS
                         </h2>
                         <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;">
-                            <p:inputText placeholder="Prénom du Père ou Tuteur" value="#{inscritController.inscrit.prenomPere}" required="true" requiredMessage="Le champ Prénom du Père ou Tuteur est obligatoire"/>
+                            <p:inputText placeholder="Nom Prénom du Père ou Tuteur"
+                                         value="#{inscritController.inscrit.prenomPere}" required="true"
+                                         requiredMessage="Le champ Prénom du Père ou Tuteur est obligatoire"/>
                             <!--<p:inputText placeholder="اسم الأب أو الوالي"  value="#{inscritController.inscrit.prenomPereAr}"  dir="rtl" required="true" requiredMessage="Le champ اسم الأب أو الوالي est obligatoire"/>-->
-                            <p:inputText placeholder="Prénom de la Mère" value="#{inscritController.inscrit.prenomMere}" required="true" requiredMessage="Le champ Prénom de la Mère est obligatoire"/>
+                            <p:inputText placeholder="Nom Prénom de la Mère" value="#{inscritController.inscrit.prenomMere}"
+                                         required="true" requiredMessage="Le champ Prénom de la Mère est obligatoire"/>
                             <!--<p:inputText placeholder="اسم الأم"  value="#{inscritController.inscrit.prenomMereAr}"  dir="rtl" required="true" requiredMessage="Le champ اسم الأم est obligatoire"/>-->
-                            <p:inputText placeholder="CIN Père ou Tuteur" value="#{inscritController.inscrit.cinTuteur}" required="true" requiredMessage="Le champ CIN Père ou Tuteur est obligatoire"/>
-                            <p:inputMask mask="9999999999" placeholder="Téléphone du Tuteur" value="#{inscritController.inscrit.telTuteur}" required="true" requiredMessage="Le champ Téléphone du Tuteur est obligatoire"/>
-                            <p:selectOneMenu  value="#{inscritController.inscrit.pcsPere.id}" required="true" requiredMessage="Le champ Profession du père du Bac est obligatoire">
-                                <f:selectItem itemLabel="Profession du père" itemValue="" noSelectionOption="true" />
-                                <f:selectItems value="#{inscritController.pcsList}" var="pcs" itemLabel="#{pcs.lib}" itemValue="#{pcs.id}"/>
+                            <p:inputText placeholder="CIN Père ou Tuteur" value="#{inscritController.inscrit.cinTuteur}"
+                                         required="true" requiredMessage="Le champ CIN Père ou Tuteur est obligatoire"/>
+                            <p:inputMask mask="9999999999" placeholder="Téléphone du Tuteur"
+                                         value="#{inscritController.inscrit.telTuteur}" required="true"
+                                         requiredMessage="Le champ Téléphone du Tuteur est obligatoire"/>
+                            <p:selectOneMenu value="#{inscritController.inscrit.pcsPere.id}" required="true"
+                                             requiredMessage="Le champ Profession du père du Bac est obligatoire">
+                                <f:selectItem itemLabel="Profession du père" itemValue="" noSelectionOption="true"/>
+                                <f:selectItems value="#{inscritController.pcsList}" var="pcs" itemLabel="#{pcs.lib}"
+                                               itemValue="#{pcs.id}"/>
                             </p:selectOneMenu>
-                            <p:selectOneMenu  value="#{inscritController.inscrit.pcsMere.id}" required="true" requiredMessage="Le champ Série du Bac est obligatoire">
-                                <f:selectItem itemLabel="Profession de la mère" itemValue="" noSelectionOption="true" />
-                                <f:selectItems value="#{inscritController.pcsList}" var="pcs" itemLabel="#{pcs.lib}" itemValue="#{pcs.id}"/>
+                            <p:selectOneMenu value="#{inscritController.inscrit.pcsMere.id}" required="true"
+                                             requiredMessage="Le champ Série du Bac est obligatoire">
+                                <f:selectItem itemLabel="Profession de la mère" itemValue="" noSelectionOption="true"/>
+                                <f:selectItems value="#{inscritController.pcsList}" var="pcs" itemLabel="#{pcs.lib}"
+                                               itemValue="#{pcs.id}"/>
                             </p:selectOneMenu>
-                            <p:inputTextarea placeholder="Adresse Actuelle du Tuteur" value="#{inscritController.inscrit.adresseTuteur}" required="true" requiredMessage="Le champ Adresse Actuelle du Tuteur est obligatoire"/>   
+                            <p:inputTextarea placeholder="Adresse Actuelle du Tuteur"
+                                             value="#{inscritController.inscrit.adresseTuteur}" required="true"
+                                             requiredMessage="Le champ Adresse Actuelle du Tuteur est obligatoire"/>
                         </p:panelGrid>
                     </div>
                 </div>
@@ -152,29 +210,43 @@
                         <h2 class="BigTopic">
                             BACCALAUREAT
                         </h2>
-                        <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="ui-panelgrid ui-widget ui-panelgrid-blank"   >
-                            <p:inputMask placeholder="Année d'obtention du Bac" value="#{inscritController.inscrit.bac.annee}" 
-                                         mask="9999" required="true" requiredMessage="Le champ Année d'obtention du Bac est obligatoire"/>
-                            <p:selectOneMenu  value="#{inscritController.inscrit.bac.serieBac.id}" required="true" requiredMessage="Le champ Série du Bac est obligatoire">
-                                <f:selectItem itemLabel="Série du Bac" itemValue="" noSelectionOption="true" />
-                                <f:selectItems value="#{inscritController.seriesBac}" var="serieBac" itemLabel="#{serieBac.lib}" itemValue="#{serieBac.id}"/>
+                        <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;"
+                                     styleClass="ui-panelgrid ui-widget ui-panelgrid-blank">
+                            <p:inputMask placeholder="Année d'obtention du Bac"
+                                         value="#{inscritController.inscrit.bac.annee}"
+                                         mask="9999" required="true"
+                                         requiredMessage="Le champ Année d'obtention du Bac est obligatoire"/>
+                            <p:selectOneMenu value="#{inscritController.inscrit.bac.serieBac.id}" required="true"
+                                             requiredMessage="Le champ Série du Bac est obligatoire">
+                                <f:selectItem itemLabel="Série du Bac" itemValue="" noSelectionOption="true"/>
+                                <f:selectItems value="#{inscritController.seriesBac}" var="serieBac"
+                                               itemLabel="#{serieBac.lib}" itemValue="#{serieBac.id}"/>
                             </p:selectOneMenu>
-                            <p:selectOneMenu placeholder="Mention du Bac" value="#{inscritController.inscrit.bac.montion}" required="true" requiredMessage="Le champ Mention du Bac est obligatoire">
-                                <f:selectItem itemLabel="Mention du Bac" itemValue="" noSelectionOption="true" />
-                                <f:selectItems value="#{inscritController.mentions}" var="mention" itemLabel="#{mention.libMention}" itemValue="#{mention.codMontion}"/>
+                            <p:selectOneMenu placeholder="Mention du Bac"
+                                             value="#{inscritController.inscrit.bac.montion}" required="true"
+                                             requiredMessage="Le champ Mention du Bac est obligatoire">
+                                <f:selectItem itemLabel="Mention du Bac" itemValue="" noSelectionOption="true"/>
+                                <f:selectItems value="#{inscritController.mentions}" var="mention"
+                                               itemLabel="#{mention.libMention}" itemValue="#{mention.codMontion}"/>
                             </p:selectOneMenu>
-                            <p:selectOneRadio id="codeTpe" value="#{inscritController.inscrit.codeTpe}" required="true" requiredMessage="Le champ Type Lycée est obligatoire">>
-                                <f:selectItem itemLabel="Lycée Privé" itemValue="22" />
-                                <f:selectItem itemLabel="Lycée Public" itemValue="23" />
+                            <p:selectOneRadio id="codeTpe" value="#{inscritController.inscrit.codeTpe}" required="true"
+                                              requiredMessage="Le champ Type Lycée est obligatoire">>
+                                <f:selectItem itemLabel="Lycée Privé" itemValue="22"/>
+                                <f:selectItem itemLabel="Lycée Public" itemValue="23"/>
                             </p:selectOneRadio>
-                            <p:selectOneMenu  value="#{inscritController.inscrit.bac.provinceBac.id}" required="true" requiredMessage="Le champ Province d'obtention du Bac est obligatoire">
-                                <f:selectItem itemLabel="Province d'obtention du Bac" itemValue="" noSelectionOption="true" />
-                                <f:selectItems value="#{inscritController.provinces}" var="province" itemLabel="#{province.lib}" itemValue="#{province.id}"/>
+                            <p:selectOneMenu value="#{inscritController.inscrit.bac.provinceBac.id}" required="true"
+                                             requiredMessage="Le champ Province d'obtention du Bac est obligatoire">
+                                <f:selectItem itemLabel="Province d'obtention du Bac" itemValue=""
+                                              noSelectionOption="true"/>
+                                <f:selectItems value="#{inscritController.provinces}" var="province"
+                                               itemLabel="#{province.lib}" itemValue="#{province.id}"/>
                             </p:selectOneMenu>
 
-                            <p:selectOneMenu  value="#{inscritController.inscrit.bac.academie.id}" required="true" requiredMessage="Le champ Académie est obligatoire">
-                                <f:selectItem itemLabel="Académie" itemValue="" noSelectionOption="true" />
-                                <f:selectItems value="#{inscritController.academies}" var="academie" itemLabel="#{academie.lib}" itemValue="#{academie.id}"/>
+                            <p:selectOneMenu value="#{inscritController.inscrit.bac.academie.id}" required="true"
+                                             requiredMessage="Le champ Académie est obligatoire">
+                                <f:selectItem itemLabel="Académie" itemValue="" noSelectionOption="true"/>
+                                <f:selectItems value="#{inscritController.academies}" var="academie"
+                                               itemLabel="#{academie.lib}" itemValue="#{academie.id}"/>
                             </p:selectOneMenu>
 
                         </p:panelGrid>
@@ -186,22 +258,31 @@
                         <h2 class="BigTopic">
                             PHOTO PERSONELLE
                         </h2>
-                        <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="ui-panelgrid ui-widget ui-panelgrid-blank"   >
+                        <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;"
+                                     styleClass="ui-panelgrid ui-widget ui-panelgrid-blank">
                             <h:panelGroup id="photo">
-                                <ui:fragment  rendered="#{not empty inscritController.photoContentsAsBase64}"  >
-                                    <img src="data:image/png;base64,#{inscritController.photoContentsAsBase64}" style="height:200px; width:171px;" onclick="document.querySelector('.photoUpload input').click()" />
+                                <ui:fragment rendered="#{not empty inscritController.photoContentsAsBase64}">
+                                    <img src="data:image/png;base64,#{inscritController.photoContentsAsBase64}"
+                                         style="height:200px; width:171px;"
+                                         onclick="document.querySelector('.photoUpload input').click()"/>
                                 </ui:fragment>
-                                <ui:fragment  rendered="#{empty inscritController.photoContentsAsBase64}"  >
-                                    <img src="resources/spark-layout/images/default-male.gif" style="height:161px; width:161px;" onclick="document.querySelector('.photoUpload input').click()"/>
+                                <ui:fragment rendered="#{empty inscritController.photoContentsAsBase64}">
+                                    <img src="resources/spark-layout/images/default-male.gif"
+                                         style="height:161px; width:161px;"
+                                         onclick="document.querySelector('.photoUpload input').click()"/>
                                 </ui:fragment>
                             </h:panelGroup>
 
 
-                            <p:fileUpload styleClass="photoUpload" value="#{inscritController.uploadedPhoto}" listener="#{inscritController.handleUploadPhoto}" mode="advanced" dragDropSupport="false"
-                                          update="photo" auto="true" sizeLimit="2097152" allowTypes="/(\.|\/)(jpe?g|png)$/"  />
+                            <p:fileUpload styleClass="photoUpload" value="#{inscritController.uploadedPhoto}"
+                                          listener="#{inscritController.handleUploadPhoto}" mode="advanced"
+                                          dragDropSupport="false"
+                                          update="photo" auto="true" sizeLimit="2097152"
+                                          allowTypes="/(\.|\/)(jpe?g|png)$/"/>
                             <p:panel>
-                                <p:outputLabel value="Photo format CIN obligatoire avec taille inférieur à 2Mo. Les photos non conformes seront refusées lors du dépot de dossier!" 
-                                               class="Fs15 red"/>
+                                <p:outputLabel
+                                        value="Photo format CIN obligatoire avec taille inférieur à 2Mo. Les photos non conformes seront refusées lors du dépot de dossier!"
+                                        class="Fs15 red"/>
                             </p:panel>
                         </p:panelGrid>
 
@@ -213,70 +294,95 @@
                         <h2 class="BigTopic">
                             NIVEAU D'INSCRIPTION
                         </h2>
-                        <p:panelGrid columns="1" layout="grid" style="border:0px !important; background:none;" styleClass="ui-panelgrid ui-widget ui-panelgrid-blank"   >
-                            <p:selectOneMenu placeholder="NIVEAU" value="#{inscritController.inscrit.etape.cod}" required="true" requiredMessage="Le champ Niveau d'inscription est obligatoire">
-                                <f:selectItem itemLabel="Selectionner Niveau ..." itemValue="" noSelectionOption="true" />
-                                <f:selectItems value="#{inscritController.etapes}" var="etape" itemLabel="#{etape.lib}" itemValue="#{etape.cod}"/>
+                        <p:panelGrid columns="1" layout="grid" style="border:0px !important; background:none;"
+                                     styleClass="ui-panelgrid ui-widget ui-panelgrid-blank">
+                            <p:selectOneMenu placeholder="NIVEAU" value="#{inscritController.inscrit.etape.cod}"
+                                             required="true"
+                                             requiredMessage="Le champ Niveau d'inscription est obligatoire">
+                                <f:selectItem itemLabel="Selectionner Niveau ..." itemValue=""
+                                              noSelectionOption="true"/>
+                                <f:selectItems value="#{inscritController.etapes}" var="etape" itemLabel="#{etape.lib}"
+                                               itemValue="#{etape.cod}"/>
                             </p:selectOneMenu>
-                            <p:selectBooleanCheckbox value="#{inscritController.inscrit.declaration}" itemLabel="J’atteste sur mon honneur que les informations fournies sont complètes, 
-                                                     authentiques et exactes et que je suis conscient que toute fausse déclaration peut entraîner le rejet de mon inscription."
-
-                                                     requiredMessage="Le champ déclaration sur honneur est obligatoir!">
-                                <f:validator validatorId="requiredCheckboxValidator"  />
-                            </p:selectBooleanCheckbox>    
+                            <p>
+                                <p:selectBooleanCheckbox value="#{inscritController.inscrit.declaration}"
+                                                         style="padding: 4px 0px; !important;"
+                                                         itemLabel="Je confirme avoir lu et compris"
+                                                         requiredMessage="Le champ est obligatoir!">
+                                    <f:validator validatorId="requiredCheckboxValidator"/>
+                                </p:selectBooleanCheckbox>
+                                <a href="charte-utilsation-dp-fr-V1.htm" style="color:#258BB2;padding: 0;">la charte de confidentialité</a>
+                            </p>
                         </p:panelGrid>
 
 
                     </div>
                 </div>
             </div>
-            <div class="layout-portlets-box ui-fluid" >
+            <div class="layout-portlets-box ui-fluid">
                 <!--<div class="Container50 Responsive50 ">-->
-                <div class="ContainerIndent ui-fluid" dir="rtl" >
-                    <p:panelGrid id="buttonGrid" columns="8" layout="grid" style="border:0px !important; background:none;" class="ui-panelgrid-blank">       
+                <div class="ContainerIndent ui-fluid" dir="rtl">
+                    <p:panelGrid id="buttonGrid" columns="8" layout="grid"
+                                 style="border:0px !important; background:none;" class="ui-panelgrid-blank">
                         <!--<p:commandButton value="VALIDER" class ="GreenButton" action="#{inscritController.save()}" update="messages"  icon="fa fa-save Fs16 white"  />-->
-                        <!--<h:commandButton value="VALIDER" class ="ui-button ui-button-text"  action="#{inscritController.save()}"> </h:commandButton>--> 
+                        <!--<h:commandButton value="VALIDER" class ="ui-button ui-button-text"  action="#{inscritController.save()}"> </h:commandButton>-->
                         <sec:authorize ifAnyGranted="ROLE_ADMIN, ROLE_OPERATOR">
-                            <p:button value="LISTE INSCRITS" outcome="listInscrit.xhtml"  icon="fa fa-rotate-left Fs16 white"  />
-                        </sec:authorize>  
+                            <p:button value="LISTE INSCRITS" outcome="listInscrit.xhtml"
+                                      icon="fa fa-rotate-left Fs16 white"/>
+                        </sec:authorize>
                         <sec:authorize ifAnyGranted="ROLE_USER">
-                            <p:commandButton value="ENREGISTER"  action="#{inscritController.save()}" update="@form"  icon="fa fa-save Fs16 white">
-                                <p:confirm header="Confirmation" message="Veuillez vérifier que vous n'avez pas permuter le nom et le prénom! Voulez vous continuer?" icon="pi pi-exclamation-triangle"/>
+                            <p:commandButton value="ENREGISTER" action="#{inscritController.save()}" update="@form"
+                                             icon="fa fa-save Fs16 white">
+                                <p:confirm header="Confirmation"
+                                           message="Veuillez vérifier que vous n'avez pas permuter le nom et le prénom! Voulez vous continuer?"
+                                           icon="pi pi-exclamation-triangle"/>
                             </p:commandButton>
                         </sec:authorize>
                         <sec:authorize ifAnyGranted="ROLE_ADMIN, ROLE_OPERATOR">
-                            <ui:fragment  rendered="#{inscritController.inscrit.VALID}"  >
-                                <p:commandButton value="RECU DEPOT"  action="#{inscritController.createReceipeForOperator(request, response)}" update="messages, validationButton"  icon="fa fa-file-pdf-o Fs16 white" class="OrangeButton" ajax="false" />
+                            <ui:fragment rendered="#{inscritController.inscrit.VALID}">
+                                <p:commandButton value="RECU DEPOT"
+                                                 action="#{inscritController.createReceipeForOperator(request, response)}"
+                                                 update="messages, validationButton" icon="fa fa-file-pdf-o Fs16 white"
+                                                 class="OrangeButton" ajax="false"/>
                             </ui:fragment>
-                        </sec:authorize> 
+                        </sec:authorize>
                         <sec:authorize ifAnyGranted="ROLE_USER">
-                            <ui:fragment  rendered="#{inscritController.inscrit.id != null}"  >
-                                <p:commandButton value="RECU de PRE-INSCRITION"  action="#{inscritController.createReceipeForUser(request, response)}" update="messages, validationButton"  icon="fa fa-file-pdf-o Fs16 white" class="OrangeButton" ajax="false" />
+                            <ui:fragment rendered="#{inscritController.inscrit.id != null}">
+                                <p:commandButton value="RECU de PRE-INSCRITION"
+                                                 action="#{inscritController.createReceipeForUser(request, response)}"
+                                                 update="messages, validationButton" icon="fa fa-file-pdf-o Fs16 white"
+                                                 class="OrangeButton" ajax="false"/>
                             </ui:fragment>
-                        </sec:authorize>   
+                        </sec:authorize>
 
                         <h:panelGroup id="validationButton">
                             <sec:authorize ifAnyGranted="ROLE_ADMIN, ROLE_OPERATOR" id="validationButton">
-                                <ui:fragment  rendered="#{not inscritController.inscrit.VALID}"  >
-                                    <p:commandButton value="VALIDER"  action="#{inscritController.validateInscrition()}" update="messages,  buttonGrid"  icon="fa fa-check Fs16 white"  class="GreenButton"/>
+                                <ui:fragment rendered="#{not inscritController.inscrit.VALID}">
+                                    <p:commandButton value="VALIDER" action="#{inscritController.validateInscrition()}"
+                                                     update="messages,  buttonGrid" icon="fa fa-check Fs16 white"
+                                                     class="GreenButton"/>
                                 </ui:fragment>
-                                <ui:fragment  rendered="#{inscritController.inscrit.VALID}"  >
-                                    <p:commandButton value="INVALIDER"  action="#{inscritController.inValidateInscrition()}" update="messages,  buttonGrid"  icon="fa fa-close Fs16 white" class="RedButton"  />
+                                <ui:fragment rendered="#{inscritController.inscrit.VALID}">
+                                    <p:commandButton value="INVALIDER"
+                                                     action="#{inscritController.inValidateInscrition()}"
+                                                     update="messages,  buttonGrid" icon="fa fa-close Fs16 white"
+                                                     class="RedButton"/>
 
                                 </ui:fragment>
-                            </sec:authorize>    
-                        </h:panelGroup>  
+                            </sec:authorize>
+                        </h:panelGroup>
 
 
                     </p:panelGrid>
                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                        <p:commandButton value="Oui" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
-                        <p:commandButton value="Non" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
-                    </p:confirmDialog>  
+                        <p:commandButton value="Oui" type="button" styleClass="ui-confirmdialog-yes"
+                                         icon="pi pi-check"/>
+                        <p:commandButton value="Non" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times"/>
+                    </p:confirmDialog>
                 </div>
                 <!--</div>-->
             </div>
-        </h:form> 
+        </h:form>
 
     </ui:define>
 
